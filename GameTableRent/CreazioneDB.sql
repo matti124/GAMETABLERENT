@@ -9,6 +9,7 @@ ID int NOT NULL AUTO_INCREMENT  ,
 Indirizzo varchar(60) NOT NULL,
 email varchar(35) not null unique,
 psw varchar(100) not null,
+isAdmin bool default 0,
 PRIMARY KEY(ID));
 
 CREATE TABLE PRODOTTO(
@@ -19,6 +20,7 @@ Prezzo double not null,
 PrezzoXDays double not null, 
 Quantity smallint not null,
 In_Cat bool default 0 not null,
+Picture BLOB not null,
 PRIMARY KEY(ID_Prod),
 check(Prezzo>0 AND PrezzoXDays>0 AND Quantity>0));
 
