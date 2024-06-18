@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class UtenteDAO implements UtenteDAOInterfaccia {
 	
 	
-	
-	private static final String INSERT_SQL = "INSERT INTO USER ( Nome, Cognome, ID, Indirizzo, Email, Psw, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+	private static final String INSERT_SQL = "INSERT INTO USER ( Nome, Cognome, Indirizzo, Email, Psw) VALUES (?, ?, ?, ?, ?)";
     private static final String SELECT_BY_KEY_SQL = "SELECT * FROM USER WHERE ID = ?";
     private static final String DELETE_BY_KEY_SQL = "DELETE FROM USER WHERE ID = ?";
     private static final String UPDATE_SQL = "UPDATE USER SET Nome = ?, Cognome = ?, Indirizzo = ?, Email = ?, Psw = ?, IsAdmin = ? WHERE ID = ?";
@@ -21,13 +21,11 @@ public class UtenteDAO implements UtenteDAOInterfaccia {
     public boolean doSave(UtenteDTO user) throws SQLException {
         try (Connection con = DriverManagerConnectionPool.getConnection();
              PreparedStatement ps = con.prepareStatement(INSERT_SQL)) {
-            ps.setInt(1, user.getID());
-            ps.setString(2, user.getNome());
-            ps.setString(3, user.getCognome());
-            ps.setString(4, user.getIndirizzo());
-            ps.setString(5, user.getEmail());
-            ps.setString(6, user.getPsw());
-            ps.setInt(7, user.getIsAdmin());
+            ps.setString(1, user.getNome());
+            ps.setString(2, user.getCognome());
+            ps.setString(3, user.getIndirizzo());
+            ps.setString(4, user.getEmail());
+            ps.setString(5, user.getPsw());
             int rowsaffected=ps.executeUpdate();
             return rowsaffected>0;
         }
@@ -90,6 +88,20 @@ public class UtenteDAO implements UtenteDAOInterfaccia {
     		}
     		return listaUtenti;
     	}
+    }
+    
+    public boolean doRetrieveByEmail(String email) {
+    	String query="SELECT * FROM USER WHERE EMAIL = ?";
+    	try(Connection con=DriverManagerConnectionPool.getConnection();
+    			PreparedStatement ps= con.prepareStatement(query)){
+    		ps.setString(1, email);
+    		ResultSet rs=ps.executeQuery();
+    		if(rs.next()) return true;
+    	} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+    	
     }
 
 	

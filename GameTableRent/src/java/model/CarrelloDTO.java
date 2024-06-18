@@ -5,12 +5,26 @@ import java.util.ArrayList;
 public class CarrelloDTO {
 	private final int ID_Carrello;
 	private ArrayList <ProdottoCarrelloDTO> Cart;
+	private int ID_Utente;
 	
 	
-	public CarrelloDTO(int iD_Carrello, ArrayList<ProdottoCarrelloDTO> prodottiInCart) {
+	public CarrelloDTO(int iD_Carrello, ArrayList<ProdottoCarrelloDTO> prodottiInCart, int id_ut) {
 		super();
-		ID_Carrello = iD_Carrello;
-		Cart = prodottiInCart;
+		this.ID_Carrello = iD_Carrello;
+		this.Cart = prodottiInCart;
+		this.ID_Utente=id_ut;
+	}
+
+
+	public int getID_Utente() {
+		return ID_Utente;
+	}
+
+
+
+
+	public ArrayList<ProdottoCarrelloDTO> getCart() {
+		return Cart;
 	}
 
 
@@ -19,9 +33,6 @@ public class CarrelloDTO {
 	}
 
 
-	public ArrayList<ProdottoCarrelloDTO> getProdottiInCart() {
-		return Cart;
-	}
 	
 	
 	public ProdottoCarrelloDTO retrieveById(int id_c , int id_p) {	//in caso un elemento già fosse nel carrello lo ritorniamo
@@ -47,6 +58,17 @@ public class CarrelloDTO {
 			if(prod.getQuantita()==1) 
 				this.Cart.remove(x);
 			else x.decreaseQuantity();
+	}
+	
+	public double getTotalPrice() {
+		double tot=0;
+		for(ProdottoCarrelloDTO x: this.Cart) {
+			if(x.getGiorni()>0) {
+				tot+=x.getPrezzoXdays()*x.getQuantita()*x.getGiorni();
+			}
+			else tot+=x.getPrezzo()*x.getQuantita();
+		}
+		return tot;
 	}
 	
 

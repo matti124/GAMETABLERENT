@@ -5,20 +5,38 @@ public class ProdottoCarrelloDTO {
 	private  int id_prodotto;
 	private  int quantita;
 	private  int giorni;
-	private  int prezzo;
+	private double prezzo;
+	private double prezzoXdays;
 	
 	
-	public ProdottoCarrelloDTO(int id_carrello, int id_prodotto, int quantita, int giorni, int prezzo) {
+	public ProdottoCarrelloDTO(int id_carrello, int id_prodotto, int quantita, int giorni, double prezzo,
+			double prezzoXdays) {
 		super();
 		this.id_carrello = id_carrello;
 		this.id_prodotto = id_prodotto;
 		this.quantita = quantita;
 		this.giorni = giorni;
 		this.prezzo = prezzo;
-		
+		this.prezzoXdays = prezzoXdays;
 	}
+
+
 	
 	
+	public double getPrezzo() {
+		return prezzo;
+	}
+
+
+
+
+	public double getPrezzoXdays() {
+		return prezzoXdays;
+	}
+
+
+
+
 	public int getId_carrello() {
 		return id_carrello;
 	}
@@ -35,10 +53,7 @@ public class ProdottoCarrelloDTO {
 		return giorni;
 	}
 	
-	public int getPrezzo() {
-		return prezzo;
-	}
-	
+
 	public void addQuantity() {
 		this.quantita++;
 	}

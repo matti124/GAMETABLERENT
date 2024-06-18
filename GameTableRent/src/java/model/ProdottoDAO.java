@@ -85,7 +85,6 @@ public class ProdottoDAO implements ProdottoDAOInterfaccia {
 			}
 			return listaProd;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

@@ -14,5 +14,7 @@ public interface UtenteDAOInterfaccia {
 	
 	
 	public ArrayList<UtenteDTO> doRetrieveAll() throws SQLException;
+	
+	public boolean doRetrieveByEmail(String email);
 
 }
