@@ -84,4 +84,35 @@ public class ProdottoDTO {
 		ProdottoDTO x=(ProdottoDTO) obj;
 		return(this.ID_Prod==x.ID_Prod);
 	}
+
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
+
+
+	public void setPrezzo(Double prezzo) {
+		Prezzo = prezzo;
+	}
+
+
+	public void setPrezzoXDay(Double prezzoXDay) {
+		PrezzoXDay = prezzoXDay;
+	}
+
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+
+	public void setImmagine(byte[] immagine) {
+		this.immagine = immagine;
+	}
+	
 }
