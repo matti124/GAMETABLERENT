@@ -2,11 +2,11 @@ package model;
 
 public class UtenteDTO {
 	private final int ID;
-	private final String Nome;
-	private final String Cognome;
-	private final String Indirizzo;
-	private final String email;
-	private final String psw;
+	private  String Nome;
+	private  String Cognome;
+	private  String Indirizzo;
+	private  String email;
+	private  String psw;
 	private  int isAdmin=0;
 	
 	public UtenteDTO(int iD, String nome, String cognome, String indirizzo, String email, String psw) {
@@ -23,6 +23,54 @@ public class UtenteDTO {
 	
 	
 	
+	public void setNome(String nome) {
+		Nome = nome;
+	}
+
+
+
+
+
+	public void setCognome(String cognome) {
+		Cognome = cognome;
+	}
+
+
+
+
+
+	public void setIndirizzo(String indirizzo) {
+		Indirizzo = indirizzo;
+	}
+
+
+
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+
+
+
+	public void setPsw(String psw) {
+		this.psw = psw;
+	}
+
+
+
+
+
+	public void setIsAdmin(int isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+
+
+
+
 	public int getID() {
 		return ID;
 	}
