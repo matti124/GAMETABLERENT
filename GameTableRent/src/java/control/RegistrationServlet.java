@@ -41,19 +41,20 @@ public class RegistrationServlet extends HttpServlet {
 
         try {
 
-            UtenteDTO user = new UtenteDTO(0, cognome, nome, indirizzo, email, hashedPassword, 0);
+            UtenteDTO user = new UtenteDTO(0, nome, cognome, indirizzo, email, hashedPassword);
             if(userDao.doRetrieveByEmail(email)) {
-            request.setAttribute("JustRegistered", "utente già registrato");
+            request.setAttribute("ValueReg", 0);
             
-           request.getRequestDispatcher("/Registrazione.jsp").forward(request, response);}
+           request.getRequestDispatcher("/Login.jsp").forward(request, response);}
             else
             userDao.doSave(user);
 
         } catch (SQLException e) {
             System.out.println("Error:" + e.getMessage());
         }
-
-        response.sendRedirect(request.getContextPath() + "/Home.jsp");
+        
+        request.setAttribute("ValueReg", 1);
+        response.sendRedirect(request.getContextPath() + "/Login.jsp");
 
     }
 
@@ -63,7 +64,7 @@ public class RegistrationServlet extends HttpServlet {
     
     
     // Metodo per l'hashing della password utilizzando SHA-256
-    private String hashWithSHA256(String password) throws NoSuchAlgorithmException {
+   public static String hashWithSHA256(String password) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedhash = digest.digest(password.getBytes());
 

@@ -43,8 +43,7 @@ public class UtenteDAO implements UtenteDAOInterfaccia {
                     rs.getString("Cognome"),
                     rs.getString("Indirizzo"),
                     rs.getString("Email"),
-                    rs.getString("Psw"),
-                    rs.getInt("IsAdmin")
+                    rs.getString("Psw")
                 );
             }
         }
@@ -83,7 +82,7 @@ public class UtenteDAO implements UtenteDAOInterfaccia {
     		ArrayList<UtenteDTO> listaUtenti=new ArrayList<>();
 
     		while(rs.next()) {
-    			UtenteDTO u=new UtenteDTO(rs.getInt("id"), rs.getString("nome"), rs.getString("cognome"),  rs.getString("indirizzo"), rs.getString("email"), rs.getString("psw"), rs.getInt("isAdmin"));
+    			UtenteDTO u=new UtenteDTO(rs.getInt("id"), rs.getString("nome"), rs.getString("cognome"),  rs.getString("indirizzo"), rs.getString("email"), rs.getString("psw"));
     			listaUtenti.add(u);
     		}
     		return listaUtenti;
@@ -103,8 +102,24 @@ public class UtenteDAO implements UtenteDAOInterfaccia {
 		return false;
     	
     }
+    
+    public boolean doRetrieveByPSW(String psw) {
+    	String query="SELECT * FROM USER WHERE PSW = ?";
+    	try(Connection con=DriverManagerConnectionPool.getConnection();
+    			PreparedStatement ps= con.prepareStatement(query)){
+    		ps.setString(1, psw);
+    		ResultSet rs=ps.executeQuery();
+    		if(rs.next()) return true;
+    	} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+    	
+    }
+    	
+    }
 
 	
-}
+
 
 

@@ -22,10 +22,10 @@
     </form>
 
     <%
-        String errorMessage = (String) request.getAttribute("JustRegistered");
-        if (errorMessage != null) {
+        int errorMessage = (int) request.getAttribute("Value");
+        if (errorMessage != 1) {
     %>
-        <p style="color:red;"><%= errorMessage %></p>
+        <p style="color:red;"><%= "utente già registrato" %></p>
     <%
         }
     %>

@@ -7,9 +7,9 @@ public class UtenteDTO {
 	private final String Indirizzo;
 	private final String email;
 	private final String psw;
-	private final int isAdmin;
+	private  int isAdmin=0;
 	
-	public UtenteDTO(int iD, String nome, String cognome, String indirizzo, String email, String psw, int isAdmin) {
+	public UtenteDTO(int iD, String nome, String cognome, String indirizzo, String email, String psw) {
 		super();
 		this.ID = iD;
 		this.Nome = nome;
@@ -17,7 +17,6 @@ public class UtenteDTO {
 		this.Indirizzo = indirizzo;
 		this.email = email;
 		this.psw = psw;
-		this.isAdmin = isAdmin;
 	}
 
 		
