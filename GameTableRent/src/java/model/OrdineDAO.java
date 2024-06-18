@@ -11,11 +11,11 @@ public class OrdineDAO implements OrdineDAOInterfaccia {
 
     @Override
     public boolean doSave(OrdineDTO ordine) { //salvo un nuovo ordine
-        String query = "INSERT INTO ordine (id_carrello, data_ordine, prezzo) VALUES (?, CURRENT_TIMESTAMP(), ?)";
+        String query = "INSERT INTO ordine (id_utente, data_ordine, prezzo) VALUES (?, CURRENT_TIMESTAMP(), ?)";
         
         try (Connection connection = DriverManagerConnectionPool.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, ordine.getId_Carrello());
+            statement.setInt(1, ordine.getIdUtente());
             statement.setDouble(2, ordine.getTotalPrice());
 
             int rowsAffected = statement.executeUpdate();
@@ -44,11 +44,11 @@ public class OrdineDAO implements OrdineDAOInterfaccia {
 
     @Override
     public boolean doUpdate(OrdineDTO ordine) { //aggiorno l'ordine in base all'id, il prezzo lo ricavo tramite funzione di OrdineDTO
-        String query = "UPDATE ordine SET id_carrello = ?, prezzo = ? WHERE id_ordine = ?";
+        String query = "UPDATE ordine SET id_utente = ?, prezzo = ? WHERE id_ordine = ?";
         
         try (Connection connection = DriverManagerConnectionPool.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, ordine.getId_Carrello());
+            statement.setInt(1, ordine.getIdUtente());
             statement.setDouble(2, ordine.getTotalPrice());
             statement.setInt(3, ordine.getId_Ordine());
 
@@ -70,17 +70,43 @@ public class OrdineDAO implements OrdineDAOInterfaccia {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    int id_carrello = resultSet.getInt("id_carrello");
+                    int id_utente = resultSet.getInt("id_utente");
                     Timestamp data_ordine = resultSet.getTimestamp("data_ordine");
                     ProdottoOrdineDAO prodotti=new ProdottoOrdineDAO();
                     ArrayList<ProdottoOrdineDTO> prods=prodotti.doRetrieveAll(id_ord);
-                    return new OrdineDTO(id_ord, id_carrello, data_ordine, prods);
+                    return new OrdineDTO(id_ord, id_utente, data_ordine, prods);
                 }
             }
         } catch (SQLException e) {
             System.err.println("Errore durante il recupero dell'ordine con ID " + id_ord + ": " + e.getMessage());
         }
         return null;
+    }
+    
+    
+    public ArrayList<OrdineDTO> doRetrieveAllbyId(int id_utente){ //tutti gli ordini relativi ad un utente
+    	String query="SELECT * FROM ORDINE WHERE ID_CARRELLO = ?";
+    	ArrayList<OrdineDTO> ordini= new ArrayList<>();
+    	 
+    	try(Connection connection=DriverManagerConnectionPool.getConnection();
+    			PreparedStatement ps= connection.prepareStatement(query);
+    			){
+    		ps.setInt(1, id_utente);
+    		ResultSet resultSet=ps.executeQuery();
+    		 while (resultSet.next()) {
+                 int id_ordine = resultSet.getInt("id_ordine");
+                 Timestamp data_ordine = resultSet.getTimestamp("data_ordine");
+                 ProdottoOrdineDAO x=new ProdottoOrdineDAO();
+                 ArrayList<ProdottoOrdineDTO> prods=x.doRetrieveAll(id_ordine);
+                 OrdineDTO ordine = new OrdineDTO(id_ordine, id_utente, data_ordine, prods);
+                 ordini.add(ordine);
+             }
+    	} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Errore durante recupero degli ordini per data: "+ e.getMessage());
+		}
+		return ordini;
+    	
     }
 
     @Override
@@ -93,11 +119,11 @@ public class OrdineDAO implements OrdineDAOInterfaccia {
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 int id_ordine = resultSet.getInt("id_ordine");
-                int id_carrello = resultSet.getInt("id_carrello");
+                int id_utente = resultSet.getInt("id_carrello");
                 Timestamp data_ordine = resultSet.getTimestamp("data_ordine");
                 ProdottoOrdineDAO prodotti=new ProdottoOrdineDAO();
                 ArrayList<ProdottoOrdineDTO> prods=prodotti.doRetrieveAll(id_ordine);
-                OrdineDTO ordine = new OrdineDTO(id_ordine, id_carrello, data_ordine, prods);
+                OrdineDTO ordine = new OrdineDTO(id_ordine, id_utente, data_ordine, prods);
                 ordini.add(ordine);
             }
         } catch (SQLException e) {
@@ -117,11 +143,11 @@ public class OrdineDAO implements OrdineDAOInterfaccia {
     		ResultSet resultSet=ps.executeQuery();
     		 while (resultSet.next()) {
                  int id_ordine = resultSet.getInt("id_ordine");
-                 int id_carrello = resultSet.getInt("id_carrello");
+                 int id_utente = resultSet.getInt("id_utente");
                  Timestamp data_ordine = resultSet.getTimestamp("data_ordine");
                  ProdottoOrdineDAO x=new ProdottoOrdineDAO();
                  ArrayList<ProdottoOrdineDTO> prods=x.doRetrieveAll(id_ordine);
-                 OrdineDTO ordine = new OrdineDTO(id_ordine, id_carrello, data_ordine, prods);
+                 OrdineDTO ordine = new OrdineDTO(id_ordine, id_utente, data_ordine, prods);
                  ordini.add(ordine);
              }
     	} catch (SQLException e) {

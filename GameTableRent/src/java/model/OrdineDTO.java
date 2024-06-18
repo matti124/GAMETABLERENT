@@ -6,16 +6,16 @@ import java.util.ArrayList;
 public class OrdineDTO {
 	
 	private final int id_Ordine;
-	private final int id_Carrello;
+	private final int id_utente;
 	private final Timestamp data;
 	private final ArrayList<ProdottoOrdineDTO> prodotti;
 	
 	
 	
-	public OrdineDTO(int id_Ordine, int id_Carrello, Timestamp data_ordine,  ArrayList<ProdottoOrdineDTO> prods) {
+	public OrdineDTO(int id_Ordine, int idUt, Timestamp data_ordine,  ArrayList<ProdottoOrdineDTO> prods) {
 		super();
 		this.id_Ordine = id_Ordine;
-		this.id_Carrello = id_Carrello;
+		this.id_utente = idUt;
 		this.data = data_ordine;
 		this.prodotti=prods;
 	}
@@ -28,8 +28,8 @@ public class OrdineDTO {
 
 
 
-	public int getId_Carrello() {
-		return id_Carrello;
+	public int getIdUtente() {
+		return id_utente;
 	}
 
 
