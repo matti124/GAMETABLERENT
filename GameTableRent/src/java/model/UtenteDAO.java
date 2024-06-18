@@ -103,19 +103,28 @@ public class UtenteDAO implements UtenteDAOInterfaccia {
     	
     }
     
-    public boolean doRetrieveByPSW(String psw) {
+    public UtenteDTO doRetrieveByPSW(String psw) {
     	String query="SELECT * FROM USER WHERE PSW = ?";
-    	try(Connection con=DriverManagerConnectionPool.getConnection();
-    			PreparedStatement ps= con.prepareStatement(query)){
-    		ps.setString(1, psw);
-    		ResultSet rs=ps.executeQuery();
-    		if(rs.next()) return true;
-    	} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-    	
-    }
+            try (Connection con = DriverManagerConnectionPool.getConnection();
+                 PreparedStatement ps = con.prepareStatement(query)) {
+                ps.setString(1, psw);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    return new UtenteDTO(
+                        rs.getInt("ID"),
+                        rs.getString("Nome"),
+                        rs.getString("Cognome"),
+                        rs.getString("Indirizzo"),
+                        rs.getString("Email"),
+                        rs.getString("Psw")
+                    );
+                }
+            } catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            return null;
+        }
     	
     }
 

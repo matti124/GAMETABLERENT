@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -25,40 +25,41 @@ public class LoginServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			this.doPost(request, response);
-	}
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        this.doPost(request, response);
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         UtenteDAO userDao = new UtenteDAO();
-        String nome = request.getParameter("nome");
-        String cognome = request.getParameter("cognome");
-        String email = request.getParameter("email");
+        UtenteDTO utente = null;
+        String hashedPsw = null;
+        
         String psw = request.getParameter("psw");
-        String indirizzo=request.getParameter("indirizzo");
-		try {
-			 psw= RegistrationServlet.hashWithSHA256(request.getParameter("Password"));
-		} catch (NoSuchAlgorithmException e) {
-			System.err.println("errore nell'hashing");
-		}
+        try {
+            hashedPsw = RegistrationServlet.hashWithSHA256(psw);
+        } catch (NoSuchAlgorithmException e) {
+            System.err.println("Errore nell'hashing");
+            response.sendRedirect(request.getContextPath() + "/errorPage.jsp");
+            return;
+        }
 
-		if(userDao.doRetrieveByPSW(psw)) {
-			UtenteDTO utente=new UtenteDTO(0,nome, cognome, email, psw, indirizzo);
-			request.getSession().setAttribute("utente", utente);
-			response.sendRedirect(request.getContextPath()+"/home.jsp");
-		}
-		else 
-			request.setAttribute("ValueLogin", 0);
-		request.getRequestDispatcher("/Registrazione.jsp").forward(request, response);
-		
-		
-	}
-
+        utente = userDao.doRetrieveByPSW(hashedPsw);
+        if (utente != null) {
+            CarrelloDAO cartDao = new CarrelloDAO();
+            CarrelloDTO cart = cartDao.doRetrieveById(utente.getID());
+            request.getSession().setAttribute("cart", cart);
+            request.getSession().setAttribute("utente", utente);
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
+        } else {
+            request.setAttribute("ValueLogin", 0);
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+        }
+    }
 }

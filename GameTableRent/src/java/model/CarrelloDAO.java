@@ -81,24 +81,24 @@ public class CarrelloDAO implements CarrelloDAOInterfaccia {
     }
 
     @Override
-    public CarrelloDTO doRetrieveById(int id_cart) {  //ritornare un carrello 
-        String query = "SELECT * FROM CARRELLO WHERE ID_CARRELLO = ?";
+    public CarrelloDTO doRetrieveById(int id_utente) {  //ritornare un carrello 
+        String query = "SELECT * FROM CARRELLO WHERE ID_UTENTE = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, id_cart);
+            statement.setInt(1, id_utente);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     int id_U = resultSet.getInt("ID_U");
                     ProdottoCarrelloDAO prod=new ProdottoCarrelloDAO();
                     ArrayList<ProdottoCarrelloDTO> prodotti_Cart=new ArrayList<>();
-                    prodotti_Cart=prod.doRetrieveAll(id_cart);
+                    prodotti_Cart=prod.doRetrieveAll(id_utente);
 
-                    return new CarrelloDTO(id_cart, prodotti_Cart, id_U);
+                    return new CarrelloDTO(id_utente, prodotti_Cart, id_U);
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Errore durante il recupero del carrello con ID " + id_cart + ": " + e.getMessage());
+            System.err.println("Errore durante il recupero del carrello con ID " + id_utente + ": " + e.getMessage());
         }
         return null;
     }

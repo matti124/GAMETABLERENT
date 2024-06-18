@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.*;
+
 @WebServlet("/Registrazione")
 public class RegistrationServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -27,44 +28,47 @@ public class RegistrationServlet extends HttpServlet {
         String cognome = request.getParameter("cognome");
         String email = request.getParameter("email");
         String psw = request.getParameter("psw");
-        String indirizzo=request.getParameter("indirizzo");
+        String indirizzo = request.getParameter("indirizzo");
 
         // Hashing della password utilizzando SHA-256
-        String hashedPassword=null;
-		try {
-			hashedPassword = hashWithSHA256(psw);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-
-       
+        String hashedPassword = null;
+        try {
+            hashedPassword = hashWithSHA256(psw);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            // Gestisci l'eccezione, ad esempio reindirizzando a una pagina di errore
+            response.sendRedirect(request.getContextPath() + "/errorPage.jsp");
+            return;
+        }
 
         try {
-
             UtenteDTO user = new UtenteDTO(0, nome, cognome, indirizzo, email, hashedPassword);
-            if(userDao.doRetrieveByEmail(email)) {
-            request.setAttribute("ValueReg", 0);
-            
-           request.getRequestDispatcher("/Login.jsp").forward(request, response);}
-            else
-            userDao.doSave(user);
 
+            if (userDao.doRetrieveByEmail(email)) {
+                request.setAttribute("ValueReg", 0);
+                request.getRequestDispatcher("/Login.jsp").forward(request, response);
+                return; 
+            } else {
+                userDao.doSave(user);
+                request.getSession().setAttribute("utente", user);
+                CarrelloDTO cart = new CarrelloDTO(0, null, user.getID());
+                CarrelloDAO cartDAO = new CarrelloDAO();
+                cartDAO.doSave(cart);
+                request.getSession().setAttribute("cart", cart);
+                request.setAttribute("ValueReg", 1);
+                request.getRequestDispatcher("Login.jsp").forward(request, response);
+                return; 
+            }
         } catch (SQLException e) {
             System.out.println("Error:" + e.getMessage());
+            // Gestisci l'eccezione, ad esempio reindirizzando a una pagina di errore
+            response.sendRedirect(request.getContextPath() + "/errorPage.jsp");
+            return; // Assicurati di uscire dopo il redirect
         }
-        
-        request.setAttribute("ValueReg", 1);
-        response.sendRedirect(request.getContextPath() + "/Login.jsp");
-
     }
 
-    
-    
-    
-    
-    
     // Metodo per l'hashing della password utilizzando SHA-256
-   public static String hashWithSHA256(String password) throws NoSuchAlgorithmException {
+    public static String hashWithSHA256(String password) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedhash = digest.digest(password.getBytes());
 
