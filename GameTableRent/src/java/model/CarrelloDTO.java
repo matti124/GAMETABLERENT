@@ -71,5 +71,14 @@ public class CarrelloDTO {
 		return tot;
 	}
 	
+	
+	public boolean contains(int id) {
+		for(ProdottoCarrelloDTO x: this.Cart) {
+			if(x.getId_prodotto()==id)
+				return true;
+		}
+		return false;
+	}
+	
 
 }
