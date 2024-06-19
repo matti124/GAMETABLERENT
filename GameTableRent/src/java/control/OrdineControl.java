@@ -17,7 +17,8 @@ AZIONI CHE DEVE GESTIRE LA SERVLET ORDINE CONTROL:
 
 1)CREAZIONE DI UN NUOVO ORDINE (Comporta pulizia del carrello)
 2)DETTAGLI DI UN PRECISO ORDINE
-3)VISTA DI TUTTI GLI ORDINI IN UN CERTO LASSO DI TEMPO (SOLO ADMIN)
+
+3)VISTA DI TUTTI GLI ORDINI IN UN CERTO LASSO DI TEMPO (SOLO ADMIN)-> LA INSERIAMO IN ADMIN CONTROL
  [MODIFICA E ELIMINAZIONE DI ORDINI SONO OPERAZIONI NON FATTIBILI IN UN E-COMMERCE POICHE' POTREBBE COMPROMETTERE LA SICUREZZA DEI DATI]
 
  *
@@ -51,7 +52,7 @@ public class OrdineControl extends HttpServlet {
 		
 		
 		case "newOrdine":
-				this.createOrder(request, response);
+				this.checkout(request, response);
 				break;
 		
 		case "OrderDetails":
@@ -87,10 +88,10 @@ public class OrdineControl extends HttpServlet {
 	
 	
 	
-	private void createOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void checkout(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 		/*Un ordine viene creato ogni qualvolta un utente effetua il checkout, quindi preme sul tasto effettua ordine. 
-		 * Il click del mouse indirizza l'utente alla servlet OrdineControl con azione createOrdine quindi sarà /OrdineControl?action=createOrder, 
+		 * Il click del mouse indirizza l'utente alla servlet OrdineControl con azione createOrdine quindi sarà /OrdineControl?action=checkout, 
 		 * la servlet va a creare un nuovo ordine relativo a quell'utente, quindi avrà:
 		 *  il campo id_ordine compilato automaticamente dal db, 
 		 *  il campo id_utente settato da noi prendendolo dalla sessione
