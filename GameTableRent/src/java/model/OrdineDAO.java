@@ -4,25 +4,28 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class OrdineDAO implements OrdineDAOInterfaccia {
 
     @Override
-    public boolean doSave(OrdineDTO ordine) { //salvo un nuovo ordine
+    public int doSave(OrdineDTO ordine) { //salvo un nuovo ordine
         String query = "INSERT INTO ordine (id_utente, data_ordine, prezzo) VALUES (?, CURRENT_TIMESTAMP(), ?)";
         
         try (Connection connection = DriverManagerConnectionPool.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, ordine.getIdUtente());
-            statement.setDouble(2, ordine.getTotalPrice());
+            statement.setDouble(2, 0.0);
 
-            int rowsAffected = statement.executeUpdate();
-            return rowsAffected == 1;
+            statement.executeUpdate();
+            ResultSet keyGenerata=statement.getGeneratedKeys();
+            
+            return keyGenerata.getInt(1);
         } catch (SQLException e) {
             System.err.println("Errore durante l'inserimento dell'ordine: " + e.getMessage());
-            return false;
+            return 0;
         }
     }
 
@@ -85,7 +88,7 @@ public class OrdineDAO implements OrdineDAOInterfaccia {
     
     
     public ArrayList<OrdineDTO> doRetrieveAllbyId(int id_utente){ //tutti gli ordini relativi ad un utente
-    	String query="SELECT * FROM ORDINE WHERE ID_CARRELLO = ?";
+    	String query="SELECT * FROM ORDINE WHERE ID_UTENTE = ?";
     	ArrayList<OrdineDTO> ordini= new ArrayList<>();
     	 
     	try(Connection connection=DriverManagerConnectionPool.getConnection();
@@ -119,7 +122,7 @@ public class OrdineDAO implements OrdineDAOInterfaccia {
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 int id_ordine = resultSet.getInt("id_ordine");
-                int id_utente = resultSet.getInt("id_carrello");
+                int id_utente = resultSet.getInt("id_utente");
                 Timestamp data_ordine = resultSet.getTimestamp("data_ordine");
                 ProdottoOrdineDAO prodotti=new ProdottoOrdineDAO();
                 ArrayList<ProdottoOrdineDTO> prods=prodotti.doRetrieveAll(id_ordine);

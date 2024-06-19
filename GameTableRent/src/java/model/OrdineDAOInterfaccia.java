@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public interface OrdineDAOInterfaccia {
 	
-	public boolean doSave(OrdineDTO x);
+	public int doSave(OrdineDTO x);
 	
 	public boolean doDeleteByKey(int id_ord);
 	

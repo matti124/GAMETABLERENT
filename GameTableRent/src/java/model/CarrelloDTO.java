@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class CarrelloDTO {
 	private final int ID_Carrello;
@@ -80,5 +81,25 @@ public class CarrelloDTO {
 		return false;
 	}
 	
+	
+	public ArrayList<ProdottoOrdineDTO> CheckOut(int id_ord){
+		  		
+		 ArrayList<ProdottoOrdineDTO> prodottiOut=new ArrayList<>();
+		 
+		 Iterator<ProdottoCarrelloDTO> iterator = this.Cart.iterator();
+		 while (iterator.hasNext()) {
+		     ProdottoCarrelloDTO x = iterator.next();
+		     ProdottoOrdineDTO prodOut = new ProdottoOrdineDTO(id_ord, x.getId_prodotto(), x.getPrezzo(), x.getPrezzoXdays(), x.getGiorni(), x.getQuantita());
+		     prodottiOut.add(prodOut);
+		     iterator.remove(); 
+		 }
 
-}
+		 return prodottiOut;
+			 
+			 
+			
+		}
+	}
+	
+
+
