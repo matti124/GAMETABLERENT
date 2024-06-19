@@ -7,6 +7,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /*
@@ -15,6 +16,8 @@ import java.util.ArrayList;
   
   1)DETTAGLIO DI UN PRODOTTO
   2)VISIONE DI TUTTI I PRODOTTI NEL CATALOGO
+  
+  LE INSERIAMO IN ADMIN CONTROL
   3)MODIFICA DI UN PRODOTTO(SOLO ADMIN)
   4)ELIMINAZIONE DI UN PRODOTTO(SOLO ADMIN)
   
@@ -70,12 +73,50 @@ public class ProductControl extends HttpServlet {
             case "elimina":
                 eliminaProdotto(request, response, utente);
                 break;
+                
+            case "aggiungi":
+            	addProduct(request, response, utente);
             default:
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
         }
     }
 
-    private void dettaglioProdotto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void addProduct(HttpServletRequest request, HttpServletResponse response, UtenteDTO utente) throws IOException {
+    	if (utente.getIsAdmin() != 1) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Non sei autorizzato a eseguire questa azione");
+            return;
+        }
+
+        try {
+            String nome = request.getParameter("nome");
+            String descrizione = request.getParameter("descrizione");
+            double prezzo = Double.parseDouble(request.getParameter("prezzo"));
+            double prezzoXDays = Double.parseDouble(request.getParameter("prezzoXDays"));
+            int inCat = Integer.parseInt(request.getParameter("inCatalogo"));
+            int quantity = Integer.parseInt(request.getParameter("quantita"));
+            Part filePart = request.getPart("immagine");
+            byte[] immagine = null;
+            if (filePart != null && filePart.getSize() > 0) {
+                InputStream inputStream = filePart.getInputStream();
+                immagine = inputStream.readAllBytes();
+            }
+
+            ProdottoDTO nuovoProdotto = new ProdottoDTO(0, nome, descrizione, prezzo, prezzoXDays, inCat, quantity, immagine);
+           
+
+            boolean added = prodottoDAO.doSave(nuovoProdotto);
+            if (added) {
+                response.sendRedirect(request.getContextPath() + "/ProductControl?action=mostraProdotti");
+            } else {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore durante l'aggiunta del prodotto");
+            }
+        } catch (NumberFormatException | IOException | ServletException | SQLException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore durante l'elaborazione della richiesta");
+        }		
+	}
+
+	private void dettaglioProdotto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int codice = Integer.parseInt(request.getParameter("codice"));
         ProdottoDTO prodotto = prodottoDAO.doRetrieveByKey(codice);
 		if (prodotto != null) {
