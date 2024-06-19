@@ -9,6 +9,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+/*
+  
+  AZIONI GESTITE DALLA SERVLET DI PRODUCT CONTROL:
+  
+  1)DETTAGLIO DI UN PRODOTTO
+  2)VISIONE DI TUTTI I PRODOTTI NEL CATALOGO
+  3)MODIFICA DI UN PRODOTTO(SOLO ADMIN)
+  4)ELIMINAZIONE DI UN PRODOTTO(SOLO ADMIN)
+  
+ 
+
+ 
+ 
+ 
+ */
+
 @WebServlet("/ProductControl")
 public class ProductControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
