@@ -45,13 +45,23 @@ public class AdminControl extends HttpServlet {
 		switch (azione) {
 		
 		
-		case "allOrdersByDate": 
+		case "allOrdersByDate":{ 
 			this.AllOrders(request, response);
-			break;
+			break;}
 			
-		case "addProduct": //mi indirizza alla pagina in cui compilerò il form per il nuovo elemento la quale passerà i dati a ProductControl?action=AddProduct
+		case "addProduct":{ //mi indirizza alla pagina in cui compilerò il form per il nuovo elemento la quale passerà i dati a ProductControl?action=aggiungi
 			response.sendRedirect(request.getContextPath()+"/NewProduct.jsp");
-			break;
+			break;}
+			
+			
+			
+		case "updateProd":{
+			response.sendRedirect(request.getContextPath()+"/UpdateProduct.jsp"); //mi indirizza alla pagina form dove potrò aggiornare il prodotto e i dati modificati verranno inoltrati a ProuctControl?action=updateProduct
+			break;}
+			
+		case "removeProd":{
+			request.getRequestDispatcher("/ProductoControl?action=elimina");
+			break;}
 			
 		}
 		
@@ -61,17 +71,7 @@ public class AdminControl extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String azione=request.getParameter("action"); 
-		
-		switch (azione) {
-		
-		
-		case "updateProd":
-			response.sendRedirect(request.getContextPath()+"/UpdateProduct.jsp"); //mi indirizza alla pagina form dove potrò aggiornare il prodotto e i dati modificati verranno inoltrati a ProuctControl?action=updateProduct
-		
-		case "removeProd":
-			request.getRequestDispatcher("/ProductoControl?action=eliminaProdotto");
-		}
+		doGet(request, response);
 	}
 	
 	
