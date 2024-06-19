@@ -12,7 +12,7 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
 
     @Override
     public boolean doSave(ProdottoOrdineDTO prod) {
-        String query = "INSERT INTO PRODOTTI_CARRELLO (ID_ORDINE, ID_PRODOTTO, PREZZO, PREZZOXDAYS, GIORNI, QUANTITY) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO PRODOTTI_ORDINE (ID_ORDINE, ID_PRODOTTO, PREZZO, PREZZOXDAYS, GIORNI, QUANTITY) VALUES (?, ?, ?, ?, ?, ?)";
         
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
         		PreparedStatement statement = connection.prepareStatement(query)) {
@@ -33,7 +33,7 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
 
     @Override
     public boolean doDelete(ProdottoOrdineDTO prod) {
-        String query = "DELETE FROM PRODOTTI_CARRELLO WHERE ID_CARRELLO = ? AND ID_PRODOTTO = ?";
+        String query = "DELETE FROM PRODOTTI_ORDINE WHERE ID_ORDINE = ? AND ID_PRODOTTO = ?";
         
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
         		PreparedStatement statement = connection.prepareStatement(query)) {
@@ -49,7 +49,7 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
     }
 
     public boolean doUpdate(ProdottoOrdineDTO prod) {
-        String query = "UPDATE PRODOTTI_CARRELLO SET PREZZO = ?, PREZZOXDAYS = ?, GIORNI = ?, QUANTITY = ? WHERE ID_ORDINE = ? AND ID_PRODOTTO = ?";
+        String query = "UPDATE PRODOTTI_ORDINE SET PREZZO = ?, PREZZOXDAYS = ?, GIORNI = ?, QUANTITY = ? WHERE ID_ORDINE = ? AND ID_PRODOTTO = ?";
         
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
         		PreparedStatement statement = connection.prepareStatement(query)) {
@@ -69,12 +69,12 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
     }
 
     @Override
-    public ProdottoOrdineDTO doRetrieveByKey(int id_cart, int id_prod) {
-        String query = "SELECT * FROM PRODOTTI_CARRELLO WHERE ID_CARRELLO = ? AND ID_PRODOTTO = ?";
+    public ProdottoOrdineDTO doRetrieveByKey(int id_ord, int id_prod) {
+        String query = "SELECT * FROM PRODOTTI_ORDINE WHERE ID_CARRELLO = ? AND ID_PRODOTTO = ?";
         
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
         		PreparedStatement statement = connection.prepareStatement(query)) {
-        	statement.setInt(1, id_cart);
+        	statement.setInt(1, id_ord);
             statement.setInt(2, id_prod);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -84,7 +84,7 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
                     double prezzo=resultSet.getDouble("PREZZO");
                     double prezzoxdays=resultSet.getDouble("PREZZOXDAYS");
 
-                    return new ProdottoOrdineDTO(id_cart, id_prod,prezzo, prezzoxdays, quantity, giorni);
+                    return new ProdottoOrdineDTO(id_ord, id_prod,prezzo, prezzoxdays, quantity, giorni);
                 }
             }
         } catch (SQLException e) {
@@ -95,7 +95,7 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
 
     
     public ArrayList<ProdottoOrdineDTO> doRetrieveAll(int id_ord) {
-        String query = "SELECT * FROM PRODOTTI_CARRELLO WHERE ID_CARRELLO = ?";
+        String query = "SELECT * FROM PRODOTTI_ORDINE WHERE ID_ORDINE = ?";
         ArrayList<ProdottoOrdineDTO> prodotti = new ArrayList<>();
         
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
@@ -125,7 +125,7 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
     
 
     public ArrayList<ProdottoOrdineDTO> doRetrieveByProd(int id_prod) {
-        String query = "SELECT * FROM PRODOTTI_CARRELLO WHERE ID_PRODOTTO = ?";
+        String query = "SELECT * FROM PRODOTTI_ORDINE WHERE ID_PRODOTTO = ?";
         ArrayList<ProdottoOrdineDTO> ordini = new ArrayList<>();
         
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
@@ -134,13 +134,13 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    int id_carrello = resultSet.getInt("ID_CARRELLO");
+                    int id_ord = resultSet.getInt("ID_ORDINE");
                     int quantity = resultSet.getInt("QUANTITY");
                     int giorni = resultSet.getInt("GIORNI");
                     double prezzo=resultSet.getDouble("PREZZO");
                     double prezzoxdays=resultSet.getDouble("PREZZOXDAYS");
 
-                    ProdottoOrdineDTO prodotto = new ProdottoOrdineDTO(id_carrello, id_prod, prezzo, prezzoxdays, giorni, quantity);
+                    ProdottoOrdineDTO prodotto = new ProdottoOrdineDTO(id_ord, id_prod, prezzo, prezzoxdays, giorni, quantity);
                     ordini.add(prodotto);
                 }
             }
