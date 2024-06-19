@@ -7,6 +7,19 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
+
+
+
+/*
+ AZIONI GESTITE DALLA SERVLET CART CONTROL:
+ 
+ 1)VISTA DEI PRODOTTI DI UNO SPECIFICO UTENTE
+ 2)PULIZIA TOTALE DI UN CARRELLO
+ 3)ELIMINAZIONE CARRELLO[IN CASO UN UTENTE VENISSE ELIMINATO ANCHE IL SUO CARRELLO VERREBBE ELIMINATO]
+ 4)AGGIUNTA PRODOTTO AL CARRELLO [NECESSITA DI PARAMETRO CODICE DALLA GET]
+ 5)RIMOZIONE PRODOTTO DAL CARRELLO [NECESSITA DI PARAMETRO CODICE DALLA GET]
+
+ */
 @WebServlet(name = "CarrelloServlet", value = "/carrello")
 public class CartControl extends HttpServlet {
     
@@ -101,15 +114,14 @@ public class CartControl extends HttpServlet {
     
     
     private void deleteCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	UtenteDTO user=(UtenteDTO) request.getSession().getAttribute("utente");
-
-        CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
+    	int id_exUtente=(int) request.getAttribute("id_exUt");
+        CarrelloDTO cart = carrelloDAO.doRetrieveById(id_exUtente);
 
         if (cart != null) {
             boolean deleted = carrelloDAO.doDeleteByKey(cart.getID_Carrello());
 
             if (deleted) {
-                response.sendRedirect(request.getContextPath() + "/carrello?action=view");
+                response.sendRedirect(request.getContextPath() + "/Home.jsp");
             } else {
                 response.getWriter().println("Failed to delete cart.");
             }
@@ -144,7 +156,7 @@ public class CartControl extends HttpServlet {
         else  //se l'elemento non è già nel carrello devo ritrovare nel db il prezzo e prezzoxdays di esso e poi aggiungerlo al carrello
         	prodotto=prodottoDAO.doRetrieveByKey(id_prod);
         if(prodotto!=null) {
-        	prod=new ProdottoCarrelloDTO(cart.getID_Carrello(),prodotto.getID_Prod(), quantity, giorni, prodotto.getPrezzo(), prodotto.getPrezzoXDay());
+        	prod=new ProdottoCarrelloDTO(cart.getID_Carrello(),prodotto.getID_Prod(),  prodotto.getPrezzo(), prodotto.getPrezzoXDay(),quantity, giorni);
         	cart.addProduct(prod);
         	carrelloDAO.doSave(cart);}
         
@@ -166,7 +178,7 @@ public class CartControl extends HttpServlet {
         
         CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
         ProdottoCarrelloDAO prodDAO= new ProdottoCarrelloDAO();
-    	ProdottoCarrelloDTO prod;
+        ProdottoCarrelloDTO prod;
         
         if (cart != null) {
         	prod=prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
