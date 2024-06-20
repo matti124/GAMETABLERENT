@@ -10,14 +10,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.*;
-
+/*	SERVLET ADEBITA ALLA REGISTRAZIONE DI NUOVI UTENTI
+ * UNA VOLTA COMPILATO IL FORM DI REGISTRAZIONE, I DATI VENGONO INOLTRATI A QUESTA SERVLET CHE PRIMA DI TUTTO CONTROLLA 
+ * CHE NON VI SIA GIA' UN ACCOUNT CHE UTILIZZI QUELLA E-MAIL, PER POI SALVARE TUTTI I DATI OTTENUTI DAL FORM IN UN DTO
+ * APPOSITO PER L'UTENTE DOVE AL MOMENTO DEL SALVATAGGIO DELLA PSW, LA SALVEREMO HASHATA. UNA VOLTA FATTO CIO' NON RESTA
+ * CHE CHIAMARE LA FUNZIONE APPOSITA DEL DAO CHE PERMETTERA' DI SALVARE IL NUOVO UTENTE NEL DATABASE E CON LUI ANCHE IL 
+ * CARRELLO ASSOCIATO. (SE UTENTE PRIMA DI REGISTRARSI AVEVA INSERITO PRODOTTI NEL CARRELLO ALLORA SALVIAMO QUEL CARRELLO NEL DB
+ * 
+ *
+ * 
+ *
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
 @WebServlet("/Registrazione")
 public class RegistrationServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doPost(request, response);
+        doPost(request, response); 
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -51,9 +66,19 @@ public class RegistrationServlet extends HttpServlet {
             } else {
                 userDao.doSave(user);
                 request.getSession().setAttribute("utente", user);
-                CarrelloDTO cart = new CarrelloDTO(0, null, user.getID());
+                
+                CarrelloDTO cart = (CarrelloDTO) request.getSession().getAttribute("cart");
+               //se il carrello della sessione è vuoto ne creo uno nuovo
+                if(cart.getCart().isEmpty())
+                	cart=new CarrelloDTO(0, user.getID());
+                //se vi sono prodotti nel carrello della sessione ne creo uno nuovo che presenta i prodotti di quello della sessione
+                else cart=new CarrelloDTO(0, cart.getCart(), user.getID());
+                
                 CarrelloDAO cartDAO = new CarrelloDAO();
                 cartDAO.doSave(cart);
+                
+                
+                
                 request.getSession().setAttribute("cart", cart);
                 request.setAttribute("ValueReg", 1);
                 request.getRequestDispatcher("Login.jsp").forward(request, response);
@@ -61,9 +86,8 @@ public class RegistrationServlet extends HttpServlet {
             }
         } catch (SQLException e) {
             System.out.println("Error:" + e.getMessage());
-            // Gestisci l'eccezione, ad esempio reindirizzando a una pagina di errore
             response.sendRedirect(request.getContextPath() + "/errorPage.jsp");
-            return; // Assicurati di uscire dopo il redirect
+            return;
         }
     }
 

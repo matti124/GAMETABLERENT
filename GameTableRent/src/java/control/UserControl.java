@@ -1,6 +1,7 @@
 package control;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import model.*;
@@ -32,7 +33,7 @@ public class UserControl extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String azione=request.getParameter("action");
 		UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("utente");
-       
+       UtenteDAO userDAO=new UtenteDAO();
 		switch (azione) {
 		
 		
@@ -42,7 +43,7 @@ public class UserControl extends HttpServlet {
 			 {
             ArrayList<OrdineDTO> ordini = this.getInformazioni(user.getID());
             request.setAttribute("Ordini", ordini);
-            request.getRequestDispatcher("OwnHub.jsp").forward(request, response);
+            request.getRequestDispatcher("MyOrders.jsp").forward(request, response);
             return;
            }
      
@@ -51,23 +52,30 @@ public class UserControl extends HttpServlet {
         
 		case "Update": //sulla pagina ci sarà un tasto "modifica" che permette di modificare i campi delle informazioni dell'utente, una volta premuto submit viene chiamata questa pagina
 		{
-		UtenteDAO userDAO=new UtenteDAO();
 		
 		String nome=request.getParameter("nome");
 		String cognome=request.getParameter("cognome");
 		String email=request.getParameter("email");
-		String psw=request.getParameter("psw");;
+		String psw=request.getParameter("psw");
+		String pswHashed=null;
 		String indirizzo=request.getParameter("indirizzo");
+
+		//Hashing della psw 
+		try {
+			 pswHashed=RegistrationServlet.hashWithSHA256(psw);
+		} catch (NoSuchAlgorithmException e) {
+		    System.err.println("Errore nell'hashing");
+            response.sendRedirect(request.getContextPath() + "/errorPage.jsp");		}
 		
 		user.setNome(nome);
 		user.setCognome(cognome);
 		user.setEmail(email);
-		user.setPsw(psw);
+		user.setPsw(pswHashed);
 		user.setIndirizzo(indirizzo);
 		
 		try {
 			userDAO.doUpdate(user);
-            request.getRequestDispatcher("OwnHub.jsp").forward(request, response);
+            request.getRequestDispatcher("Account.jsp").forward(request, response);
             return;
 
 		} catch (SQLException e) {
@@ -87,9 +95,8 @@ public class UserControl extends HttpServlet {
 		
 		case "Delete":
 		{
-			UtenteDAO dao=new UtenteDAO();
 			try {
-				dao.doDeleteByKey(user.getID());
+				userDAO.doDeleteByKey(user.getID());
 				response.sendRedirect(request.getContextPath()+"/Home.jsp");
 				return;
 
@@ -99,6 +106,13 @@ public class UserControl extends HttpServlet {
 			}
 		}
 		
+		
+		
+		
+			
+		
+			
+			
 		
 		
 		

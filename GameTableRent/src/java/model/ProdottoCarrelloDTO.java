@@ -60,12 +60,23 @@ public class ProdottoCarrelloDTO {
 	public void decreaseQuantity() {
 		this.quantita--;
 	}
+	
+	public void setQuantity(int x) {
+		this.quantita=x;
+	}
 
 
 	@Override
 	public boolean equals(Object obj) {
 		ProdottoCarrelloDTO x=(ProdottoCarrelloDTO) obj;
 		return (this.id_prodotto==x.id_prodotto && this.id_carrello==x.id_carrello);
+	}
+
+
+
+
+	public void setDays(int giorni) {
+		this.giorni=giorni;
 	}
 	
 	

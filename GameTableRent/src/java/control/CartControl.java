@@ -18,6 +18,7 @@ import java.io.IOException;
  3)ELIMINAZIONE CARRELLO[IN CASO UN UTENTE VENISSE ELIMINATO ANCHE IL SUO CARRELLO VERREBBE ELIMINATO]
  4)AGGIUNTA PRODOTTO AL CARRELLO [NECESSITA DI PARAMETRO CODICE DALLA GET]
  5)RIMOZIONE PRODOTTO DAL CARRELLO [NECESSITA DI PARAMETRO CODICE DALLA GET]
+ 6)AGGIORNAMENTO CARRELLO 
 
  */
 @WebServlet(name = "CarrelloServlet", value = "/carrello")
@@ -55,14 +56,10 @@ public class CartControl extends HttpServlet {
                 deleteCart(request, response);
                 break;
                 
-            case "addCart":
-            	addToCart(request,response);
-            	break;
+            
             	
             	
-            case "removeFromCart":
-            	removeFromCart(request, response);
-            	
+            
             	
             	
             default:
@@ -73,7 +70,20 @@ public class CartControl extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+       String action=request.getParameter("action");
+      
+       switch(action) {
+       
+       case "addToCart":
+    	   this.addToCart(request, response);
+    	   break;
+       case "UpdateCart":
+    	   	this.updateCart(request, response);
+       
+       
+       }
+       
+    
     }
 
     private void viewCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { //azione che avviene quando si preme sul tasto per andare al carrello
@@ -164,7 +174,7 @@ public class CartControl extends HttpServlet {
         	carrelloDAO.doSave(cart);}
         
         try {
-			response.sendRedirect(request.getContextPath() + "/carrello?action=view");
+			response.sendRedirect(request.getContextPath() + "/ProductControl?action=mostraProdotti");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -174,34 +184,36 @@ public class CartControl extends HttpServlet {
     	}
     
     
-    private void removeFromCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
-        
-        UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("utente");
-        
-        CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
-        ProdottoCarrelloDAO prodDAO= new ProdottoCarrelloDAO();
-        ProdottoCarrelloDTO prod;
-        
-        if (cart != null) {
-        	prod=prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
-        	cart.decreaseProduct(prod);
-        	carrelloDAO.doUpdateCart(cart);
-        	if(!cart.getCart().contains(prod))
-        		prodDAO.doDelete(prod);
-        	
-        }
-        try {
-     			response.sendRedirect(request.getContextPath() + "/carrello?action=view");
-     		} catch (IOException e) {
-     			// TODO Auto-generated catch block
-     			e.printStackTrace();
-     		}
-        	
-        	
-            
-    }
 
+    
+    
+    private void updateCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        int giorni = Integer.parseInt(request.getParameter("days"));
+
+        UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("utente");
+        CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
+        ProdottoCarrelloDAO prodDAO = new ProdottoCarrelloDAO();
+        ProdottoCarrelloDTO prod;
+
+        if (cart != null) {
+            prod = prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
+            if (prod != null) {
+                if (quantity == 0) {
+                    cart.decreaseProduct(prod);
+                    carrelloDAO.doUpdateCart(cart);
+                    prodDAO.doDelete(prod);
+                } else {
+                    prod.setQuantity(quantity);
+                    prod.setDays(giorni);
+                    prodDAO.doUpdate(prod);
+                    carrelloDAO.doUpdateCart(cart);
+                }
+        response.getWriter().write("Success");
+    }
+        }
     	
     }
+}
 

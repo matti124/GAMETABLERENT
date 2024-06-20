@@ -8,14 +8,20 @@ public class CarrelloDTO {
 	private ArrayList <ProdottoCarrelloDTO> Cart;
 	private int ID_Utente;
 	
-	
+	//costruttore che presenta anche prodotti associati
 	public CarrelloDTO(int iD_Carrello, ArrayList<ProdottoCarrelloDTO> prodottiInCart, int id_ut) {
 		super();
 		this.ID_Carrello = iD_Carrello;
 		this.Cart = prodottiInCart;
 		this.ID_Utente=id_ut;
 	}
-
+	//costruttore per nuovo carrello senza prodotti associati
+	public CarrelloDTO(int iD_Carrello,  int id_ut) {
+		super();
+		this.ID_Carrello = iD_Carrello;
+		this.Cart = new ArrayList<>();
+		this.ID_Utente=id_ut;
+	}
 
 	public int getID_Utente() {
 		return ID_Utente;

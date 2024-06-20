@@ -44,7 +44,8 @@ public class OrdineControl extends HttpServlet {
 		
 		
 		if(user==null)
-			response.sendRedirect(request.getContextPath()+"/errorpage404");
+			request.setAttribute("NonRegisteredUser", 1);
+			request.getRequestDispatcher("/Registration.jsp").forward(request, response);
 		
 		String action= request.getParameter("action");
 		
@@ -60,12 +61,21 @@ public class OrdineControl extends HttpServlet {
 				break;
 				
 				
-		case "AllOrders":
+		case "AllOrdersByDate":
 				if(user.getIsAdmin()>0)
+				this.AllOrdersByDate(request, response);
+				else             
+					response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Solo admin può accedere a queste azioni!");
+				break;
+				
+		case "AllOrders":
+			if(user.getIsAdmin()>0)
 				this.AllOrders(request, response);
 				else             
 					response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Solo admin può accedere a queste azioni!");
 				break;
+				
+		
 
 		
 		}
@@ -116,7 +126,7 @@ public class OrdineControl extends HttpServlet {
 		ArrayList<ProdottoOrdineDTO> prodottiInCart=new ArrayList<>();
 	
 		prodottiInCart=cart.CheckOut(keyIdOrd);
-		
+		//controllo quantità
 		for(ProdottoOrdineDTO x: prodottiInCart) {
 			ordine.getProdotti().add(x);
 			prodDAO.doSave(x);
@@ -148,13 +158,23 @@ public class OrdineControl extends HttpServlet {
 	
 	
 	
-	private void AllOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Timestamp start=Timestamp.valueOf(request.getParameter("Start")); //sarà necessaria una regular expression di javascriprt per essere sicuro che sia corretta la data
-		Timestamp end=Timestamp.valueOf(request.getParameter("End"));
+	private void AllOrdersByDate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Timestamp start=(Timestamp) request.getAttribute("start"); //sarà necessaria una regular expression di javascriprt per essere sicuro che sia corretta la data
+		Timestamp end=(Timestamp)request.getAttribute("end");
 		OrdineDAO dao=new OrdineDAO();
 		ArrayList<OrdineDTO> ordini=dao.doRetrieveByDate(start, end);
 		request.setAttribute("listaOrdini", ordini);
-		request.getRequestDispatcher("/OthersOrders.jsp").forward(request,response); //pagina per vedere tutti gli ordini in uno specifico arco di tempo
+		request.getRequestDispatcher("/Orders.jsp").forward(request,response); //pagina per vedere tutti gli ordini in uno specifico arco di tempo
 	}
+	
+	private void AllOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		OrdineDAO dao=new OrdineDAO();
+		ArrayList<OrdineDTO> ordini=dao.doRetrieveAll();
+		request.setAttribute("listaOrdini", ordini);
+		request.getRequestDispatcher("/Orders.jsp").forward(request,response); 
+	}
+	
+	
 
 }
