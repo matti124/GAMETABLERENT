@@ -153,10 +153,13 @@ public class CartControl extends HttpServlet {
     		cart.addProduct(prod);
     		carrelloDAO.doUpdateCart(cart);}
         
-        else  //se l'elemento non è già nel carrello devo ritrovare nel db il prezzo e prezzoxdays di esso e poi aggiungerlo al carrello
+      
+ //se l'elemento non è già nel carrello devo ritrovare nel db il prezzo e prezzoxdays di esso e poi aggiungerlo al carrello e crearne una riga in ProdottoCarrello
+        else 
         	prodotto=prodottoDAO.doRetrieveByKey(id_prod);
         if(prodotto!=null) {
         	prod=new ProdottoCarrelloDTO(cart.getID_Carrello(),prodotto.getID_Prod(),  prodotto.getPrezzo(), prodotto.getPrezzoXDay(),quantity, giorni);
+        	prodDAO.doSave(prod);       	
         	cart.addProduct(prod);
         	carrelloDAO.doSave(cart);}
         
@@ -184,6 +187,8 @@ public class CartControl extends HttpServlet {
         	prod=prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
         	cart.decreaseProduct(prod);
         	carrelloDAO.doUpdateCart(cart);
+        	if(!cart.getCart().contains(prod))
+        		prodDAO.doDelete(prod);
         	
         }
         try {

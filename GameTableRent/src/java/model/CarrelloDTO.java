@@ -57,8 +57,8 @@ public class CarrelloDTO {
 		ProdottoCarrelloDTO prod=this.retrieveById(x.getId_prodotto(), x.getId_carrello());
 		if(prod!=null)
 			if(prod.getQuantita()==1) 
-				this.Cart.remove(x);
-			else x.decreaseQuantity();
+				this.Cart.remove(prod);
+			else prod.decreaseQuantity();
 	}
 	
 	public double getTotalPrice() {
