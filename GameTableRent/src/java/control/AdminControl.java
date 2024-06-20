@@ -1,6 +1,7 @@
 package control;
-
+import model.*;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -60,8 +61,22 @@ public class AdminControl extends HttpServlet {
 			break;}
 			
 		case "removeProd":{
-			request.getRequestDispatcher("/ProductoControl?action=elimina");
+			response.sendRedirect(request.getContextPath()+"/ProductoControl?action=elimina");
 			break;}
+		
+		
+		case "seeAllUsers":{
+			ArrayList<UtenteDTO> listaUtenti= new ArrayList<>();
+			UtenteDAO userDAO=new UtenteDAO();
+			try {
+				listaUtenti=userDAO.doRetrieveAll();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			request.setAttribute("listaUtenti", listaUtenti);
+			request.getRequestDispatcher("/ListaUtenti.jsp").forward(request, response);
+			
+		}
 			
 		}
 		
@@ -82,7 +97,7 @@ public class AdminControl extends HttpServlet {
 		OrdineDAO dao=new OrdineDAO();
 		ArrayList<OrdineDTO> ordini=dao.doRetrieveByDate(start, end);
 		request.setAttribute("listaOrdini", ordini);
-		request.getRequestDispatcher("/OthersOrders.jsp").forward(request,response); //pagina per vedere tutti gli ordini in uno specifico arco di tempo
+		request.getRequestDispatcher("/AllOrders.jsp").forward(request,response); //pagina per vedere tutti gli ordini in uno specifico arco di tempo
 	}
 
 
