@@ -40,7 +40,7 @@ public class LoginServlet extends HttpServlet {
         UtenteDAO userDao = new UtenteDAO();
         UtenteDTO utente = null;
         String hashedPsw = null;
-        
+        String email=request.getParameter("email");
         String psw = request.getParameter("psw");
         try {
             hashedPsw = RegistrationServlet.hashWithSHA256(psw);
@@ -49,17 +49,17 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/errorPage.jsp");
             return;
         }
-
+        if(userDao.doRetrieveByEmail(email))
         utente = userDao.doRetrieveByPSW(hashedPsw);
         if (utente != null) {
             CarrelloDAO cartDao = new CarrelloDAO();
             CarrelloDTO cart = cartDao.doRetrieveById(utente.getID());
             request.getSession().setAttribute("cart", cart);
             request.getSession().setAttribute("utente", utente);
-            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            response.sendRedirect(request.getContextPath() + "/Home.jsp");
         } else {
             request.setAttribute("ValueLogin", 0);
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/Login.jsp").forward(request, response);
         }
     }
 }

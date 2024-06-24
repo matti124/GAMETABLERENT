@@ -14,13 +14,13 @@ PRIMARY KEY(ID));
 
 CREATE TABLE PRODOTTO (
     ID_Prod INT NOT NULL AUTO_INCREMENT,
-    Nome VARCHAR(20) NOT NULL UNIQUE,
+    Nome VARCHAR(50) NOT NULL UNIQUE,
     Descrizione TEXT NOT NULL,
     Prezzo DOUBLE NOT NULL,
     PrezzoXDays DOUBLE NOT NULL, 
     Quantity SMALLINT NOT NULL,
     In_Cat BOOL DEFAULT 0 NOT NULL,
-    Picture BLOB NOT NULL,
+    Picture BLOB DEFAULT NULL,
     PRIMARY KEY (ID_Prod),
     INDEX idx_PrezzoXDays (PrezzoXDays), -- Aggiungi un indice a PrezzoXDays
     INDEX idx_Prezzo (Prezzo),           -- Aggiungi un indice a Prezzo

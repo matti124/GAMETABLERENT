@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ProdottoDAO implements ProdottoDAOInterfaccia {
-	private static final String RetrieveByKeySQL="SELECT * FROM PRODOTTO WHERE ID= ?;";
+	private static final String RetrieveByKeySQL="SELECT * FROM PRODOTTO WHERE ID_Prod= ?;";
 	private static final String doSaveSQL="INSERT INTO PRODOTTO(ID_Prod, Nome, Descrizione, Prezzo, PrezzoXDays, Quantity, In_Cat, Picture) VALUES(?, ?, ?, ?, ?, ?, ?, ?;";
 	private static final String doDeleteSQL="DELETE FROM PRODOTTI WHERE ID= ?";
 	private static final String doRetrieveAllSQL="SELECT * FROM PRODOTTO;";

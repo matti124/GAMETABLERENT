@@ -23,6 +23,15 @@ public class ProdottoCarrelloDTO {
 
 	
 	
+	@Override
+	public String toString() {
+		return "ProdottoCarrelloDTO [id_carrello=" + id_carrello + ", id_prodotto=" + id_prodotto + ", quantita="
+				+ quantita + ", giorni=" + giorni + ", prezzo=" + prezzo + ", prezzoXdays=" + prezzoXdays + "]";
+	}
+
+
+
+
 	public double getPrezzo() {
 		return prezzo;
 	}

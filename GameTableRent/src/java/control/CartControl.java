@@ -21,7 +21,7 @@ import java.io.IOException;
  6)AGGIORNAMENTO CARRELLO 
 
  */
-@WebServlet(name = "CarrelloServlet", value = "/carrello")
+@WebServlet("/CartControl")
 public class CartControl extends HttpServlet {
     
     private static final long serialVersionUID = 1L;
@@ -143,21 +143,35 @@ public class CartControl extends HttpServlet {
     
     
     
-    private void addToCart(HttpServletRequest request, HttpServletResponse response) {
+	private void addToCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
     	
     	int id_prod=Integer.parseInt(request.getParameter("codice_prod"));
     	int quantity=Integer.parseInt(request.getParameter("quantity"));
     	int giorni=Integer.parseInt(request.getParameter("days"));
     	
-    	
+    	System.out.println("ID PRODOTTO->" +id_prod);
+    	System.out.println("QUANTITA->" +quantity);
+    	System.out.println("GIORNI->" +giorni);
+
     	UtenteDTO user=(UtenteDTO) request.getSession().getAttribute("utente");
+    	
     	ProdottoCarrelloDAO prodDAO= new ProdottoCarrelloDAO();
     	ProdottoCarrelloDTO prod;
-        CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
+        CarrelloDTO cart=(CarrelloDTO) request.getSession().getAttribute("carrello");
+
         ProdottoDAO prodottoDAO= new ProdottoDAO();
         ProdottoDTO prodotto=null;
         
-    	
+        if(user==null) {
+        	prodotto=prodottoDAO.doRetrieveByKey(id_prod);
+        	ProdottoCarrelloDTO prod1=new ProdottoCarrelloDTO(0,prodotto.getID_Prod(),  prodotto.getPrezzo(), prodotto.getPrezzoXDay(),quantity, giorni);
+        	System.out.println(prod1);
+        	cart.addProduct(prod1);
+        	return;
+
+        	
+    	}
         if(cart.contains(id_prod)) { //se il carrello contiene già un elemento di quel tipo 
     		prod=prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
     		cart.addProduct(prod);

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -65,14 +67,17 @@ public class RegistrationServlet extends HttpServlet {
                 return; 
             } else {
                 userDao.doSave(user);
+                user=userDao.doRetrieveByPSW(hashedPassword);
                 request.getSession().setAttribute("utente", user);
                 
-                CarrelloDTO cart = (CarrelloDTO) request.getSession().getAttribute("cart");
+                CarrelloDTO cart = (CarrelloDTO) request.getSession().getAttribute("carrello");
                //se il carrello della sessione è vuoto ne creo uno nuovo
-                if(cart.getCart().isEmpty())
-                	cart=new CarrelloDTO(0, user.getID());
+                if(cart.getCart().isEmpty()) {
+                	ArrayList<ProdottoCarrelloDTO> listaProds=new ArrayList<>();
+                	cart=new CarrelloDTO(0, listaProds, user.getID());}
                 //se vi sono prodotti nel carrello della sessione ne creo uno nuovo che presenta i prodotti di quello della sessione
-                else cart=new CarrelloDTO(0, cart.getCart(), user.getID());
+                else 
+                	cart=new CarrelloDTO(0, cart.getCart(), user.getID());
                 
                 CarrelloDAO cartDAO = new CarrelloDAO();
                 cartDAO.doSave(cart);
