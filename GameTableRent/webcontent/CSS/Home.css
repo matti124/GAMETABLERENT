@@ -1,0 +1,128 @@
+@charset "UTF-8";
+/* Reset dei margini e della famiglia di caratteri per tutto il corpo */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Colore di sfondo neutro della pagina */
+    overflow-x: hidden; /* Impedisce lo scrolling orizzontale su dispositivi mobili */
+    background-image: url("../Pictures/1000_F_263916530_LxHmbQhIf1QV3APt1tgqSNthRdl5PVJa.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+/* Titolo centrato sopra tutto il contenuto */
+.title {
+    position: relative; /* Posizione relativa per contenere elementi posizionati in modo assoluto */
+    max-width: 90%; /* Larghezza massima del titolo per renderlo responsive */
+    margin: 20px auto; /* Margine per centrare il titolo */
+    font-size: 2em;
+    color: #4e8f00;
+    text-align: center;
+    z-index: 1; /* Posizionato sopra gli altri elementi */
+}
+
+      .title span {
+      		font-family:monospace;
+      		font-style:oblique;
+      		font-weight:bold;
+            background-color: #fff7d7; /* Colore di sfondo per l'area del testo */
+            color:olive;
+            border: 2px solid #4e8f00; /* Bordo del titolo */
+            padding: 5px 10px; /* Padding interno al bordo */
+            border-radius: 10px; /* Bordo arrotondato */
+        }
+
+/* Contenitore principale che centra il contenuto verticalmente */
+.container {
+    display: grid; /* Layout a griglia */
+    grid-template-columns: repeat(3, 1fr); /* Tre colonne di larghezza uguale */
+    grid-gap: 20px; /* Spazio tra le colonne */
+    align-items: center; /* Allineamento verticale al centro */
+    justify-content: center; /* Allineamento orizzontale al centro */
+    min-height: 100vh; /* Altezza minima della viewport */
+    box-sizing: border-box; /* Assicura che il padding non aumenti le dimensioni del contenitore */
+    background-color: rgba(255, 255, 255, 0.9); /* Sfondo bianco semi-trasparente per il contenitore */
+    border: 2px double #ccc; /* Bordo grigio per il contenitore */
+}
+
+/* Colonna che contiene ciascun pulsante */
+.row {
+    background-size: cover; /* Copre completamente l'area della colonna con l'immagine di sfondo */
+    background-position: center;
+    display: flex;
+    flex-direction: column; /* Dispone i contenuti verticalmente */
+    align-items: center;
+    justify-content: center; /* Allineamento contenuto al centro verticale */
+    text-align: center;
+    position: relative; /* Posizione relativa per contenere elementi posizionati in modo assoluto */
+    border-radius: 20px; /* Bordo arrotondato */
+    border: 2px solid #fefb00; /* Bordo verde */
+    padding: 20px; /* Spazio interno alla colonna */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+    height: 90%; /* Altezza al 100% della colonna */
+}
+
+/* Immagine di sfondo per la prima colonna */
+#row1 {
+    background-image: url("../Pictures/Registrazione.jpeg");
+}
+
+/* Colori di sfondo per le altre colonne */
+#row2 {
+    background-color: #8df900; /* Verde */
+    background-image: url("../Pictures/Login.jpeg");
+}
+
+#row3 {
+    background-color: #d4fb78; /* Verde chiaro */
+    background-image: url("../Pictures/Catalogo.jpeg");
+    background-position: center right; /* Centra l'immagine verticalmente e orizzontalmente */
+}
+
+button {
+    padding: 15px 30px; /* Dimensioni del padding per il pulsante */
+    font-size: 18px; /* Dimensione del carattere */
+    background-color: #4CAF50; /* Colore di sfondo del pulsante */
+    color: white; /* Colore del testo */
+    border: 2px solid #4CAF50; /* Bordo del pulsante */
+    border-radius: 25px; /* Bordo arrotondato */
+    cursor: pointer; /* Cambia il cursore al passaggio del mouse */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Effetto di transizione per il colore di sfondo, testo e bordo */
+    text-decoration: none; /* Rimuove il sottolineato di default */
+    display: inline-block; /* Mostra come blocco inline */
+    margin-top: 20px; /* Margine superiore */
+}
+
+button:hover {
+    background-color: #45a049; /* Colore di sfondo al passaggio del mouse */
+    border-color: #45a049; /* Colore del bordo al passaggio del mouse */
+    color: #ffffff; /* Colore del testo al passaggio del mouse */
+    transform: scale(1.1); /* Effetto di ingrandimento al passaggio del mouse */
+}
+
+button:focus {
+    outline: none; /* Rimuove l'outline di focus */
+}
+
+/* Stile aggiuntivo per un pulsante alternativo */
+.button-alt {
+    background-color: #f44336; /* Colore di sfondo del pulsante alternativo */
+    border-color: #f44336; /* Colore del bordo del pulsante alternativo */
+}
+
+.button-alt:hover {
+    background-color: #d32f2f; /* Colore di sfondo del pulsante alternativo al passaggio del mouse */
+    border-color: #d32f2f; /* Colore del bordo del pulsante alternativo al passaggio del mouse */
+}
+
+/* Stili per rendere il layout responsive */
+@media screen and (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr; /* Una colonna piena per schermi più piccoli */
+        padding: 5px; /* Riduci il padding laterale per schermi più piccoli */
+    }
+    
+    .title {
+        font-size: 1.5em; /* Riduci la dimensione del titolo su schermi più piccoli */
+    }
+}

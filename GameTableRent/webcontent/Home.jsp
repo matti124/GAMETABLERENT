@@ -11,13 +11,35 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Home Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage con righe</title>
+    <link rel="stylesheet" href="CSS/Home.css">
 </head>
 <body>
+<div class="title"><span>GAME TABLE RENT</span></div>
+    <div class="container">
+        <div class="row" id="row1">
+            <a href="Registrazione.jsp"><button>Registrati</button></a>
+        </div>
+        <div class="row" id="row2">
+            <a href="Login.jsp"><button>Accedi</button></a>
+        </div>
+        <div class="row" id="row3">
+			<a href="ProductControl?action=mostraProdotti"><button>Catalogo</button></a>
+        </div>
+    </div>
 
-    <h1>Benvenuto alla Home Page</h1>
-    <button onclick="location.href='Registrazione.jsp'">Vai a Pagina Registrazione</button>
-    <button onclick="location.href='Login.jsp'">Vai a Pagina Login</button>
-    <button onclick="location.href='ProductControl?action=mostraProdotti'">Vai a Catalogo</button>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var title = document.getElementById('title');
+            title.style.opacity = 0;
+            title.style.transition = 'opacity 1s ease';
+
+            setTimeout(function() {
+                title.style.opacity = 1;
+            }, 500); // Delay di 500ms prima di iniziare la transizione
+        });
+    </script>
 </body>
 </html>
+

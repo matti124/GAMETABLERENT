@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Catalogo</title>
-    <link rel="stylesheet" href="Catalogo.css">
+    <link rel="stylesheet" href="CSS/Catalogo.css">
 </head>
 <body>
 <% ArrayList<ProdottoDTO> catalogo = (ArrayList<ProdottoDTO>) request.getAttribute("ListaProdotti"); %>
