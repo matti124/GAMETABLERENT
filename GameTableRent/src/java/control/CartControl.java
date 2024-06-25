@@ -149,43 +149,86 @@ public class CartControl extends HttpServlet {
     	int id_prod=Integer.parseInt(request.getParameter("codice_prod"));
     	int quantity=Integer.parseInt(request.getParameter("quantity"));
     	int giorni=Integer.parseInt(request.getParameter("days"));
+    	  
     	
-    	System.out.println("ID PRODOTTO->" +id_prod);
-    	System.out.println("QUANTITA->" +quantity);
-    	System.out.println("GIORNI->" +giorni);
+           
+           
+    	
 
     	UtenteDTO user=(UtenteDTO) request.getSession().getAttribute("utente");
     	
     	ProdottoCarrelloDAO prodDAO= new ProdottoCarrelloDAO();
     	ProdottoCarrelloDTO prod;
-        CarrelloDTO cart=(CarrelloDTO) request.getSession().getAttribute("carrello");
+        CarrelloDTO cart=(CarrelloDTO) request.getSession().getAttribute("cart");
+        System.out.println(cart.getID_Carrello());
 
-        ProdottoDAO prodottoDAO= new ProdottoDAO();
-        ProdottoDTO prodotto=null;
+     
+     // Verifica se l'utente è non registrato
+        if (user == null) {
+        	System.out.println("non sono utente");
+                      // Controlla se il prodotto è già nel carrello
+            boolean found = false;
+            for (ProdottoCarrelloDTO x : cart.getCart()) {
+                if (x.getId_prodotto() == id_prod && x.getGiorni() == giorni) {
+                    // Se il prodotto è già presente, aggiorna la quantità o i giorni di noleggio
+                    x.setQuantity(x.getQuantita() + quantity);
+                    found = true;
+                    break;
+                }
+            }
+
+            // Se il prodotto non è stato trovato nel carrello, aggiungilo
+            if (!found) {
+            	ProdottoDAO dao=new ProdottoDAO();
+                ProdottoDTO dto = dao.doRetrieveByKey(id_prod);
+                
+                // Crea un nuovo oggetto ProdottoCarrelloDTO e aggiungilo al carrello
+                ProdottoCarrelloDTO prodCarrello = new ProdottoCarrelloDTO(cart.getID_Carrello(), dto.getID_Prod(), dto.getPrezzo(), dto.getPrezzoXDay(), quantity, giorni);
+                cart.addProduct(prodCarrello);
+                return;
+            }
+            return;
+        }
+
         
-        if(user==null) {
-        	prodotto=prodottoDAO.doRetrieveByKey(id_prod);
-        	ProdottoCarrelloDTO prod1=new ProdottoCarrelloDTO(0,prodotto.getID_Prod(),  prodotto.getPrezzo(), prodotto.getPrezzoXDay(),quantity, giorni);
-        	System.out.println(prod1);
-        	cart.addProduct(prod1);
-        	return;
-
+        
+        
+        else { //SONO UN UTENTE
         	
-    	}
+        	
+        	//AGGIORNO QUANTITA' DEL PRODOTTO NEL DATABASE SOLO SE E' UN UTENTE REGISTRATO A SALVARE GLI OGGETTI
+        	ProdottoDAO prodottoDAO= new ProdottoDAO();
+              ProdottoDTO prodotto=prodottoDAO.doRetrieveByKey(id_prod);
+               for(int i=0;i<quantity;i++)
+               prodotto.decreaseQuantity();
+               prodottoDAO.doUpdate(prodotto);
+               
+               
         if(cart.contains(id_prod)) { //se il carrello contiene già un elemento di quel tipo 
+      
+        	System.out.println("contengo l'elemento, Ne sto inserendo: "+ quantity+ " giorni: "+ giorni);
     		prod=prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
-    		cart.addProduct(prod);
-    		carrelloDAO.doUpdateCart(cart);}
+    		for(int i=0;i<quantity; i++) {
+    		cart.addProduct(prod);}
+    		
+    		//SE STO INSERENDO NEL CARRELLO PRODOTTO CON STESSA QUANTITA' DI QUELLO TROVATO ALLORA AGGIORNO QUANTITA'
+    		if(prod.getGiorni()==giorni) {
+    			System.out.println("Hanno stesso numero di giorni: "+ giorni);
+    		prodDAO.doUpdate(prod);}
+    		
+    		//SE E' LO STESSO PRODOTTO MA DIFFERNTE NUMERO DI GIORNI VUOL DIRE CHE LO STO AFFITTANDO E LO SALVO COME NUOVO PRODOTTO NEL CARRELLO
+    		else prodDAO.doSave(new ProdottoCarrelloDTO(cart.getID_Carrello(), id_prod, prod.getPrezzo(), prod.getPrezzoXdays(), quantity, giorni));
+        }
         
       
  //se l'elemento non è già nel carrello devo ritrovare nel db il prezzo e prezzoxdays di esso e poi aggiungerlo al carrello e crearne una riga in ProdottoCarrello
-        else 
-        	prodotto=prodottoDAO.doRetrieveByKey(id_prod);
-        if(prodotto!=null) {
+        else {
+        	System.out.println("NON contengo l'elemento");
+
         	prod=new ProdottoCarrelloDTO(cart.getID_Carrello(),prodotto.getID_Prod(),  prodotto.getPrezzo(), prodotto.getPrezzoXDay(),quantity, giorni);
-        	prodDAO.doSave(prod);       	
-        	cart.addProduct(prod);
-        	carrelloDAO.doSave(cart);}
+    		for(int i=0;i<quantity; i++) {
+        	cart.addProduct(prod);}
+        	prodDAO.doSave(prod);}
         
         try {
 			response.sendRedirect(request.getContextPath() + "/ProductControl?action=mostraProdotti");
@@ -193,7 +236,7 @@ public class CartControl extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+        }
 
     	}
     

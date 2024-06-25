@@ -50,7 +50,6 @@ public class DriverManagerConnectionPool  {
 		} else {
 			connection = createDBConnection();		
 		}
-		System.out.println("connessione stabilita");
 		return connection;
 	}
 

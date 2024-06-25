@@ -21,6 +21,7 @@
                     <h5>Descrizione: <%= x.getDescrizione() %></h5>
                     <h5>Prezzo: <%= x.getPrezzo() %></h5>
                     <h5>Prezzo al Giorno: <%= x.getPrezzoXDay() %></h5>
+                    <h5>Quantità nel magazzino: <%=x.getQuantity() %></h5>
                 </div>
                 <div class="prodotto-img">
                     <% if (x.getImmagine() != null) { %>
@@ -29,9 +30,16 @@
                         <img class="immagineProd" alt="Immagine" src="Pictures/defaultImage.png">
                     <% } %>
                 </div>
-                <div class="aggiungi">
-                    <button onclick="mostraFormAggiungi('<%= x.getID_Prod() %>')">Aggiungi</button>
+                
+                <div class="buttonContainer">
+                    <div class="aggiungi">
+					<button onclick="mostraFormAggiungi('<%= x.getID_Prod() %>', <%= x.getQuantity() %>)">Aggiungi</button>
+                    </div>
+                    <div class="mostra">
+                        <button onclick="location.href='ProductControl?action=dettaglio&codice=<%=x.getID_Prod()%>'">Dettaglio</button>
+                    </div>
                 </div>
+                
             </div>
         <% }
     } else { %>
@@ -45,17 +53,39 @@
         <span class="close" onclick="chiudiFormAggiunta()">&times;</span>
         <h2>Aggiungi al Carrello</h2>
         <input type="hidden" id="productId">
-        Quantità: <input type="number" id="quantita" min="1" required>
-        Giorni:  <input type="number" id="giorni" min="1" max="60" step="5" required>
+        
+        <!-- Menu a tendina per selezionare Compra o Affitta -->
+        <label for="sceltaTipo">Scegli l'opzione:</label>
+        <select id="sceltaTipo" onchange="toggleInput()">
+            <option value="compra">Compra</option>
+            <option value="affitta">Affitta</option>
+        </select>
+        
+        <!-- Input per la quantità (mostrato quando Compra è selezionato) -->
+        <div id="compraInput" style="display: block;">
+            Quantità: <input type="number" id="quantita" min="1" required>
+        </div>
+        
+        <!-- Input per i giorni (mostrato quando Affitta è selezionato) -->
+        <div id="affittaInput" style="display: none;">
+            Giorni: <input type="number" id="giorni" min="0" max="60" step="5" required>
+        </div>
+        
         <button onclick="aggiungiAlCarrello()">Aggiungi</button>
     </div>
 </div>
 
 <script>
     // Mostra il form di aggiunta al carrello
-    function mostraFormAggiungi(productId) {
+    function mostraFormAggiungi(productId, quantity) {
         document.getElementById('productId').value = productId; // Imposta l'id del prodotto nel campo nascosto
         document.getElementById('formAggiunta').style.display = 'block';
+        console.log("Quantità elemento selezionato:", Number(quantity))
+        document.getElementById('quantita').setAttribute("max", Number(quantity));
+        
+        // Imposta di default Compra quando si apre il form
+        document.getElementById('sceltaTipo').value = 'compra';
+        toggleInput(); // Chiama la funzione per mostrare/nascondere gli input corretti in base alla scelta
     }
 
     // Funzione per chiudere il form di aggiunta al carrello (modal)
@@ -63,18 +93,29 @@
         document.getElementById('formAggiunta').style.display = 'none';
     }
 
+    // Funzione per mostrare/nascondere gli input di quantità o giorni in base alla scelta
+    function toggleInput() {
+        var scelta = document.getElementById("sceltaTipo").value;
+        if (scelta === "compra") {
+            document.getElementById("compraInput").style.display = "block";
+            document.getElementById("affittaInput").style.display = "none";
+        } else if (scelta === "affitta") {
+            document.getElementById("compraInput").style.display = "none";
+            document.getElementById("affittaInput").style.display = "block";
+        }
+    }
+
     // Funzione per aggiungere il prodotto al carrello in modo asincrono
-    function aggiungiAlCarrello(productId) {
+    function aggiungiAlCarrello() {
         var id_prod = document.getElementById('productId').value;
-        var quantity = document.getElementById('quantita').value;
-        var giorni = document.getElementById('giorni').value;
+        var tipo = document.getElementById('sceltaTipo').value;
+        var quantity = tipo === "compra" ? document.getElementById('quantita').value : 1;
+        var giorni = tipo === "affitta" ? document.getElementById('giorni').value : 0;
+       
         var params = 'action=addToCart&codice_prod=' + id_prod
                      + '&quantity=' + quantity
                      + '&days=' + giorni;
-        console.log('Valori del form: \n' +
-        		'Id: '+ id_prod+ '\n'+
-                'Quantità: ' + quantity + '\n' +
-                'Giorni: ' + giorni);
+       
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'CartControl', true);
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -82,18 +123,14 @@
 
         xhr.onload = function() {
             if (xhr.status === 200) {
-                // Aggiunta al carrello completata con successo
-                // Puoi gestire qui eventuali aggiornamenti UI o messaggi all'utente
                 alert('Prodotto aggiunto al carrello con successo!');
-                chiudiFormAggiunta(); // Chiudi il form dopo l'aggiunta
+                chiudiFormAggiunta(); 
             } else {
-                // Gestisci qui eventuali errori o messaggi di errore
                 alert('Si è verificato un errore durante l\'aggiunta al carrello.');
             }
         };
 
         xhr.onerror = function() {
-            // Gestisci qui errori di rete o altre problematiche
             alert('Si è verificato un errore di rete.');
         };
 

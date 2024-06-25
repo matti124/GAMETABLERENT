@@ -12,7 +12,7 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
 
     @Override
     public boolean doSave(ProdottoCarrelloDTO prod) {
-        String query = "INSERT INTO PRODOTTI_CARRELLO (ID_CARRELLO, ID_PRODOTTO, QUANTITY, GIORNI) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO PRODOTTI_CARRELLO (ID_CARRELLO, ID_PRODOTTO, QUANTITY, GIORNI, PREZZO, PREZZOXDAYS) VALUES (?, ?, ?, ?, ?, ?)";
         
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
         		PreparedStatement statement = connection.prepareStatement(query)) {
@@ -20,6 +20,8 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
             statement.setInt(2, prod.getId_prodotto());
             statement.setInt(3, prod.getQuantita());
             statement.setInt(4, prod.getGiorni());
+            statement.setDouble(5, prod.getPrezzo());
+            statement.setDouble(6, prod.getPrezzoXdays());
 
             int rowsAffected = statement.executeUpdate();
             return rowsAffected == 1;
@@ -48,14 +50,17 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
 
     @Override
     public boolean doUpdate(ProdottoCarrelloDTO prod) {
-        String query = "UPDATE PRODOTTI_CARRELLO SET QUANTITY = ?, GIORNI = ? WHERE ID_CARRELLO = ? AND ID_PRODOTTO = ?";
+        String query = "UPDATE PRODOTTI_CARRELLO SET QUANTITY = ?, PREZZO= ?, PREZZOXDAYS= ? WHERE GIORNI = ? AND ID_CARRELLO = ? AND ID_PRODOTTO = ?";
         
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
         		PreparedStatement statement = connection.prepareStatement(query)) {
         	statement.setInt(1, prod.getQuantita());
-            statement.setInt(2, prod.getGiorni());
-            statement.setInt(3, prod.getId_carrello());
-            statement.setInt(4, prod.getId_prodotto());
+            statement.setDouble(2, prod.getPrezzo());
+            statement.setDouble(3, prod.getPrezzoXdays());
+            statement.setInt(4, prod.getGiorni());
+            statement.setInt(5, prod.getId_carrello());
+            statement.setInt(6, prod.getId_prodotto());
+       
 
             int rowsAffected = statement.executeUpdate();
             return rowsAffected == 1;

@@ -82,7 +82,7 @@ public class CarrelloDAO implements CarrelloDAOInterfaccia {
 
     @Override
     public CarrelloDTO doRetrieveById(int id_utente) {  //ritornare un carrello 
-        String query = "SELECT * FROM CARRELLO WHERE ID_UTENTE = ?";
+        String query = "SELECT * FROM CARRELLO WHERE ID_U = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id_utente);

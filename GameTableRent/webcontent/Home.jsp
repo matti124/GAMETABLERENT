@@ -2,9 +2,9 @@
     pageEncoding="ISO-8859-1" import="model.*,java.util.*"%>
     
     <%
-	if (request.getSession().getAttribute("carrello") == null) {
+	if (request.getSession().getAttribute("cart") == null) {
 		CarrelloDTO carrello = new CarrelloDTO();
-		request.getSession().setAttribute("carrello", carrello);
+		request.getSession().setAttribute("cart", carrello);
 	}
 %>
 <!DOCTYPE html>

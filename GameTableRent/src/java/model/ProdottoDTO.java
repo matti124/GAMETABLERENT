@@ -11,15 +11,15 @@ public class ProdottoDTO {
 	private byte[] immagine;
 	
 	
-	public ProdottoDTO(int iD_Prod, String nome, String descrizione, Double prezzo, Double prezzoXDay, int iN_CAT,
-			int quantity, byte[] img) {
+	public ProdottoDTO(int iD_Prod, String nome, String descrizione, Double prezzo, Double prezzoXDay, int quantity,
+			int incat, byte[] img) {
 		super();
 		this.ID_Prod = iD_Prod;
 		this.nome = nome;
 		this.descrizione = descrizione;
 		this.Prezzo = prezzo;
 		this.PrezzoXDay = prezzoXDay;
-		this.IN_CAT = iN_CAT;
+		this.IN_CAT = incat;
 		this.quantity = quantity;
 		this.immagine=img;
 	}

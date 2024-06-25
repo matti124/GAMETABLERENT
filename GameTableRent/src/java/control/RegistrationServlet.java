@@ -70,7 +70,7 @@ public class RegistrationServlet extends HttpServlet {
                 user=userDao.doRetrieveByPSW(hashedPassword);
                 request.getSession().setAttribute("utente", user);
                 
-                CarrelloDTO cart = (CarrelloDTO) request.getSession().getAttribute("carrello");
+                CarrelloDTO cart = (CarrelloDTO) request.getSession().getAttribute("cart");
                //se il carrello della sessione è vuoto ne creo uno nuovo
                 if(cart.getCart().isEmpty()) {
                 	ArrayList<ProdottoCarrelloDTO> listaProds=new ArrayList<>();
@@ -85,7 +85,6 @@ public class RegistrationServlet extends HttpServlet {
                 
                 
                 request.getSession().setAttribute("cart", cart);
-                request.setAttribute("ValueReg", 1);
                 request.getRequestDispatcher("Login.jsp").forward(request, response);
                 return; 
             }
