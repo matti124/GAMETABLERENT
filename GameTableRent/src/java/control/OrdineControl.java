@@ -121,22 +121,25 @@ public class OrdineControl extends HttpServlet {
 		CarrelloDTO cart=(CarrelloDTO)request.getSession().getAttribute("cart"); //controllo front end che il carrello non sia vuoto (sul click del bottone)
 		UtenteDTO user=(UtenteDTO)request.getSession().getAttribute("user");
 
-		OrdineDTO ordine=new OrdineDTO(0, user.getID(), null, null);
+		OrdineDTO ordine=new OrdineDTO(0, user.getID(), null, new ArrayList<ProdottoOrdineDTO>());
 		int keyIdOrd=ordDAO.doSave(ordine);
+		System.out.println("Ho creato ordine vuoto e prelevo il suo id: "+ keyIdOrd);
 		ArrayList<ProdottoOrdineDTO> prodottiInCart=new ArrayList<>();
 	
 		prodottiInCart=cart.CheckOut(keyIdOrd);
 		//controllo quantità
 		for(ProdottoOrdineDTO x: prodottiInCart) {
+			System.out.println("Inserisco:"+ x+ "\n");
 			ordine.getProdotti().add(x);
+			
 			prodDAO.doSave(x);
 		}
-		
+		System.out.println("Aggiorno l'ordine coi prodotti acquistati: "+ ordine.getTotalPrice());
 		ordDAO.doUpdate(ordine);
 		CarrelloDAO cartDAO=new CarrelloDAO();
 		cartDAO.doFreeSpace(cart.getID_Carrello());
-		
-		response.sendRedirect(request.getContextPath()+"/OwnHub.jsp");
+		System.out.println("Ordine avvenuto con successo");
+		response.sendRedirect(request.getContextPath()+"/Home.jsp");
 		
 		
 	}

@@ -155,7 +155,7 @@ public class CartControl extends HttpServlet {
            
     	
 
-    	UtenteDTO user=(UtenteDTO) request.getSession().getAttribute("utente");
+    	UtenteDTO user=(UtenteDTO) request.getSession().getAttribute("user");
     	
     	ProdottoCarrelloDAO prodDAO= new ProdottoCarrelloDAO();
     	ProdottoCarrelloDTO prod;
@@ -183,7 +183,7 @@ public class CartControl extends HttpServlet {
                 ProdottoDTO dto = dao.doRetrieveByKey(id_prod);
                 
                 // Crea un nuovo oggetto ProdottoCarrelloDTO e aggiungilo al carrello
-                ProdottoCarrelloDTO prodCarrello = new ProdottoCarrelloDTO(cart.getID_Carrello(), dto.getID_Prod(), dto.getPrezzo(), dto.getPrezzoXDay(), quantity, giorni);
+                ProdottoCarrelloDTO prodCarrello = new ProdottoCarrelloDTO(cart.getID_Carrello(), dto.getID_Prod(), dto.getPrezzo(), dto.getPrezzoXDay(), quantity, giorni, dto.getImmagine(), dto.getNome());
                 cart.addProduct(prodCarrello);
                 return;
             }
@@ -217,7 +217,7 @@ public class CartControl extends HttpServlet {
     		prodDAO.doUpdate(prod);}
     		
     		//SE E' LO STESSO PRODOTTO MA DIFFERNTE NUMERO DI GIORNI VUOL DIRE CHE LO STO AFFITTANDO E LO SALVO COME NUOVO PRODOTTO NEL CARRELLO
-    		else prodDAO.doSave(new ProdottoCarrelloDTO(cart.getID_Carrello(), id_prod, prod.getPrezzo(), prod.getPrezzoXdays(), quantity, giorni));
+    		else prodDAO.doSave(new ProdottoCarrelloDTO(cart.getID_Carrello(), id_prod, prod.getPrezzo(), prod.getPrezzoXdays(), quantity, giorni, prod.getImage(), prod.getName()));
         }
         
       
@@ -225,7 +225,7 @@ public class CartControl extends HttpServlet {
         else {
         	System.out.println("NON contengo l'elemento");
 
-        	prod=new ProdottoCarrelloDTO(cart.getID_Carrello(),prodotto.getID_Prod(),  prodotto.getPrezzo(), prodotto.getPrezzoXDay(),quantity, giorni);
+        	prod=new ProdottoCarrelloDTO(cart.getID_Carrello(),prodotto.getID_Prod(),  prodotto.getPrezzo(), prodotto.getPrezzoXDay(),quantity, giorni, prodotto.getImmagine(), prodotto.getNome());
     		for(int i=0;i<quantity; i++) {
         	cart.addProduct(prod);}
         	prodDAO.doSave(prod);}

@@ -8,6 +8,19 @@ body {
 h1 {
     text-align: center;
 }
+button {
+    padding: 15px 30px; /* Dimensioni del padding per il pulsante */
+    font-size: 18px; /* Dimensione del carattere */
+    background-color: #4CAF50; /* Colore di sfondo del pulsante */
+    color: white; /* Colore del testo */
+    border: 2px solid #4CAF50; /* Bordo del pulsante */
+    border-radius: 25px; /* Bordo arrotondato */
+    cursor: pointer; /* Cambia il cursore al passaggio del mouse */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Effetto di transizione per il colore di sfondo, testo e bordo */
+    text-decoration: none; /* Rimuove il sottolineato di default */
+    display: inline-block; /* Mostra come blocco inline */
+    margin-top: 20px; /* Margine superiore */
+}
 
 .catalogo {
     display: flex;

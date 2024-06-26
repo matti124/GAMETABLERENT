@@ -23,6 +23,16 @@ public class UtenteDTO {
 	
 	
 	
+	@Override
+	public String toString() {
+		return "UtenteDTO [ID=" + ID + ", Nome=" + Nome + ", Cognome=" + Cognome + ", Indirizzo=" + Indirizzo
+				+ ", email=" + email + ", psw=" + psw + ", isAdmin=" + isAdmin + "]";
+	}
+
+
+
+
+
 	public void setNome(String nome) {
 		Nome = nome;
 	}

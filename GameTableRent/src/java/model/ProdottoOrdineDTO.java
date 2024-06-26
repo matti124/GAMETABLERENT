@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Arrays;
+
 public class ProdottoOrdineDTO {
 	private final int id_ordine;
 	private final int id_prodotto;
@@ -7,12 +9,14 @@ public class ProdottoOrdineDTO {
 	private final int giorni;
 	private final double prezzoXdays;
 	private final int quantity;
+	private byte[] image;
+	private final String name;
 	
 	
 
 
 
-	public ProdottoOrdineDTO(int id_ordine, int id_prodotto, double prezzo, double prezzodays, int giorni, int quantity) {
+	public ProdottoOrdineDTO(int id_ordine, int id_prodotto, double prezzo, double prezzodays, int giorni, int quantity, byte[]img, String name) {
 		super();
 		this.id_ordine = id_ordine;
 		this.id_prodotto = id_prodotto;
@@ -20,11 +24,23 @@ public class ProdottoOrdineDTO {
 		this.giorni = giorni;
 		this.prezzoXdays = prezzodays;
 		this.quantity = quantity;
+		this.name = name ;
+		this.setImage(img);
 	}
 	
 	
 	
 	
+	@Override
+	public String toString() {
+		return "ProdottoOrdineDTO [id_ordine=" + id_ordine + ", id_prodotto=" + id_prodotto + ", prezzo=" + prezzo
+				+ ", giorni=" + giorni + ", prezzoXdays=" + prezzoXdays + ", quantity=" + quantity + ", image="
+				+ Arrays.toString(image) + ", name=" + name + "]";
+	}
+
+
+
+
 	public double getPrezzoXdays() {
 		return prezzoXdays;
 	}
@@ -47,6 +63,27 @@ public class ProdottoOrdineDTO {
 
 	public int getQuantity() {
 		return quantity;
+	}
+
+
+
+
+	public String getName() {
+		return name;
+	}
+
+
+
+
+	public byte[] getImage() {
+		return image;
+	}
+
+
+
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 
 }

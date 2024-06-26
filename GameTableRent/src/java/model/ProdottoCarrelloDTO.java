@@ -7,10 +7,12 @@ public class ProdottoCarrelloDTO {
 	private  int giorni;
 	private double prezzo;
 	private double prezzoXdays;
+	private byte[] image;
+	private final String name;
 	
 	
 	public ProdottoCarrelloDTO(int id_carrello, int id_prodotto, double prezzo,
-			double prezzoXdays, int quantita, int giorni ) {
+			double prezzoXdays, int quantita, int giorni, byte[] bs, String nome ) {
 		super();
 		this.id_carrello = id_carrello;
 		this.id_prodotto = id_prodotto;
@@ -18,6 +20,9 @@ public class ProdottoCarrelloDTO {
 		this.giorni = giorni;
 		this.prezzo = prezzo;
 		this.prezzoXdays = prezzoXdays;
+		this.setImage(bs);
+		this.name=nome;
+		
 	}
 
 
@@ -86,6 +91,27 @@ public class ProdottoCarrelloDTO {
 
 	public void setDays(int giorni) {
 		this.giorni=giorni;
+	}
+
+
+
+
+	public byte[] getImage() {
+		return image;
+	}
+
+
+
+
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
+
+
+
+
+	public String getName() {
+		return name;
 	}
 	
 	

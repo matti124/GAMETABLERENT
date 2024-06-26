@@ -42,9 +42,9 @@ public class CarrelloDTO {
 
 	
 	
-	public ProdottoCarrelloDTO retrieveById(int id_p) {	//in caso un elemento già fosse nel carrello lo ritorniamo
+	public ProdottoCarrelloDTO retrieveById(int id_p, int giorni) {	//in caso un elemento già fosse nel carrello lo ritorniamo
 		for(ProdottoCarrelloDTO x : Cart) {
-			if(x.getId_prodotto()==id_p)
+			if(x.getId_prodotto()==id_p&& x.getGiorni()==giorni)
 				return x;
 		}
 		return null;
@@ -53,7 +53,7 @@ public class CarrelloDTO {
 	
 	public void addProduct(ProdottoCarrelloDTO x) { //se un elemento non è nel carrello lo aggiungo oppure ne aumento la quantità
 	    if (x != null) {
-	    	if(this.retrieveById(x.getId_prodotto())==null)
+	    	if(this.retrieveById(x.getId_prodotto(), x.getGiorni())==null)
 				this.Cart.add(x);
 			else x.addQuantity();
 	    } else {
@@ -67,7 +67,7 @@ public class CarrelloDTO {
 	
 	
 	public void decreaseProduct(ProdottoCarrelloDTO x) {
-		ProdottoCarrelloDTO prod=this.retrieveById(x.getId_prodotto());
+		ProdottoCarrelloDTO prod=this.retrieveById(x.getId_prodotto(), x.getGiorni());
 		if(prod!=null)
 			if(prod.getQuantita()==1) 
 				this.Cart.remove(prod);
@@ -102,7 +102,7 @@ public class CarrelloDTO {
 		 Iterator<ProdottoCarrelloDTO> iterator = this.Cart.iterator();
 		 while (iterator.hasNext()) {
 		     ProdottoCarrelloDTO x = iterator.next();
-		     ProdottoOrdineDTO prodOut = new ProdottoOrdineDTO(id_ord, x.getId_prodotto(), x.getPrezzo(), x.getPrezzoXdays(), x.getGiorni(), x.getQuantita());
+		     ProdottoOrdineDTO prodOut = new ProdottoOrdineDTO(id_ord, x.getId_prodotto(), x.getPrezzo(), x.getPrezzoXdays(), x.getGiorni(), x.getQuantita(), x.getImage(), x.getName());
 		     prodottiOut.add(prodOut);
 		     iterator.remove(); 
 		 }

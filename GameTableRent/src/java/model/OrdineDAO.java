@@ -11,23 +11,35 @@ import java.util.ArrayList;
 public class OrdineDAO implements OrdineDAOInterfaccia {
 
     @Override
-    public int doSave(OrdineDTO ordine) { //salvo un nuovo ordine
+    public int doSave(OrdineDTO ordine) {
         String query = "INSERT INTO ordine (id_utente, data_ordine, prezzo) VALUES (?, CURRENT_TIMESTAMP(), ?)";
-        
+
         try (Connection connection = DriverManagerConnectionPool.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            
             statement.setInt(1, ordine.getIdUtente());
             statement.setDouble(2, 0.0);
 
-            statement.executeUpdate();
-            ResultSet keyGenerata=statement.getGeneratedKeys();
+            int rowsAffected = statement.executeUpdate();
             
-            return keyGenerata.getInt(1);
+            if (rowsAffected == 0) {
+                throw new SQLException("L'inserimento dell'ordine non ha avuto successo, nessuna riga inserita.");
+            }
+            
+            try (ResultSet keyGenerata = statement.getGeneratedKeys()) {
+                if (keyGenerata.next()) {
+                    return keyGenerata.getInt(1);
+                } else {
+                    throw new SQLException("Nessuna chiave generata durante l'inserimento dell'ordine.");
+                }
+            }
         } catch (SQLException e) {
             System.err.println("Errore durante l'inserimento dell'ordine: " + e.getMessage());
-            return 0;
+            e.printStackTrace();  // Stampa la traccia dell'eccezione per debug
+            return 0;  // Ritorna 0 in caso di errore
         }
     }
+
 
     @Override
     public boolean doDeleteByKey(int id_ord) { //elimino un ordine in base all'id
@@ -52,6 +64,7 @@ public class OrdineDAO implements OrdineDAOInterfaccia {
         try (Connection connection = DriverManagerConnectionPool.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, ordine.getIdUtente());
+            System.out.println("AGGIORNO PREZZO: "+ ordine.getTotalPrice());
             statement.setDouble(2, ordine.getTotalPrice());
             statement.setInt(3, ordine.getId_Ordine());
 

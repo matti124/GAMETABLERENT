@@ -55,8 +55,8 @@ public class LoginServlet extends HttpServlet {
             CarrelloDAO cartDao = new CarrelloDAO();
             CarrelloDTO cart = cartDao.doRetrieveById(utente.getID());
             request.getSession().setAttribute("cart", cart);
-            request.getSession().setAttribute("utente", utente);
-            response.sendRedirect(request.getContextPath() + "/Home.jsp");
+            request.getSession().setAttribute("user", utente);
+            response.sendRedirect(request.getContextPath() + "/UserHome.jsp");
         } else {
             request.setAttribute("ValueLogin", 0);
             request.getRequestDispatcher("/Login.jsp").forward(request, response);

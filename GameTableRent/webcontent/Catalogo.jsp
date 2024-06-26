@@ -11,6 +11,8 @@
 <% ArrayList<ProdottoDTO> catalogo = (ArrayList<ProdottoDTO>) request.getAttribute("ListaProdotti"); %>
 
 <h1>Catalogo:</h1>
+ <a href="Cart.jsp"><button>Carrello</button></a>
+
 
 <div class="catalogo">
     <% if (catalogo != null && !catalogo.isEmpty()) { 

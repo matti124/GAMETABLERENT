@@ -12,7 +12,7 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
 
     @Override
     public boolean doSave(ProdottoCarrelloDTO prod) {
-        String query = "INSERT INTO PRODOTTI_CARRELLO (ID_CARRELLO, ID_PRODOTTO, QUANTITY, GIORNI, PREZZO, PREZZOXDAYS) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO PRODOTTI_CARRELLO (ID_CARRELLO, ID_PRODOTTO, QUANTITY, GIORNI, PREZZO, PREZZOXDAYS, PICTURE, NOME) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
         		PreparedStatement statement = connection.prepareStatement(query)) {
@@ -22,6 +22,8 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
             statement.setInt(4, prod.getGiorni());
             statement.setDouble(5, prod.getPrezzo());
             statement.setDouble(6, prod.getPrezzoXdays());
+            statement.setBytes(7, prod.getImage());
+            statement.setString(8, prod.getName());
 
             int rowsAffected = statement.executeUpdate();
             return rowsAffected == 1;
@@ -85,8 +87,10 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
                     int giorni = resultSet.getInt("GIORNI");
                     double prezzo=resultSet.getDouble("PREZZO");
                     double prezzoxdays=resultSet.getDouble("PREZZOXDAYS");
+                    byte[] picture=resultSet.getBytes("PICTURE");
+                    String nome=resultSet.getString("Nome");
 
-                    return new ProdottoCarrelloDTO(id_cart, id_prod, prezzo, prezzoxdays, quantity, giorni);
+                    return new ProdottoCarrelloDTO(id_cart, id_prod, prezzo, prezzoxdays, quantity, giorni, picture, nome);
                 }
             }
         } catch (SQLException e) {
@@ -111,9 +115,11 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
                     int quantity = resultSet.getInt("QUANTITY");
                     int giorni = resultSet.getInt("GIORNI");
                     double prezzo=resultSet.getDouble("PREZZO");
-                    double prezzoxdays=resultSet.getDouble("PREZZOXDAYS");
+                    double prezzoXdays=resultSet.getDouble("PREZZOXDAYS");
+                    byte[] picture=resultSet.getBytes("PICTURE");
+                    String nome=resultSet.getString("Nome");
 
-                    ProdottoCarrelloDTO prodotto = new ProdottoCarrelloDTO(id_cart, id_prodotto, prezzo, prezzoxdays, quantity, giorni);
+                    ProdottoCarrelloDTO prodotto= new ProdottoCarrelloDTO(id_cart, id_prodotto, prezzo, prezzoXdays, quantity, giorni, picture, nome);
                     prodotti.add(prodotto);
                 }
             }
@@ -138,8 +144,10 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
                     int giorni = resultSet.getInt("GIORNI");
                     double prezzo=resultSet.getDouble("PREZZO");
                     double prezzoxdays=resultSet.getDouble("PREZZOXDAYS");
+                    byte[] picture=resultSet.getBytes("PICTURE");
+                    String nome=resultSet.getString("Nome");
 
-                    ProdottoCarrelloDTO prodotto = new ProdottoCarrelloDTO(id_cart, id_prod, prezzo, prezzoxdays, quantity, giorni);
+                    ProdottoCarrelloDTO prodotto= new ProdottoCarrelloDTO(id_cart, id_prod, prezzo, prezzoxdays, quantity, giorni, picture, nome);
                     carrelli.add(prodotto);
                 }
             }

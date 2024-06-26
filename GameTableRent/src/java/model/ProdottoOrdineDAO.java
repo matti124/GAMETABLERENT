@@ -12,7 +12,7 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
 
     @Override
     public boolean doSave(ProdottoOrdineDTO prod) {
-        String query = "INSERT INTO PRODOTTI_ORDINE (ID_ORDINE, ID_PRODOTTO, PREZZO, PREZZOXDAYS, GIORNI, QUANTITY) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO PRODOTTI_ORDINE (ID_ORDINE, ID_PRODOTTO, PREZZO, PREZZOXDAYS, GIORNI, QUANTITY, PICTURE, NOME) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
         		PreparedStatement statement = connection.prepareStatement(query)) {
@@ -22,6 +22,8 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
             statement.setDouble(4, prod.getPrezzoXdays());
             statement.setInt(5, prod.getGiorni());
             statement.setInt(6, prod.getQuantity());
+            statement.setBytes(7, prod.getImage());
+            statement.setString(8, prod.getName());
 
             int rowsAffected = statement.executeUpdate();
             return rowsAffected == 1;
@@ -83,8 +85,11 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
                     int giorni = resultSet.getInt("GIORNI");
                     double prezzo=resultSet.getDouble("PREZZO");
                     double prezzoxdays=resultSet.getDouble("PREZZOXDAYS");
+                    byte[] picture=resultSet.getBytes("PICTURE");
+                    String nome=resultSet.getString("Nome");
 
-                    return new ProdottoOrdineDTO(id_ord, id_prod,prezzo, prezzoxdays, quantity, giorni);
+
+                    return new ProdottoOrdineDTO(id_ord, id_prod,prezzo, prezzoxdays, quantity, giorni, picture, nome);
                 }
             }
         } catch (SQLException e) {
@@ -109,8 +114,11 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
                     int giorni = resultSet.getInt("GIORNI");
                     double prezzo=resultSet.getDouble("PREZZO");
                     double prezzoxdays=resultSet.getDouble("PREZZOXDAYS");
+                    byte[] picture=resultSet.getBytes("PICTURE");
+                    String nome=resultSet.getString("Nome");
 
-                    ProdottoOrdineDTO prodotto = new ProdottoOrdineDTO(id_ord, id_prodotto,  prezzo, prezzoxdays, giorni, quantity);
+
+                    ProdottoOrdineDTO prodotto = new ProdottoOrdineDTO(id_ord, id_prodotto,  prezzo, prezzoxdays, giorni, quantity, picture, nome);
                     prodotti.add(prodotto);
                 }
             }
@@ -139,8 +147,11 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
                     int giorni = resultSet.getInt("GIORNI");
                     double prezzo=resultSet.getDouble("PREZZO");
                     double prezzoxdays=resultSet.getDouble("PREZZOXDAYS");
+                    byte[] picture=resultSet.getBytes("PICTURE");
+                    String nome=resultSet.getString("Nome");
 
-                    ProdottoOrdineDTO prodotto = new ProdottoOrdineDTO(id_ord, id_prod, prezzo, prezzoxdays, giorni, quantity);
+
+                    ProdottoOrdineDTO prodotto = new ProdottoOrdineDTO(id_ord, id_prod, prezzo, prezzoxdays, giorni, quantity, picture, nome);
                     ordini.add(prodotto);
                 }
             }
