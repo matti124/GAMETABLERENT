@@ -45,7 +45,7 @@
     <div class="login-container">
         <h1>Login</h1>
         <form action="LoginServlet" method="post">
-            <input type="text" name="email" placeholder="E-mail" required>
+            <input type="text" name="email" placeholder="Email" required>
             <input type="password" name="psw" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
