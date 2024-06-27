@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class OrdineDTO {
 	
-	private final int id_Ordine;
+	private  int id_Ordine;
 	private final int id_utente;
 	private final Timestamp data;
 	private final ArrayList<ProdottoOrdineDTO> prodotti;
@@ -20,7 +20,10 @@ public class OrdineDTO {
 		this.prodotti=prods;
 	}
 
-
+public void setId_Ordine(int x) {
+	this.id_Ordine=x;
+	
+}
 	
 	public int getId_Ordine() {
 		return id_Ordine;

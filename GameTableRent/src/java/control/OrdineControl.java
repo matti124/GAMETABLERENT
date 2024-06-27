@@ -43,9 +43,9 @@ public class OrdineControl extends HttpServlet {
 		UtenteDTO user=(UtenteDTO) request.getSession().getAttribute("user");
 		
 		
-		if(user==null)
+		if(user==null) {
 			request.setAttribute("NonRegisteredUser", 1);
-			request.getRequestDispatcher("/Registration.jsp").forward(request, response);
+			request.getRequestDispatcher("/Registration.jsp").forward(request, response);}
 		
 		String action= request.getParameter("action");
 		
@@ -129,17 +129,16 @@ public class OrdineControl extends HttpServlet {
 		prodottiInCart=cart.CheckOut(keyIdOrd);
 		//controllo quantità
 		for(ProdottoOrdineDTO x: prodottiInCart) {
-			System.out.println("Inserisco:"+ x+ "\n");
 			ordine.getProdotti().add(x);
 			
 			prodDAO.doSave(x);
 		}
 		System.out.println("Aggiorno l'ordine coi prodotti acquistati: "+ ordine.getTotalPrice());
+		ordine.setId_Ordine(keyIdOrd); //ASSEGNO ALL'ORDINE SALVATO VUOTO IL SUO ID RECUPERATO
 		ordDAO.doUpdate(ordine);
 		CarrelloDAO cartDAO=new CarrelloDAO();
 		cartDAO.doFreeSpace(cart.getID_Carrello());
-		System.out.println("Ordine avvenuto con successo");
-		response.sendRedirect(request.getContextPath()+"/Home.jsp");
+		response.sendRedirect(request.getContextPath()+"/UserHome.jsp");
 		
 		
 	}

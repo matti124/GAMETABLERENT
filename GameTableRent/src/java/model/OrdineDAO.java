@@ -58,23 +58,30 @@ public class OrdineDAO implements OrdineDAOInterfaccia {
     }
 
     @Override
-    public boolean doUpdate(OrdineDTO ordine) { //aggiorno l'ordine in base all'id, il prezzo lo ricavo tramite funzione di OrdineDTO
+    public boolean doUpdate(OrdineDTO ordine) {
         String query = "UPDATE ordine SET id_utente = ?, prezzo = ? WHERE id_ordine = ?";
         
         try (Connection connection = DriverManagerConnectionPool.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
+            
             statement.setInt(1, ordine.getIdUtente());
-            System.out.println("AGGIORNO PREZZO: "+ ordine.getTotalPrice());
-            statement.setDouble(2, ordine.getTotalPrice());
+            double totalPrice = ordine.getTotalPrice();
+            statement.setDouble(2, totalPrice);
             statement.setInt(3, ordine.getId_Ordine());
 
             int rowsAffected = statement.executeUpdate();
-            return rowsAffected == 1;
-        } catch (SQLException e) {
-            System.err.println("Errore durante l'aggiornamento dell'ordine con ID " + ordine.getId_Ordine() + ": " + e.getMessage());
-            return false;
-        }
-    }
+            
+            if (rowsAffected == 1) {
+                System.out.println("Ordine aggiornato con successo.");
+            } else {
+                System.out.println("Ordine non trovato o non aggiornato.");
+            }
+            
+            return true;} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		return false;}
 
     @Override
     public OrdineDTO doRetrieveByKey(int id_ord) { //ritorno tutti i dati riguardanti un ordine (anche la lista dei prodotti acquistati)

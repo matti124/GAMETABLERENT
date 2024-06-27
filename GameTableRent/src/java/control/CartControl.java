@@ -206,19 +206,23 @@ public class CartControl extends HttpServlet {
                
         if(cart.contains(id_prod)) { //se il carrello contiene già un elemento di quel tipo 
       
-        	System.out.println("contengo l'elemento, Ne sto inserendo: "+ quantity+ " giorni: "+ giorni);
     		prod=prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
-    		for(int i=0;i<quantity; i++) {
-    		cart.addProduct(prod);}
+    		
     		
     		//SE STO INSERENDO NEL CARRELLO PRODOTTO CON STESSA QUANTITA' DI QUELLO TROVATO ALLORA AGGIORNO QUANTITA'
     		if(prod.getGiorni()==giorni) {
-    			System.out.println("Hanno stesso numero di giorni: "+ giorni);
+    			System.out.println("Sto inserendo prodotto già presente in carrello"+ giorni);
+    			for(int i=0;i<quantity; i++) {
+    	    		cart.addProduct(prod);}
     		prodDAO.doUpdate(prod);}
     		
     		//SE E' LO STESSO PRODOTTO MA DIFFERNTE NUMERO DI GIORNI VUOL DIRE CHE LO STO AFFITTANDO E LO SALVO COME NUOVO PRODOTTO NEL CARRELLO
-    		else prodDAO.doSave(new ProdottoCarrelloDTO(cart.getID_Carrello(), id_prod, prod.getPrezzo(), prod.getPrezzoXdays(), quantity, giorni, prod.getImage(), prod.getName()));
-        }
+    		else {
+    			System.out.println("Sto inserendo un prodotto già presente in carrello ma con giorni differenti");
+    			ProdottoCarrelloDTO prodottoAffittato=new ProdottoCarrelloDTO(cart.getID_Carrello(), id_prod, prod.getPrezzo(), prod.getPrezzoXdays(), quantity, giorni, prod.getImage(), prod.getName());
+    			prodDAO.doSave(prodottoAffittato);
+    			cart.addProduct(prodottoAffittato);
+        }}
         
       
  //se l'elemento non è già nel carrello devo ritrovare nel db il prezzo e prezzoxdays di esso e poi aggiungerlo al carrello e crearne una riga in ProdottoCarrello
