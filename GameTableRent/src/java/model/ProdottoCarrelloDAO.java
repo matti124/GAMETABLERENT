@@ -91,6 +91,7 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
                     String nome=resultSet.getString("Nome");
 
                     return new ProdottoCarrelloDTO(id_cart, id_prod, prezzo, prezzoxdays, quantity, giorni, picture, nome);
+
                 }
             }
         } catch (SQLException e) {
@@ -120,6 +121,7 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
                     String nome=resultSet.getString("Nome");
 
                     ProdottoCarrelloDTO prodotto= new ProdottoCarrelloDTO(id_cart, id_prodotto, prezzo, prezzoXdays, quantity, giorni, picture, nome);
+
                     prodotti.add(prodotto);
                 }
             }
@@ -148,6 +150,7 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
                     String nome=resultSet.getString("Nome");
 
                     ProdottoCarrelloDTO prodotto= new ProdottoCarrelloDTO(id_cart, id_prod, prezzo, prezzoxdays, quantity, giorni, picture, nome);
+
                     carrelli.add(prodotto);
                 }
             }

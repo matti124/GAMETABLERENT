@@ -177,6 +177,5 @@ public class OrdineControl extends HttpServlet {
 		request.getRequestDispatcher("/Orders.jsp").forward(request,response); 
 	}
 	
-	
 
 }

@@ -13,6 +13,7 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
     @Override
     public boolean doSave(ProdottoOrdineDTO prod) {
         String query = "INSERT INTO PRODOTTI_ORDINE (ID_ORDINE, ID_PRODOTTO, PREZZO, PREZZOXDAYS, GIORNI, QUANTITY, PICTURE, NOME) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
         
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
         		PreparedStatement statement = connection.prepareStatement(query)) {
@@ -90,6 +91,7 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
 
 
                     return new ProdottoOrdineDTO(id_ord, id_prod,prezzo, prezzoxdays, quantity, giorni, picture, nome);
+
                 }
             }
         } catch (SQLException e) {
@@ -152,6 +154,7 @@ public class ProdottoOrdineDAO implements ProdGenericDAOInterfaccia<ProdottoOrdi
 
 
                     ProdottoOrdineDTO prodotto = new ProdottoOrdineDTO(id_ord, id_prod, prezzo, prezzoxdays, giorni, quantity, picture, nome);
+
                     ordini.add(prodotto);
                 }
             }

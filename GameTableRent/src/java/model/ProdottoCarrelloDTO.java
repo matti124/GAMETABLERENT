@@ -13,6 +13,7 @@ public class ProdottoCarrelloDTO {
 	
 	public ProdottoCarrelloDTO(int id_carrello, int id_prodotto, double prezzo,
 			double prezzoXdays, int quantita, int giorni, byte[] bs, String nome ) {
+
 		super();
 		this.id_carrello = id_carrello;
 		this.id_prodotto = id_prodotto;

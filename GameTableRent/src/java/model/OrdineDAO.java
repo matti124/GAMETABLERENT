@@ -11,12 +11,13 @@ import java.util.ArrayList;
 public class OrdineDAO implements OrdineDAOInterfaccia {
 
     @Override
-    public int doSave(OrdineDTO ordine) {
+
+    public int doSave(OrdineDTO ordine) { //salvo un nuovo ordine
         String query = "INSERT INTO ordine (id_utente, data_ordine, prezzo) VALUES (?, CURRENT_TIMESTAMP(), ?)";
 
         try (Connection connection = DriverManagerConnectionPool.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            
+
             statement.setInt(1, ordine.getIdUtente());
             statement.setDouble(2, 0.0);
 
@@ -33,11 +34,11 @@ public class OrdineDAO implements OrdineDAOInterfaccia {
                     throw new SQLException("Nessuna chiave generata durante l'inserimento dell'ordine.");
                 }
             }
+
         } catch (SQLException e) {
             System.err.println("Errore durante l'inserimento dell'ordine: " + e.getMessage());
-            e.printStackTrace();  // Stampa la traccia dell'eccezione per debug
+            e.printStackTrace();}  // Stampa la traccia dell'eccezione per debug
             return 0;  // Ritorna 0 in caso di errore
-        }
     }
 
 

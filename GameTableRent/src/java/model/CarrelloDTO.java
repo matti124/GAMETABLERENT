@@ -103,6 +103,7 @@ public class CarrelloDTO {
 		 while (iterator.hasNext()) {
 		     ProdottoCarrelloDTO x = iterator.next();
 		     ProdottoOrdineDTO prodOut = new ProdottoOrdineDTO(id_ord, x.getId_prodotto(), x.getPrezzo(), x.getPrezzoXdays(), x.getGiorni(), x.getQuantita(), x.getImage(), x.getName());
+
 		     prodottiOut.add(prodOut);
 		     iterator.remove(); 
 		 }
