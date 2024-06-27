@@ -19,7 +19,6 @@ import model.OrdineDTO;
  * 4) AGGIUNGERE UN PRODOTTO
  * 
  * 
- * 
  */
 @WebServlet("/AdminControl")
 public class AdminControl extends HttpServlet {
