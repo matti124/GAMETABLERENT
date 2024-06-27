@@ -46,7 +46,7 @@
         <h1>Login</h1>
         <form action="LoginServlet" method="post">
             <input type="text" name="email" placeholder="email" required>
-            <input type="password" name="psw" placeholder="Password" required>
+            <input type="password" name="psw" placeholder="password" required>
             <button type="submit">Login</button>
         </form>
         <% if (request.getAttribute("ValueLogin") != null) { %>
