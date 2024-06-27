@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Carrello</title>
+    <link rel="stylesheet" type="text/css" href="CSS/Carrello.css">
     <script type="text/javascript">
         function checkOut(userID, cart) {
             if (!userID) {
@@ -17,7 +18,6 @@
                 return;
             }
 
-            // Proceed to checkout (example URL, change it to your actual checkout URL)
             window.location.href = "OrdineControl?action=newOrdine";
         }
     </script>
@@ -32,44 +32,46 @@
     <%
     if (user != null) {
     %>
-    <h1>Ciao <%=user.getNome()%></h1>
-    <%} else {%>
-    <h1>Ciao Guest</h1>
-    <% } %>
+    <div class="title"><span>Ciao <%=user.getNome()%></span>
+    <%}%>
+<%if (cart.getCart().isEmpty()){ %>
+    <h2 style="text-align: center"> <span>Il tuo carrello è vuoto </span></h2> 
+    <%} else{ %>
 
-    <h2 style="text-align: center">ECCO IL TUO CARRELLO:</h2>
-    <%
-    for (ProdottoCarrelloDTO x : cart.getCart()) {
-    %>
-    <div class="prodotto">
+    <h2 style="text-align: center"> <span>ECCO IL TUO CARRELLO: </span></h2> <%} %></div> 
+    <div class="carrello-container">
         <%
-        String tipo = (x.getGiorni() == 0) ? "Acquisto" : "Nolleggio";
+        for (ProdottoCarrelloDTO x : cart.getCart()) {
         %>
-        <div class="prodotto-info">
-            <h3>Nome: <%=x.getName()%></h3>
-            <h5>Tipo: <%=tipo%></h5>
-            <h5>Prezzo: <%=x.getPrezzo()%></h5>
-            <h5>Prezzo al Giorno: <%=x.getPrezzoXdays()%></h5>
-            <h5>Quantità: <%=x.getQuantita()%></h5>
-            <% if (tipo.equals("Nolleggio")) { %>
-            <h5>Giorni: <%=x.getGiorni()%></h5>
-            <% } %>
+        <div class="prodotto">
+            <%
+            String tipo = (x.getGiorni() == 0) ? "Acquisto" : "Nolleggio";
+            %>
+            <div class="prodotto-info">
+                <h3>Nome: <%=x.getName()%></h3>
+                <h5>Tipo: <%=tipo%></h5>
+                <h5>Prezzo: <%=x.getPrezzo()%></h5>
+                <h5>Prezzo al Giorno: <%=x.getPrezzoXdays()%></h5>
+                <h5>Quantità: <%=x.getQuantita()%></h5>
+                <% if (tipo.equals("Nolleggio")) { %>
+                <h5>Giorni: <%=x.getGiorni()%></h5>
+                <% } %>
+            </div>
+            <div class="prodotto-img">
+                <% if (x.getImage() != null) { %>
+                <img class="immagineProd" alt="Immagine" src="<%=x.getImage()%>">
+                <% } else { %>
+                <img class="immagineProd" alt="Immagine" src="Pictures/defaultImage.png">
+                <% } %>
+                <a href="ProductControl?action=dettaglio&codice=<%=x.getId_prodotto()%>">
+                    <button>Dettagli Prodotto</button>
+                </a>
+            </div>
         </div>
-        <div class="prodotto-img">
-            <% if (x.getImage() != null) { %>
-            <img class="immagineProd" alt="Immagine" src="<%=x.getImage()%>">
-            <% } else { %>
-            <img class="immagineProd" alt="Immagine" src="Pictures/defaultImage.png">
-            <% } %>
-
-            <a href="ProductControl?action=dettaglio&codice=<%=x.getId_prodotto()%>">
-                <button>Dettagli Prodotto</button>
-            </a>
-        </div>
+        <% } %>
     </div>
-    <% } %>
-
-    <button onclick="checkOut(<%=valido%>, <%=cart.getCart().size()%>)">Effettua Ordine</button>
-
+    <div class="checkout-button">
+        <button onclick="checkOut(<%=valido%>, <%=cart.getCart().size()%>)">Effettua Ordine, Tot: <%=cart.getTotalPrice() %>$</button>
+    </div>
 </body>
 </html>
