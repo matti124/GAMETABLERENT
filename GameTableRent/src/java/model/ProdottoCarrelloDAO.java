@@ -53,7 +53,8 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
     @Override
     public boolean doUpdate(ProdottoCarrelloDTO prod) {
         String query = "UPDATE PRODOTTI_CARRELLO SET QUANTITY = ?, PREZZO= ?, PREZZOXDAYS= ? WHERE GIORNI = ? AND ID_CARRELLO = ? AND ID_PRODOTTO = ?";
-        
+        System.out.println("Updating product in database: " + prod.getId_prodotto() + ", new quantity: " + prod.getQuantita());
+
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
         		PreparedStatement statement = connection.prepareStatement(query)) {
         	statement.setInt(1, prod.getQuantita());
@@ -65,6 +66,7 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
        
 
             int rowsAffected = statement.executeUpdate();
+            System.out.println("*********Prodotto Carrello aggiornato***********");
             return rowsAffected == 1;
         } catch (SQLException e) {
             System.err.println("Errore durante l'aggiornamento del prodotto nel carrello: " + e.getMessage());
