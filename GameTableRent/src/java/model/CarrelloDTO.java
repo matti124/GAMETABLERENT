@@ -69,7 +69,7 @@ public class CarrelloDTO {
 	public void decreaseProduct(ProdottoCarrelloDTO x) {
 		ProdottoCarrelloDTO prod=this.retrieveById(x.getId_prodotto(), x.getGiorni());
 		if(prod!=null)
-			if(prod.getQuantita()<=1) 
+			if(prod.getQuantita()==0) 
 				this.Cart.remove(prod);
 			else prod.decreaseQuantity();
 	}
@@ -113,6 +113,11 @@ public class CarrelloDTO {
 			 
 			
 		}
+	
+	public void delete(ProdottoCarrelloDTO x) {
+		ProdottoCarrelloDTO delete=this.retrieveById(x.getId_prodotto(), x.getGiorni());
+		this.Cart.remove(delete);
+	}
 	}
 	
 

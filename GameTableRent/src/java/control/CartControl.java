@@ -253,44 +253,51 @@ public class CartControl extends HttpServlet {
 	    int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
 	    int quantity = Integer.parseInt(request.getParameter("quantity"));
 	    int giorni = Integer.parseInt(request.getParameter("days"));
-
-	    System.out.println("aggiorno il prodotto: "+ id_prod+"\n quantità: "+ quantity);
+	    String type=request.getParameter("type");
+	    
+	    
 	    UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
 	    if (user == null) {
 	        response.getWriter().write("User not logged in");
 	        return;
 	    }
-
 	    CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
 	    if (cart == null) {
 	        response.getWriter().write("Cart not found");
-	        return;
-	    }
-
+	        return;}
+	    
 	    ProdottoCarrelloDAO prodDAO = new ProdottoCarrelloDAO();
 	    ProdottoCarrelloDTO prod = prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
 	    if (prod == null) {
 	        response.getWriter().write("Product not found in cart");
 	        return;
 	    }
+	    
+	    if(type=="Quanity") {
+	    
 
 	    if (quantity == 0) {
-	        cart.decreaseProduct(prod);
+	        cart.delete(prod);;
 	        carrelloDAO.doUpdateCart(cart);
 	        prodDAO.doDelete(prod);
 	        request.getSession().setAttribute("cart", cart);
 
 	        System.out.println("Product removed from cart");
 	    } else {
-	        System.out.println("Old quantity: " + prod.getQuantita());
 	        prod.setQuantity(quantity);
-	        System.out.println("New quantity: " + prod.getQuantita());
-	        prod.setDays(giorni);
 	        request.getSession().setAttribute("cart", cart);
 	        prodDAO.doUpdate(prod);  // Ensure this line persists the changes
 	    }
 	    response.getWriter().write("Success");
 	}
+	if(type=="Days") {
+		
+		prod.setDays(giorni);
+        request.getSession().setAttribute("cart", cart);
 
+		prodDAO.doUpdate(prod);
+		
+	}
+	}
 }
 
