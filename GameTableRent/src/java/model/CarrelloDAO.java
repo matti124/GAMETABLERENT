@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class CarrelloDAO implements CarrelloDAOInterfaccia {
@@ -20,19 +21,33 @@ public class CarrelloDAO implements CarrelloDAOInterfaccia {
     
 
     @Override
-    public boolean doSave(CarrelloDTO cart) { //inserimento nuovo carrello
+    public int doSave(CarrelloDTO cart) { //inserimento nuovo carrello
         String query = "INSERT INTO CARRELLO (ID_U) VALUES (?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, cart.getID_Utente());
+        try (Connection connection = DriverManagerConnectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            int rowsAffected = statement.executeUpdate();
-            return rowsAffected == 1;
-        } catch (SQLException e) {
-            System.err.println("Errore durante l'inserimento del carrello: " + e.getMessage());
-            return false;
-        }
-    }
+               statement.setInt(1,cart.getID_Utente());
+
+               int rowsAffected = statement.executeUpdate();
+               
+               if (rowsAffected == 0) {
+                   throw new SQLException("L'inserimento dell'ordine non ha avuto successo, nessuna riga inserita.");
+               }
+               
+               try (ResultSet keyGenerata = statement.getGeneratedKeys()) {
+                   if (keyGenerata.next()) {
+                       return keyGenerata.getInt(1);
+                   } else {
+                       throw new SQLException("Nessuna chiave generata durante l'inserimento dell'ordine.");
+                   }
+               }
+
+           } catch (SQLException e) {
+               System.err.println("Errore durante l'inserimento dell'ordine: " + e.getMessage());
+               e.printStackTrace();}  // Stampa la traccia dell'eccezione per debug
+               return 0;  // Ritorna 0 in caso di errore
+       }
 
     @Override
     public boolean doFreeSpace(int id_cart) { //svuotare il carrello

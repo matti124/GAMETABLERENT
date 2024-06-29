@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public interface CarrelloDAOInterfaccia {
 	
-	public boolean doSave(CarrelloDTO cart);
+	public int doSave(CarrelloDTO cart);
 	
 	public boolean doFreeSpace(int id_cart); //libera spazio per un carrello
 	
