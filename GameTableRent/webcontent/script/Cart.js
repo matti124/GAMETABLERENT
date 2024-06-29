@@ -15,7 +15,7 @@
      
         
       
-       function updateQuantityCart(productId, days, sign, maxQuantity) {
+       function updateQuantityCart(productId,  sign, maxQuantity) {
             // Recupera la quantità corrente dal DOM
             let quantityElem = document.getElementById("quantity_of_" + productId);
             
@@ -31,7 +31,7 @@
                 quantity = quantity - 1;
                 console.log("Nuova quantità: " + quantity);
             } else if (sign === '+') {
-                if (quantity >= maxQuantity) {
+                if (quantity > maxQuantity) {
                     alert("La quantità non può essere maggiore di quella in magazzino.");
                     return;
                 }
@@ -60,7 +60,7 @@
             };
 
             // Invia la richiesta
-            let params = "codice_prod=" + productId + "&quantity=" + quantity + "&days=" + days;
+            let params = "codice_prod=" + productId + "&quantity=" + quantity
             console.log("Invio dei parametri: " + params);
             richiesta.send(params);
         }
@@ -69,44 +69,52 @@
        
        
        
-       
-        function UpdateDaysCart(productId, quantity,  sign) {
-            let days=parseInt(document.getElementById("daysOf"+ productId).textContent);
-            
-            if(sign==='-'){
-				if(days-5<5){
-				alert("impossibile nolleggiare prodotto per meno di 5 giorni");
-				return;}
-				else
-				days-=5;
-			}
-			if(sign==='+'){
-				if(days+5>60){
-					alert("impossibile nolleggiare prodotto per più di 60 giorni");
-					return;
-				}
-				else days+=5;
-			}
-			document.getElementById("daysOf"+productId).textContent=days;
-            // Crea una richiesta asincrona al server
-            let richiesta = new XMLHttpRequest();
-            richiesta.open("POST", "CartControl?action=UpdateCart", true);
-            richiesta.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+     function UpdateDaysCart(productId, sign) {
+    let daysElement = document.getElementById("daysOf" + productId);
+    let days = parseInt(daysElement.textContent);
 
-            richiesta.onreadystatechange = function() {
-                if (richiesta.readyState === 4 && richiesta.status === 200) {
-                    console.log("Risposta dal server: " + richiesta.responseText);
-				//non devo fare nulla anche per risposta positiva
-					}
-						
-                }
-          
+    if (isNaN(days)) {
+        alert("Il numero di giorni non è valido.");
+        return;
+    }
 
-            // Invia la richiesta
-            let params = "codice_prod=" + productId + "&quantity=" + quantity + "&days=" + days;
-            console.log("Invio dei parametri: " + params);
-            richiesta.send(params);}
-        
+    if (sign === '-') {
+        if (days - 5 < 5) {
+            alert("Impossibile noleggiare il prodotto per meno di 5 giorni");
+            return;
+        } else {
+            days -= 5;
+        }
+    } else if (sign === '+') {
+        if (days + 5 > 60) {
+            alert("Impossibile noleggiare il prodotto per più di 60 giorni");
+            return;
+        } else {
+            days += 5;
+        }
+    } else {
+        alert("Segno non valido.");
+        return;
+    }
+
+    console.log("Giorni risultanti: ", days);
+    daysElement.textContent = days;
+
+    let richiesta = new XMLHttpRequest();
+    richiesta.open("POST", "CartControl?action=UpdateDaysCart", true);
+    richiesta.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    richiesta.onreadystatechange = function() {
+        if (richiesta.readyState === 4 && richiesta.status === 200) {
+            console.log("Risposta dal server: " + richiesta.responseText);
+        }
+    };
+
+    let params = "codice_prod=" + productId + "&days=" + days;
+    console.log("Invio dei parametri: " + params);
+    richiesta.send(params);
+}
+
        
        
        /* le funzione di aggiornamento trattano principalmente l'aggiornamento in front end dei numeri, 

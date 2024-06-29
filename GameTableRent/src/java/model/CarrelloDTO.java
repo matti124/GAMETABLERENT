@@ -53,14 +53,16 @@ public class CarrelloDTO {
 	
 	public void addProduct(ProdottoCarrelloDTO x) { //se un elemento non è nel carrello lo aggiungo oppure ne aumento la quantità
 	    if (x != null) {
-	    	if(this.retrieveById(x.getId_prodotto(), x.getGiorni())==null)
+	    	if(this.retrieveById(x.getId_prodotto(), x.getGiorni())==null) {
 				this.Cart.add(x);
+				x.addQuantity();}
 			else x.addQuantity();
 	    } else {
 	        // Gestione appropriata nel caso prod sia null
 	        System.out.println("Tentativo di aggiungere un prodotto null al carrello.");
 	    }
 		
+	    System.out.println(x);
 		
 	}
 	

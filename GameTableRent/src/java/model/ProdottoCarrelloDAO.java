@@ -53,7 +53,7 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
     @Override
     public boolean doUpdate(ProdottoCarrelloDTO prod) {
         String query = "UPDATE PRODOTTI_CARRELLO SET QUANTITY = ?, PREZZO= ?, PREZZOXDAYS= ? WHERE GIORNI = ? AND ID_CARRELLO = ? AND ID_PRODOTTO = ?";
-        System.out.println("Updating product in database: " + prod.getId_prodotto() + ", new quantity: " + prod.getQuantita());
+        System.out.println("Updating product in database: " + prod.getId_prodotto() + ", new quantity: " + prod.getQuantita()+ ", new days: "+ prod.getGiorni());
 
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
         		PreparedStatement statement = connection.prepareStatement(query)) {
@@ -72,7 +72,32 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
             System.err.println("Errore durante l'aggiornamento del prodotto nel carrello: " + e.getMessage());
             return false;
         }
+        
+      
     }
+    
+    public boolean doUpdateWithoutDaysInWhere(ProdottoCarrelloDTO prod) {
+        String query = "UPDATE PRODOTTI_CARRELLO SET QUANTITY = ?, PREZZO = ?, PREZZOXDAYS = ?, GIORNI = ? WHERE ID_CARRELLO = ? AND ID_PRODOTTO = ?";
+        System.out.println("Updating product in database: " + prod.getId_prodotto() + ", new quantity: " + prod.getQuantita() + ", new days: " + prod.getGiorni());
+
+        try (Connection connection = DriverManagerConnectionPool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, prod.getQuantita());
+            statement.setDouble(2, prod.getPrezzo());
+            statement.setDouble(3, prod.getPrezzoXdays());
+            statement.setInt(4, prod.getGiorni());
+            statement.setInt(5, prod.getId_carrello());
+            statement.setInt(6, prod.getId_prodotto());
+
+            int rowsAffected = statement.executeUpdate();
+            System.out.println("*********Prodotto Carrello aggiornato***********");
+            return rowsAffected == 1;
+        } catch (SQLException e) {
+            System.err.println("Errore durante l'aggiornamento del prodotto nel carrello: " + e.getMessage());
+            return false;
+        }
+    }
+
 
     @Override
     public ProdottoCarrelloDTO doRetrieveByKey(int id_cart, int id_prod) {
@@ -160,6 +185,33 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
             System.err.println("Errore durante il recupero dei carrelli per il prodotto: " + e.getMessage());
         }
         return carrelli;
+    }
+
+    public ProdottoCarrelloDTO doRetrieveByKeyAndDays(int id_cart, int id_prod, int giorni) {
+        String query = "SELECT * FROM PRODOTTI_CARRELLO WHERE ID_CARRELLO = ? AND ID_PRODOTTO = ? AND GIORNI = ?";
+        
+        try (	Connection connection=DriverManagerConnectionPool.getConnection();
+        		PreparedStatement statement = connection.prepareStatement(query)) {
+        	statement.setInt(1, id_cart);
+            statement.setInt(2, id_prod);
+            statement.setInt(3, giorni);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int quantity = resultSet.getInt("QUANTITY");
+                    double prezzo=resultSet.getDouble("PREZZO");
+                    double prezzoxdays=resultSet.getDouble("PREZZOXDAYS");
+                    byte[] picture=resultSet.getBytes("PICTURE");
+                    String nome=resultSet.getString("Nome");
+
+                    return new ProdottoCarrelloDTO(id_cart, id_prod, prezzo, prezzoxdays, quantity, giorni, picture, nome);
+
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore durante il recupero del prodotto nel carrello: " + e.getMessage());
+        }
+        return null;
     }
 
 	

@@ -46,7 +46,7 @@ public class RegistrationServlet extends HttpServlet {
         String email = request.getParameter("email");
         String psw = request.getParameter("psw");
         String indirizzo = request.getParameter("indirizzo");
-
+        boolean gotElements=false;
         // Hashing della password utilizzando SHA-256
         String hashedPassword = null;
         try {
@@ -73,14 +73,32 @@ public class RegistrationServlet extends HttpServlet {
                 CarrelloDTO cart = (CarrelloDTO) request.getSession().getAttribute("cart");
                //se il carrello della sessione è vuoto ne creo uno nuovo
                 if(cart.getCart().isEmpty()) {
+                	System.out.println("L'utente non registrato non aveva prodotti nel carrello");
+
                 	ArrayList<ProdottoCarrelloDTO> listaProds=new ArrayList<>();
                 	cart=new CarrelloDTO(0, listaProds, user.getID());}
                 //se vi sono prodotti nel carrello della sessione ne creo uno nuovo che presenta i prodotti di quello della sessione
-                else 
+                else {
+                	System.out.println("L'utente non registrato aveva prodotti nel carrello");
                 	cart=new CarrelloDTO(0, cart.getCart(), user.getID());
+                	gotElements=true;
+              
+                	
+                
+                
+                }
                 
                 CarrelloDAO cartDAO = new CarrelloDAO();
-                cartDAO.doSave(cart);
+                int idCart=cartDAO.doSave(cart);
+                
+              
+                //SE L'UTENTE PRIMA DI REGISTRARSI AVEVA PRODOTTI NEL CARRELLO ALLORA UNA VOLTA CHE CARICO IL CARRELLO E LO SALVO, DEVO SALVARE ANCHE I PRODOTTI AL SUO INTERNO
+            	if(gotElements) {
+                ProdottoCarrelloDAO dao=new ProdottoCarrelloDAO();
+                for(ProdottoCarrelloDTO x: cart.getCart()) {
+                	
+            		dao.doSave(new ProdottoCarrelloDTO(idCart, x.getId_prodotto(), x.getPrezzo(), x.getPrezzoXdays(), x.getQuantita(), x.getGiorni(), x.getImage(), x.getName()));}
+            	}
                 
                 
                 

@@ -36,15 +36,15 @@
                     <h5>Prezzo: <%=x.getPrezzo()%></h5>
                     <h5>Prezzo al Giorno: <%=x.getPrezzoXdays()%></h5>
                     <h5>Quantità: 
-                        <button onclick="updateQuantityCart(<%=x.getId_prodotto()%>, 0, '-', <%=maxQuantity%>)"> - </button>
+                        <button onclick="updateQuantityCart(<%=x.getId_prodotto()%>,'-', <%=maxQuantity%>)"> - </button>
                         <span id="quantity_of_<%=x.getId_prodotto()%>"><%=x.getQuantita()%></span>
-                        <button onclick="updateQuantityCart(<%=x.getId_prodotto()%>, 0, '+', <%=maxQuantity%>)"> + </button>
+                        <button onclick="updateQuantityCart(<%=x.getId_prodotto()%>,'+', <%=maxQuantity%>)"> + </button>
                     </h5>
                     <% if (tipo.equals("Nolleggio")) { %>
                         <h5>Giorni: 
-                            <button onclick="UpdateDaysCart(<%=x.getId_prodotto()%>, 1, <%=x.getGiorni()%>, '-')"> - </button>
+                            <button onclick="UpdateDaysCart(<%=x.getId_prodotto()%>,'-')"> - </button>
                            <span id="daysOf<%=x.getId_prodotto()%>"> <%=x.getGiorni()%> </span>
-                            <button onclick="UpdateDaysCart(<%=x.getId_prodotto()%>, 1, <%=x.getGiorni()%>, '+')"> + </button>
+                            <button onclick="UpdateDaysCart(<%=x.getId_prodotto()%>,'+')"> + </button>
                         </h5>
                     <% } %>
                 </div>

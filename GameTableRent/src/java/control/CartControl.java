@@ -80,7 +80,11 @@ public class CartControl extends HttpServlet {
     	   break;
        case "UpdateCart":
     	   	this.updateCart(request, response);
-       
+    	   	break;
+    	   	
+       case "UpdateDaysCart":
+    	   this.UpdateDaysCart(request, response);
+    	   break;
        
        }
        
@@ -152,7 +156,7 @@ public class CartControl extends HttpServlet {
     	int giorni=Integer.parseInt(request.getParameter("days"));
     	  
     	
-           
+           System.out.println("Quantità passata: "+ quantity);
            
     	
 
@@ -230,8 +234,9 @@ public class CartControl extends HttpServlet {
         else {
         	System.out.println("NON contengo l'elemento");
 
-        	prod=new ProdottoCarrelloDTO(cart.getID_Carrello(),prodotto.getID_Prod(),  prodotto.getPrezzo(), prodotto.getPrezzoXDay(),quantity, giorni, prodotto.getImmagine(), prodotto.getNome());
+        	prod=new ProdottoCarrelloDTO(cart.getID_Carrello(),prodotto.getID_Prod(),  prodotto.getPrezzo(), prodotto.getPrezzoXDay(),0, giorni, prodotto.getImmagine(), prodotto.getNome());
     		for(int i=0;i<quantity; i++) {
+    		System.out.println("Aumento quantittà prodotto in carrello: "+ i);
         	cart.addProduct(prod);}
         	prodDAO.doSave(prod);}
         
@@ -252,8 +257,6 @@ public class CartControl extends HttpServlet {
 	private void updateCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
 	    int quantity = Integer.parseInt(request.getParameter("quantity"));
-	    int giorni = Integer.parseInt(request.getParameter("days"));
-	    String type=request.getParameter("type");
 	    
 	    
 	    UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
@@ -273,7 +276,7 @@ public class CartControl extends HttpServlet {
 	        return;
 	    }
 	    
-	    if(type=="Quanity") {
+	   
 	    
 
 	    if (quantity == 0) {
@@ -290,14 +293,27 @@ public class CartControl extends HttpServlet {
 	    }
 	    response.getWriter().write("Success");
 	}
-	if(type=="Days") {
-		
-		prod.setDays(giorni);
+	
+	
+	
+	private void UpdateDaysCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+		int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
+	    int days = Integer.parseInt(request.getParameter("days"));
+	    
+	    CarrelloDTO cart=(CarrelloDTO) request.getSession().getAttribute("cart");
+	    ProdottoCarrelloDAO prodDAO=new ProdottoCarrelloDAO();
+	    ProdottoCarrelloDTO prod = prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
+	    System.out.println("Vecchi giorni: "+ prod.getGiorni());
+	    prod.setDays(days);
+	    System.out.println("Nuovi giorni: "+ prod.getGiorni());
         request.getSession().setAttribute("cart", cart);
+	    prodDAO.doUpdateWithoutDaysInWhere(prod);
 
-		prodDAO.doUpdate(prod);
-		
+
+	    
+	
 	}
 	}
-}
+
 
