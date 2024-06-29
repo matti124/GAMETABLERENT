@@ -13,7 +13,7 @@
     	        <input type="text" id="cognome" name="cognome" required><br>
     	
         <label for="email">Email:</label>
-        <input type="text" id="email" name="email" required><br>
+        <input type="email" id="email" name="email" required><br>
         <label for="password">Password:</label>
         <input type="password" id="password" name="psw" required><br>
         <label for="indirizzo">indirizzo:</label>

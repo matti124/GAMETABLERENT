@@ -51,6 +51,7 @@ public class LoginServlet extends HttpServlet {
         }
         if(userDao.doRetrieveByEmail(email))
         utente = userDao.doRetrieveByPSW(hashedPsw);
+        System.out.println("PSW HASHATA INSERITA-> "+ hashedPsw);
         if (utente != null) {
             CarrelloDAO cartDao = new CarrelloDAO();
             CarrelloDTO cart = cartDao.doRetrieveById(utente.getID());

@@ -12,9 +12,12 @@
             margin: 0; /* Reset margin for full screen centering */
           display:flex;
           justify-content: center;
+           background-image: url("Pictures/1000_F_263916530_LxHmbQhIf1QV3APt1tgqSNthRdl5PVJa.jpg");
           
         }
         .product-details {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+        
         	margin-top:10%;
         	margin-bottom:10%;
             border: 1px solid #ccc;
@@ -31,7 +34,7 @@
 </head>
 <body>
     <div class="product-details">
-        <h2>Dettagli Prodotto</h2>
+        <h2 style="text-align:center">Dettagli Prodotto</h2>
         <% model.ProdottoDTO prodotto = (model.ProdottoDTO) request.getAttribute("prodotto"); %>
         <% if (prodotto != null) { %>
             <h3><%= prodotto.getNome() %></h3>

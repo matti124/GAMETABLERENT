@@ -1,7 +1,6 @@
 package control;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import model.*;
@@ -32,7 +31,7 @@ public class UserControl extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String azione=request.getParameter("action");
-		UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("utente");
+		UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
        UtenteDAO userDAO=new UtenteDAO();
 		switch (azione) {
 		
@@ -56,25 +55,18 @@ public class UserControl extends HttpServlet {
 		String nome=request.getParameter("nome");
 		String cognome=request.getParameter("cognome");
 		String email=request.getParameter("email");
-		String psw=request.getParameter("psw");
-		String pswHashed=null;
 		String indirizzo=request.getParameter("indirizzo");
 
-		//Hashing della psw 
-		try {
-			 pswHashed=RegistrationServlet.hashWithSHA256(psw);
-		} catch (NoSuchAlgorithmException e) {
-		    System.err.println("Errore nell'hashing");
-            response.sendRedirect(request.getContextPath() + "/errorPage.jsp");		}
+	
 		
 		user.setNome(nome);
 		user.setCognome(cognome);
-		user.setEmail(email);
-		user.setPsw(pswHashed);
 		user.setIndirizzo(indirizzo);
+		user.setEmail(email);
 		
 		try {
 			userDAO.doUpdate(user);
+			request.getSession().setAttribute("user", user);
             request.getRequestDispatcher("Account.jsp").forward(request, response);
             return;
 
