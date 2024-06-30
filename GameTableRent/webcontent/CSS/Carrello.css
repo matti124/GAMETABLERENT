@@ -102,3 +102,31 @@ h1, h2 {
 .checkout-button button:hover {
     background-color: #218838;
 }
+
+/* Aggiornamento del CSS per il paragrafo */
+p {
+    position: fixed;
+    bottom: 20px; /* Distanza dal basso */
+    left: 20px; /* Distanza da sinistra */
+    text-align: center;
+    font-size: 1.1em;
+    margin: 0; /* Rimuove il margine predefinito */
+    padding: 10px; /* Aggiunge spazio interno */
+    color: #4e8f00;
+    background-color: rgba(255, 255, 255, 0.9); /* Sfondo semi-trasparente */
+    border: 1px solid #ced4da; /* Bordo sottile */
+    border-radius: 5px; /* Bordi arrotondati */
+}
+
+p a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+p a:hover {
+    color: #0056b3;
+}
+
+

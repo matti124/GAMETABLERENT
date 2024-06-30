@@ -43,6 +43,7 @@
             // Aggiorna il DOM con il nuovo valore di quantità
             quantityElem.textContent = quantity;
 
+
             // Crea una richiesta asincrona al server
             let richiesta = new XMLHttpRequest();
             richiesta.open("POST", "CartControl?action=UpdateCart", true);

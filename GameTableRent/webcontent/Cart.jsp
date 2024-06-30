@@ -11,16 +11,17 @@
     <meta charset="UTF-8">
     <title>Carrello</title>
     <link rel="stylesheet" type="text/css" href="CSS/Carrello.css">
-<script src="script/Cart.js"></script>
+    <script src="script/Cart.js"></script>
 </head>
+<%@ include file="Header.jsp" %>
 <body>
     <% if (user != null) { %>
         <div class="title"><span>Ciao <%=user.getNome()%></span></div>
     <% } %>
     <% if (cart.getCart().isEmpty()) { %>
-        <h2 style="text-align: center">Il tuo carrello è vuoto</h2> 
+        <h2 class="title" style="text-align: center"><span>Il tuo carrello è vuoto</span></h2> 
     <% } else { %>
-        <h2 style="text-align: center">ECCO IL TUO CARRELLO:</h2>
+        <h2 class="title" style="text-align: center"><span>PRODOTTI IN CARRELLO</span></h2> 
     <% } %>
     <div class="carrello-container">
         <% for (ProdottoCarrelloDTO x : cart.getCart()) {
@@ -43,7 +44,7 @@
                     <% if (tipo.equals("Nolleggio")) { %>
                         <h5>Giorni: 
                             <button onclick="UpdateDaysCart(<%=x.getId_prodotto()%>,'-')"> - </button>
-                           <span id="daysOf<%=x.getId_prodotto()%>"> <%=x.getGiorni()%> </span>
+                            <span id="daysOf<%=x.getId_prodotto()%>"> <%=x.getGiorni()%> </span>
                             <button onclick="UpdateDaysCart(<%=x.getId_prodotto()%>,'+')"> + </button>
                         </h5>
                     <% } %>
@@ -62,7 +63,11 @@
         <% } %>
     </div>
     <div class="checkout-button">
-        <button onclick="checkOut(<%=valido%>, <%=cart.getCart().size()%>)">Effettua Ordine, Tot: <%=cart.getTotalPrice()%>$</button>
+        <% if (valido) { %>
+            <button id="TotalPrice" onclick="checkOut(<%=valido%>, <%=cart.getCart().size()%>)">Effettua Ordine, Tot: <%=cart.getTotalPrice()%>$</button>
+        <% } else { %>
+            <p>Per procedere con l'acquisto, effettua il <a href="Login.jsp">login</a> o <a href="Registrazione.jsp">registrati</a>.</p>
+        <% } %>
     </div>
 </body>
 </html>
