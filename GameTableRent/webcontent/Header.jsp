@@ -49,7 +49,7 @@
         }
 
         /* Stile responsive */
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 400px) {
             header {
                 padding: 10px 20px;
             }
@@ -60,7 +60,8 @@
 
             nav {
                 flex-direction: column;
-                gap: 10px;
+                gap: 5px;
+                font-size:medium;
             }
         }
     </style>
@@ -80,7 +81,11 @@
                <% } %>
             
             <a href="Cart.jsp">Carrello</a>
-            <a href="#">Account</a>
+            <%if(utente ==null){ %>
+            <a href="Login.jsp">Login</a>
+            <%}else{ %>
+            <a href="Account.jsp">Account</a>
+            <%} %>
 			<a href="ProductControl?action=mostraProdotti">Catalogo</a>
         </nav>
     </header>

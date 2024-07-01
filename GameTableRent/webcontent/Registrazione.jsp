@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="CSS/RegLog.css">
 </head>
 <body>
+<div class="main-content">
     <div class="container">
         <h2>Registrazione</h2>
         <form action="Registrazione" method="post">
@@ -21,6 +22,7 @@
             <input type="text" id="indirizzo" name="indirizzo" placeholder="Indirizzo" required><br>
             <button type="submit">Registrati</button>
         </form>
+    </div>
     </div>
 </body>
 </html>

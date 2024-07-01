@@ -1,0 +1,69 @@
+@charset "UTF-8";
+/* Orders.css */
+
+/* Impostazioni generali della tabella */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+/* Stili per intestazioni e celle */
+th, td {
+    border: 1px solid #4e8f00; /* Bordo della tabella */
+    padding: 10px; /* Spaziatura interna */
+    text-align: left; /* Allineamento del testo */
+}
+
+/* Stili per l'intestazione della tabella */
+th {
+    background-color: #f0f0f0; /* Colore di sfondo */
+    color: #4e8f00; /* Colore del testo */
+}
+
+/* Stili per le celle della tabella */
+td {
+    background-color: rgba(255, 255, 255, 0.9); /* Colore di sfondo */
+}
+
+/* Stili per il contenitore della form di ricerca */
+.date-form {
+    display: block;
+    border: 2px solid #fefb00;
+    padding: 5px; /* Ridotto lo spazio interno */
+    margin-top: 10px; /* Ridotto il margine superiore */
+    max-width: 40%; /* Larghezza massima del riquadro */
+    
+        background-color: rgba(255, 255, 255, 0.9); /* Colore di sfondo */
+    
+}
+.date-form {
+    display: block;
+    border: 2px solid #fefb00;
+    padding: 5px;
+    margin-top: 10px;
+    max-width: 40%;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+
+
+
+
+
+
+/* Regolazioni responsive */
+@media screen and (max-width: 800px) {
+    table, th, td {
+        max-width: 100%; /* Larghezza massima per adattarsi al dispositivo */
+    }
+    
+    .date-form{
+    margin-right:auto;
+    margin-left:auto;
+    max-width:100%;
+    
+    
+    }
+    
+}

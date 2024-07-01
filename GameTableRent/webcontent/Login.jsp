@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="CSS/RegLog.css">
 </head>
 <body>
-
+<div class="main-content">
     <div class="container">
         <h2>Login</h2>
         <form action="LoginServlet" method="post">
@@ -18,9 +18,8 @@
         </form>
         <% if (request.getAttribute("ValueLogin") != null) { %>
             <div class="error-message">Login fallito. Per favore riprova.</div>
-        <% } else if (request.getAttribute("ValueReg") != null) { %>
-            <div class="error-message">Email già registrata.</div>
-        <% } %> 
+        <%} %>
+    </div>
     </div>
 
 </body>

@@ -13,7 +13,6 @@
 <% ArrayList<ProdottoDTO> catalogo = (ArrayList<ProdottoDTO>) request.getAttribute("ListaProdotti"); %>
 
 <h1>Catalogo:</h1>
- <a href="Cart.jsp"><button>Carrello</button></a>
 
 
 <div class="catalogo">
@@ -127,8 +126,9 @@
 
         xhr.onload = function() {
             if (xhr.status === 200) {
-                alert('Prodotto aggiunto al carrello con successo!');
                 chiudiFormAggiunta(); 
+
+                alert('Prodotto aggiunto al carrello con successo!');
             } else {
                 alert('Si è verificato un errore durante l\'aggiunta al carrello.');
             }

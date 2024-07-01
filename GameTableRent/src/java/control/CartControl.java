@@ -175,7 +175,7 @@ public class CartControl extends HttpServlet {
             boolean found = false;
             for (ProdottoCarrelloDTO x : cart.getCart()) {
                 if (x.getId_prodotto() == id_prod && x.getGiorni() == giorni) {
-                    // Se il prodotto è già presente, aggiorna la quantità o i giorni di noleggio
+                	System.out.println("Contengo già il prodotto con stessi giorni");                    // Se il prodotto è già presente, aggiorna la quantità o i giorni di noleggio
                     x.setQuantity(x.getQuantita() + quantity);
                     found = true;
                     break;
@@ -188,7 +188,9 @@ public class CartControl extends HttpServlet {
                 ProdottoDTO dto = dao.doRetrieveByKey(id_prod);
                 
                 // Crea un nuovo oggetto ProdottoCarrelloDTO e aggiungilo al carrello
-                ProdottoCarrelloDTO prodCarrello = new ProdottoCarrelloDTO(cart.getID_Carrello(), dto.getID_Prod(), dto.getPrezzo(), dto.getPrezzoXDay(), quantity, giorni, dto.getImmagine(), dto.getNome());
+            	System.out.println("Non Contengo già il prodotto con stessi giorni");                    // Se il prodotto è già presente, aggiorna la quantità o i giorni di noleggio
+
+                ProdottoCarrelloDTO prodCarrello = new ProdottoCarrelloDTO(cart.getID_Carrello(), dto.getID_Prod(), dto.getPrezzo(), dto.getPrezzoXDay(), 0, giorni, dto.getImmagine(), dto.getNome());
                 cart.addProduct(prodCarrello);
                 return;
             }

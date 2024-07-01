@@ -37,9 +37,17 @@
                     <h5>Prezzo: <%=x.getPrezzo()%></h5>
                     <h5>Prezzo al Giorno: <%=x.getPrezzoXdays()%></h5>
                     <h5>Quantità: 
+                    
+                    <%if(valido){ %>
                         <button onclick="updateQuantityCart(<%=x.getId_prodotto()%>,'-', <%=maxQuantity%>)"> - </button>
+                        <%} %>
+                        
                         <span id="quantity_of_<%=x.getId_prodotto()%>"><%=x.getQuantita()%></span>
+                        
+                        <% if(valido){%>
                         <button onclick="updateQuantityCart(<%=x.getId_prodotto()%>,'+', <%=maxQuantity%>)"> + </button>
+                        <%} %>
+                        
                     </h5>
                     <% if (tipo.equals("Nolleggio")) { %>
                         <h5>Giorni: 

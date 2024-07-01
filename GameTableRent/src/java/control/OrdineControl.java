@@ -1,10 +1,8 @@
 package control;
 import model.*;
-
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -62,12 +60,12 @@ public class OrdineControl extends HttpServlet {
 				
 				
 		case "AllOrdersByDate":
-				if(user.getIsAdmin()>0)
-				this.AllOrdersByDate(request, response);
-				else             
-					response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Solo admin può accedere a queste azioni!");
+				this.AllOrdersByDateForUser(request, response, user.getID());
+				
 				break;
 				
+		
+			
 		case "AllOrders":
 			if(user.getIsAdmin()>0)
 				this.AllOrders(request, response);
@@ -160,11 +158,16 @@ public class OrdineControl extends HttpServlet {
 	
 	
 	
-	private void AllOrdersByDate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Timestamp start=(Timestamp) request.getAttribute("start"); //sarà necessaria una regular expression di javascriprt per essere sicuro che sia corretta la data
-		Timestamp end=(Timestamp)request.getAttribute("end");
+	private void AllOrdersByDateForUser(HttpServletRequest request, HttpServletResponse response, int id_u) throws ServletException, IOException {
+		 String startDateStr = request.getParameter("Start");
+	        String endDateStr = request.getParameter("end");
+	        
+	        Timestamp start = Timestamp.valueOf(startDateStr + " 00:00:00");
+	        Timestamp end = Timestamp.valueOf(endDateStr + " 23:59:59");
+
+	       
 		OrdineDAO dao=new OrdineDAO();
-		ArrayList<OrdineDTO> ordini=dao.doRetrieveByDate(start, end);
+		ArrayList<OrdineDTO> ordini=dao.doRetrieveByDateForUser(start, end, id_u);
 		request.setAttribute("listaOrdini", ordini);
 		request.getRequestDispatcher("/Orders.jsp").forward(request,response); //pagina per vedere tutti gli ordini in uno specifico arco di tempo
 	}
@@ -176,6 +179,8 @@ public class OrdineControl extends HttpServlet {
 		request.setAttribute("listaOrdini", ordini);
 		request.getRequestDispatcher("/Orders.jsp").forward(request,response); 
 	}
+	
+
 	
 
 }

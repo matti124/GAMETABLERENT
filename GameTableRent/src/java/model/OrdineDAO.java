@@ -158,7 +158,7 @@ public class OrdineDAO implements OrdineDAOInterfaccia {
     
     public ArrayList<OrdineDTO> doRetrieveByDate(Timestamp start, Timestamp end){ //ritorno tutti gli ordini effettuati nell'arco di un preciso lasso di tempo
     	ArrayList<OrdineDTO> ordini= new ArrayList<>();
-    	String query="SELECT * FROM ORDINE WHERE DATA_ORDINE BETWEEN (? AND ?);";
+    	String query="SELECT * FROM ORDINE WHERE DATA_ORDINE BETWEEN ? AND ?;";
     	try(Connection connection=DriverManagerConnectionPool.getConnection();
     			PreparedStatement ps= connection.prepareStatement(query);
     			){
@@ -181,6 +181,34 @@ public class OrdineDAO implements OrdineDAOInterfaccia {
 		return ordini;
     	
     }
+    
+    
+    public ArrayList<OrdineDTO> doRetrieveByDateForUser(Timestamp start, Timestamp end, int id_utente){ //ritorno tutti gli ordini effettuati nell'arco di un preciso lasso di tempo
+    	ArrayList<OrdineDTO> ordini= new ArrayList<>();
+    	String query="SELECT * FROM ORDINE WHERE ID_UTENTE = ? AND DATA_ORDINE BETWEEN ? AND ?;";
+    	try(Connection connection=DriverManagerConnectionPool.getConnection();
+    			PreparedStatement ps= connection.prepareStatement(query);
+    			){
+    		ps.setInt(1, id_utente);
+    		ps.setTimestamp(2, start);
+    		ps.setTimestamp(3, end);
+    		ResultSet resultSet=ps.executeQuery();
+    		 while (resultSet.next()) {
+                 int id_ordine = resultSet.getInt("id_ordine");
+                 Timestamp data_ordine = resultSet.getTimestamp("data_ordine");
+                 ProdottoOrdineDAO x=new ProdottoOrdineDAO();
+                 ArrayList<ProdottoOrdineDTO> prods=x.doRetrieveAll(id_ordine);
+                 OrdineDTO ordine = new OrdineDTO(id_ordine, id_utente, data_ordine, prods);
+                 ordini.add(ordine);
+             }
+    	} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Errore durante recupero degli ordini per data: "+ e.getMessage());
+		}
+		return ordini;
+    	
+    }
+
 
 	
     

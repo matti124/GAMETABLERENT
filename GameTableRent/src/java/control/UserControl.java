@@ -41,9 +41,10 @@ public class UserControl extends HttpServlet {
 		case "Ordini": //ci sarà un tasto apposito che quando premuto carica gli ordini
 			 {
             ArrayList<OrdineDTO> ordini = this.getInformazioni(user.getID());
-            request.setAttribute("Ordini", ordini);
-            request.getRequestDispatcher("MyOrders.jsp").forward(request, response);
-            return;
+            request.setAttribute("listaOrdini", ordini);
+            request.getRequestDispatcher("Orders.jsp").forward(request, response);
+            System.out.println("Ho trovato e settato gli ordini");
+            break;
            }
      
 			 
