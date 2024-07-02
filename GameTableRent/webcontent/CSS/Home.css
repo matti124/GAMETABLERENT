@@ -11,7 +11,7 @@ body {
 }
 
 /* Titolo centrato sopra tutto il contenuto */
-.title {
+#title {
     position: relative; /* Posizione relativa per contenere elementi posizionati in modo assoluto */
     max-width: 90%; /* Larghezza massima del titolo per renderlo responsive */
     margin: 20px auto; /* Margine per centrare il titolo */
@@ -21,7 +21,7 @@ body {
     z-index: 1; /* Posizionato sopra gli altri elementi */
 }
 
-      .title span {
+      #title span {
       		font-family:monospace;
       		font-style:oblique;
       		font-weight:bold;
@@ -115,6 +115,37 @@ button:focus {
     border-color: #d32f2f; /* Colore del bordo del pulsante alternativo al passaggio del mouse */
 }
 
+
+/*PER USER HOME*/
+/* Immagine di sfondo per la prima colonna */
+#row1User {
+    background-image: url("../Pictures/scheda-equip-v2.jpg");
+    
+}
+
+/* Colori di sfondo per le altre colonne */
+#row2User {
+    background-color: #8df900; /* Verde */
+    background-image: url("../Pictures/carrello.jpg");
+    background-position: right ;
+}
+
+#row3User {
+    background-color: #d4fb78; /* Verde chiaro */
+    background-image: url("../Pictures/Catalogo.jpeg");
+    background-position: right ; /* Centra l'immagine verticalmente e orizzontalmente */
+}
+
+@media screen and (max-width: 900px) {
+	#row2User {
+	    background-position: center right ;
+	
+	
+	}
+	
+}
+
+
 /* Stili per rendere il layout responsive */
 @media screen and (max-width: 768px) {
     .container {
@@ -125,4 +156,9 @@ button:focus {
     .title {
         font-size: 1.5em; /* Riduci la dimensione del titolo su schermi più piccoli */
     }
+    #row1User{
+    background-position: top}
 }
+
+
+

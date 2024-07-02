@@ -150,7 +150,7 @@ public class OrdineControl extends HttpServlet {
 		OrdineDTO ordine=ordDAO.doRetrieveByKey(id_ordine);
 		request.setAttribute("ordine", ordine);
 		try {
-			request.getRequestDispatcher("/OrderDetails.jsp").forward(request, response); //pagina per vedere dettagli dell'ordine 
+			request.getRequestDispatcher("/OrderDetail.jsp").forward(request, response); //pagina per vedere dettagli dell'ordine 
 		} catch (ServletException | IOException e) {
 			e.printStackTrace();
 		}

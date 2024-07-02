@@ -34,8 +34,9 @@
                                 <td><%=ordine.getTotalPrice()%>$</td>
                                 <td><%= ordine.getProdotti().size()%></td>
                                 <td>
-                                    <form action="OrderDetail.jsp" method="get">
-                                        <input type="hidden" name="ordineId" value="<%= ordine.getId_Ordine() %>">
+                                    <form action="OrdineControl" method="get">
+                                    	<input type="hidden" name="action" value="OrderDetails">
+                                        <input type="hidden" name="id_ord" value="<%= ordine.getId_Ordine() %>">
                                         <button type="submit">View Order</button>
                                     </form>
                                 </td>
@@ -61,6 +62,6 @@
               
                 </div>
             <% } else{ %>
-            <h1>Nessun ordine effettuato</h1><%} %>
+            <h2 style="display:block; margin-top:20px;">Nessun ordine effettuato</h2><%} %>
 </body>
 </html>

@@ -18,15 +18,15 @@
     <link rel="stylesheet" href="CSS/Home.css">
 </head>
 <body>
-<div class="title"><span>Ciao <%=name%></span></div>
+<div id="title"><span>Ciao <%=name%></span></div>
     <div class="container">
-        <div class="row" id="row1">
+        <div class="row" id="row1User">
             <a href="Account.jsp"><button>Account</button></a>
         </div>
-        <div class="row" id="row2">
+        <div class="row" id="row2User">
             <a href="Cart.jsp"><button>Carrello</button></a>
         </div>
-        <div class="row" id="row3">
+        <div class="row" id="row3User">
 			<a href="ProductControl?action=mostraProdotti"><button>Catalogo</button></a>
         </div>
     </div>

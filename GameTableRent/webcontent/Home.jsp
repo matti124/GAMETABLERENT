@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="CSS/Home.css">
 </head>
 <body>
-<div class="title"><span>GAME TABLE RENT</span></div>
+<div id="title"><span>GAME TABLE RENT</span></div>
     <div class="container">
         <div class="row" id="row1">
             <a href="Registrazione.jsp"><button>Registrati</button></a>

@@ -23,7 +23,7 @@
     <% } else { %>
         <h2 class="title" style="text-align: center"><span>PRODOTTI IN CARRELLO</span></h2> 
     <% } %>
-    <div class="carrello-container">
+    <div class="container">
         <% for (ProdottoCarrelloDTO x : cart.getCart()) {
             ProdottoDAO prodDAO = new ProdottoDAO();
             ProdottoDTO prod = prodDAO.doRetrieveByKey(x.getId_prodotto());
@@ -51,9 +51,13 @@
                     </h5>
                     <% if (tipo.equals("Nolleggio")) { %>
                         <h5>Giorni: 
+                        <%if (valido){ %>
                             <button onclick="UpdateDaysCart(<%=x.getId_prodotto()%>,'-')"> - </button>
+                            <%} %>
                             <span id="daysOf<%=x.getId_prodotto()%>"> <%=x.getGiorni()%> </span>
+                            <%if(valido){ %>
                             <button onclick="UpdateDaysCart(<%=x.getId_prodotto()%>,'+')"> + </button>
+                            <%} %>
                         </h5>
                     <% } %>
                 </div>
