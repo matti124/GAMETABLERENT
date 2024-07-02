@@ -44,7 +44,7 @@ public class AdminFilter implements Filter {
 
         HttpSession session = request.getSession(false);
         
-        boolean isAdmin = session != null && session.getAttribute("utente") != null && ((UtenteDTO) session.getAttribute("utente")).getIsAdmin() == 1;
+        boolean isAdmin = session != null && session.getAttribute("user") != null && ((UtenteDTO) session.getAttribute("user")).getIsAdmin() == 1;
 
         // Verifica se l'utente è admin per i servlet specificati
         if (isAdmin) {

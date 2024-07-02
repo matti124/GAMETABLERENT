@@ -61,7 +61,7 @@
             nav {
                 flex-direction: column;
                 gap: 5px;
-                font-size:medium;
+                font-size: medium;
             }
         }
     </style>
@@ -76,17 +76,19 @@
                UtenteDTO utente = (UtenteDTO) request.getSession().getAttribute("user");
                if (utente == null) { %>
                    <a href="Home.jsp">Home</a>
-               <% } else { %>
+            <% } else if (utente.getIsAdmin() == 0) { %>
                    <a href="UserHome.jsp">Home</a>
-               <% } %>
+            <% } else if (utente.getIsAdmin() == 1) { %>
+                   <a href="admin/AdminHome.jsp">Home</a>
+            <% } %>
             
             <a href="Cart.jsp">Carrello</a>
-            <%if(utente ==null){ %>
-            <a href="Login.jsp">Login</a>
-            <%}else{ %>
-            <a href="Account.jsp">Account</a>
-            <%} %>
-			<a href="ProductControl?action=mostraProdotti">Catalogo</a>
+            <% if (utente == null) { %>
+                <a href="Login.jsp">Login</a>
+            <% } else { %>
+                <a href="Account.jsp">Account</a>
+            <% } %>
+            <a href="ProductControl?action=mostraProdotti">Catalogo</a>
         </nav>
     </header>
 </body>

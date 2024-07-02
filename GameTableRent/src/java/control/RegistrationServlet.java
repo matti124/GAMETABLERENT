@@ -59,7 +59,7 @@ public class RegistrationServlet extends HttpServlet {
         }
 
         try {
-            UtenteDTO user = new UtenteDTO(0, nome, cognome, indirizzo, email, hashedPassword);
+            UtenteDTO user = new UtenteDTO(0, nome, cognome, indirizzo, email, hashedPassword, 0);
 
             if (userDao.doRetrieveByEmail(email)) {
                 request.setAttribute("ValueReg", 0);
@@ -103,7 +103,7 @@ public class RegistrationServlet extends HttpServlet {
                 
                 
                 request.getSession().setAttribute("cart", cart);
-                request.getRequestDispatcher("Login.jsp").forward(request, response);
+                response.sendRedirect("Login.jsp");
                 return; 
             }
         } catch (SQLException e) {

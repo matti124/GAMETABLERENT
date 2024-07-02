@@ -31,7 +31,7 @@ public class UtenteDAO implements UtenteDAOInterfaccia {
         }
     }
 
-    public UtenteDTO doRetrieveByKey(int id) throws SQLException {
+    public UtenteDTO doRetrieveByKey(int id)   {
         try (Connection con = DriverManagerConnectionPool.getConnection();
              PreparedStatement ps = con.prepareStatement(SELECT_BY_KEY_SQL)) {
             ps.setInt(1, id);
@@ -43,24 +43,32 @@ public class UtenteDAO implements UtenteDAOInterfaccia {
                     rs.getString("Cognome"),
                     rs.getString("Indirizzo"),
                     rs.getString("Email"),
-                    rs.getString("Psw")
+                    rs.getString("Psw"),
+                    rs.getInt("isAdmin")
                 );
             }
-        }
+        } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return null;
     }
 
-    public boolean doDeleteByKey(int id) throws SQLException {
+    public boolean doDeleteByKey(int id)   {
         try (Connection con = DriverManagerConnectionPool.getConnection();
              PreparedStatement ps = con.prepareStatement(DELETE_BY_KEY_SQL)) {
             ps.setInt(1, id);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
-        }
+        } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
     }
 
     
-    public void doUpdate(UtenteDTO user) throws SQLException { //aggiorno user con quel preciso id passando già tutti i dati aggiornati
+    public void doUpdate(UtenteDTO user)  { //aggiorno user con quel preciso id passando già tutti i dati aggiornati
         try (Connection con = DriverManagerConnectionPool.getConnection();
              PreparedStatement ps = con.prepareStatement(UPDATE_SQL)) {
             ps.setString(1, user.getNome());
@@ -71,22 +79,29 @@ public class UtenteDAO implements UtenteDAOInterfaccia {
             ps.setInt(6, user.getIsAdmin());
             ps.setInt(7, user.getID());
             ps.executeUpdate();
-        }
+        } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     
-    public ArrayList<UtenteDTO> doRetrieveAll() throws SQLException {
+    public ArrayList<UtenteDTO> doRetrieveAll()  {
     	try(Connection con=DriverManagerConnectionPool.getConnection();
     			PreparedStatement ps= con.prepareStatement(RETRIEVE_ALL)){
     		ResultSet rs=ps.executeQuery();
     		ArrayList<UtenteDTO> listaUtenti=new ArrayList<>();
 
     		while(rs.next()) {
-    			UtenteDTO u=new UtenteDTO(rs.getInt("id"), rs.getString("nome"), rs.getString("cognome"),  rs.getString("indirizzo"), rs.getString("email"), rs.getString("psw"));
+    			UtenteDTO u=new UtenteDTO(rs.getInt("id"), rs.getString("nome"), rs.getString("cognome"),  rs.getString("indirizzo"), rs.getString("email"), rs.getString("psw"), rs.getInt("isAdmin"));
     			listaUtenti.add(u);
     		}
     		return listaUtenti;
-    	}
+    	} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
     }
     
     public boolean doRetrieveByEmail(String email) {
@@ -116,7 +131,9 @@ public class UtenteDAO implements UtenteDAOInterfaccia {
                         rs.getString("Cognome"),
                         rs.getString("Indirizzo"),
                         rs.getString("Email"),
-                        rs.getString("Psw")
+                        rs.getString("Psw"),
+                        rs.getInt("isAdmin")
+
                     );
                 }
             } catch (SQLException e) {

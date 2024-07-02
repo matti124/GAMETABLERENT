@@ -65,15 +65,10 @@ public class UserControl extends HttpServlet {
 		user.setIndirizzo(indirizzo);
 		user.setEmail(email);
 		
-		try {
-			userDAO.doUpdate(user);
-			request.getSession().setAttribute("user", user);
-            request.getRequestDispatcher("Account.jsp").forward(request, response);
-            return;
-
-		} catch (SQLException e) {
-			System.err.println("errore nel salvataggio");
-			e.printStackTrace();}
+		userDAO.doUpdate(user);
+		request.getSession().setAttribute("user", user);
+		request.getRequestDispatcher("Account.jsp").forward(request, response);
+		return;
 		}
 		
 		
@@ -88,15 +83,9 @@ public class UserControl extends HttpServlet {
 		
 		case "Delete":
 		{
-			try {
-				userDAO.doDeleteByKey(user.getID());
-				response.sendRedirect(request.getContextPath()+"/Home.jsp");
-				return;
-
-			} catch (SQLException e) {
-				System.err.println("Errore durante l'eliminazione");
-				e.printStackTrace();
-			}
+			userDAO.doDeleteByKey(user.getID());
+			response.sendRedirect(request.getContextPath()+"/Home.jsp");
+			return;
 		}
 		
 		

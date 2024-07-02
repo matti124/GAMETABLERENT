@@ -57,6 +57,12 @@ public class LoginServlet extends HttpServlet {
             CarrelloDTO cart = cartDao.doRetrieveById(utente.getID());
             request.getSession().setAttribute("cart", cart);
             request.getSession().setAttribute("user", utente);
+            System.out.println("Is Admin?  -> "+ utente.getIsAdmin());
+            if(utente.getIsAdmin()>0) {
+            	System.out.println("utente admin");
+                response.sendRedirect(request.getContextPath()+"/admin/AdminHome.jsp");}
+            else
+
             response.sendRedirect(request.getContextPath() + "/UserHome.jsp");
         } else {
             request.setAttribute("ValueLogin", 0);

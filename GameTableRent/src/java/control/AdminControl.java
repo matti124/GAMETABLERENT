@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.OrdineDAO;
 import model.OrdineDTO;
+import model.UtenteDAO;
+import model.UtenteDTO;
 
 /*
  * AZIONI GESTITE DALLA SERVLET ADMIN CONTROL:
@@ -41,9 +43,13 @@ public class AdminControl extends HttpServlet {
 		
 		switch (azione) {
 		
-		
-		case "allOrdersByDate":{ 
+		case "allOrders":{
 			this.AllOrders(request, response);
+			break;
+			
+		}
+		case "allOrdersByDate":{ 
+			this.AllOrdersByDate(request, response);
 			break;}
 			
 		case "addProduct":{ //mi indirizza alla pagina in cui compilerò il form per il nuovo elemento la quale passerà i dati a ProductControl?action=aggiungi
@@ -59,11 +65,22 @@ public class AdminControl extends HttpServlet {
 		case "removeProd":{
 			request.getRequestDispatcher("/ProductoControl?action=elimina");
 			break;}
+		
+		
+		case "AllAccounts":{
+			this.AllAccounts(request, response);
+			break;
+		}
+		
+		case "AccountDetails":{
+			this.AccountDetails(request, response);
+		}
 			
 		}
 		
 	}
 
+	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -73,13 +90,36 @@ public class AdminControl extends HttpServlet {
 	
 	
 
-	private void AllOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void AllOrdersByDate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Timestamp start=Timestamp.valueOf(request.getParameter("Start")); //sarà necessaria una regular expression di javascriprt per essere sicuro che sia corretta la data
 		Timestamp end=Timestamp.valueOf(request.getParameter("End"));
 		OrdineDAO dao=new OrdineDAO();
 		ArrayList<OrdineDTO> ordini=dao.doRetrieveByDate(start, end);
-		request.setAttribute("listaOrdini", ordini);
-		request.getRequestDispatcher("/OthersOrders.jsp").forward(request,response); //pagina per vedere tutti gli ordini in uno specifico arco di tempo
+		request.setAttribute("ordini", ordini);
+		request.getRequestDispatcher("/Orders.jsp").forward(request,response); //pagina per vedere tutti gli ordini in uno specifico arco di tempo
+	}
+	
+	
+	private void AllOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		OrdineDAO dao= new OrdineDAO();
+		ArrayList<OrdineDTO> ordini=dao.doRetrieveAll();
+		request.setAttribute("ordini", ordini);
+		request.getRequestDispatcher("/Orders.jsp").forward(request, response);
+	}
+	
+	
+	private void AllAccounts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		UtenteDAO dao=new UtenteDAO();
+		ArrayList<UtenteDTO> utenti=dao.doRetrieveAll();
+		request.setAttribute("utenti", utenti);
+		request.getRequestDispatcher("/admin/Accounts.jsp").forward(request, response);
+	}
+	private void AccountDetails(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int id_utente=Integer.parseInt(request.getParameter("id_utente"));
+		UtenteDAO userDAO=new UtenteDAO();
+		UtenteDTO user=userDAO.doRetrieveByKey(id_utente);
+		request.setAttribute("utenteDettagli", user);
+		request.getRequestDispatcher("/admin/AccountDetails.jsp").forward(request, response);
 	}
 
 
