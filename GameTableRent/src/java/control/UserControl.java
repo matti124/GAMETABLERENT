@@ -1,7 +1,6 @@
 package control;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import model.*;
 import javax.servlet.ServletException;

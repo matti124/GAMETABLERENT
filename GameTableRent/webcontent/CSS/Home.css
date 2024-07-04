@@ -21,7 +21,7 @@ body {
     z-index: 1; /* Posizionato sopra gli altri elementi */
 }
 
-      #title span {
+       span {
       		font-family:monospace;
       		font-style:oblique;
       		font-weight:bold;

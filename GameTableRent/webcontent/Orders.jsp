@@ -3,7 +3,9 @@
 <%UtenteDTO user=(UtenteDTO)request.getSession().getAttribute("user");
   ArrayList<OrdineDTO>ordini=(ArrayList<OrdineDTO>)request.getAttribute("listaOrdini");
     %>
+    <%if (user.getIsAdmin()==0){ %>
     <%@include file="Header.jsp" %>
+    <%} %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,8 +18,11 @@
 <body>
     <div class="main-content">
         <div class="container">
-            <h2>I tuoi ordini</h2>
-            <% if (ordini != null && !ordini.isEmpty()) { %>
+        <%if(user.getIsAdmin()>0){ %>
+        <h2>Ordini</h2><%}else{ %>
+            <h2>I tuoi ordini</h2><%} %>
+               <% if (ordini != null && !ordini.isEmpty()) { %>
+            
                 <table>
                     <thead>
                         <tr>
@@ -48,6 +53,7 @@
         </div>
         
     </div>
+    <%if(user.getIsAdmin()==0){ %>
           <div class="date-form">
                 <h2> Ricerca Ordini per data:</h2>
                 <form method="get" action="OrdineControl">
@@ -61,6 +67,7 @@
                 <a href="UserControl?action=Ordini" style="text-decoration:none"><button>Mostra tutti</button></a>
               
                 </div>
+                <%} %>
             <% } else{ %>
             <h2 style="display:block; margin-top:20px;">Nessun ordine effettuato</h2><%} %>
 </body>
