@@ -104,7 +104,8 @@ public class AdminControl extends HttpServlet {
 		OrdineDAO dao= new OrdineDAO();
 		ArrayList<OrdineDTO> ordini=dao.doRetrieveAll();
 		request.setAttribute("ordini", ordini);
-		request.getRequestDispatcher("/Orders.jsp").forward(request, response);
+		System.out.println("ti inolotro alla pagina");
+		request.getRequestDispatcher("/admin/AllOrders.jsp").forward(request, response);
 	}
 	
 	
