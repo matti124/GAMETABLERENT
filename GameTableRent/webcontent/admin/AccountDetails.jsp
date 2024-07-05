@@ -6,6 +6,7 @@
     OrdineDAO ordineDAO = new OrdineDAO();
     ArrayList<OrdineDTO> ordini = ordineDAO.doRetrieveAllbyId(userCheck.getID());
     request.setAttribute("listaOrdini", ordini);
+    double tot=ordini.stream().mapToDouble(a->a.getTotalPrice()).sum();
 %>
 <!DOCTYPE html>
 <html>
@@ -13,6 +14,8 @@
 <meta charset="UTF-8">
 <title>Dettagli Utente</title>
 <link rel="stylesheet" href="CSS/RegLog.css">
+<link rel="stylesheet" href="CSS/Orders.css">
+
 <style>
     span {
         font-family: monospace;
@@ -23,9 +26,7 @@
         padding: 5px 10px;
         border-radius: 10px;
     }
-    .container {
-        max-width: 40%;
-    }
+   
 </style>
 </head>
 <%@include file="../Header.jsp" %>
@@ -40,6 +41,7 @@
             <label>Indirizzo: <span><%= userCheck.getIndirizzo() %></span></label>
             <label>Email: <span><%= userCheck.getEmail() %></span></label>
             <label>Elementi nel carrello: <span><%= dao.doRetrieveById(userCheck.getID()).getCart().size() %></span></label>
+            <label>Spesa Totale: <span><%=tot %></span></label>
         </form>
     </div>
 </div>

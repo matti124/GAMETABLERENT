@@ -57,7 +57,7 @@
           <div class="date-form">
                 <h2> Ricerca Ordini per data:</h2>
                 <form method="get" action="OrdineControl">
-                <input type="hidden" name="action" value="AllOrdersByDate">
+                <input type="hidden" name="action" value="AllOrdersByDateForUser">
                 <label> Data inizio: </label>
                 <input type="date" name="Start">
                  <label> Data fine: </label>

@@ -26,44 +26,34 @@ td {
     background-color: rgba(255, 255, 255, 0.9); /* Colore di sfondo */
 }
 
-/* Stili per il contenitore della form di ricerca */
-.date-form {
-    display: block;
-    border: 2px solid #fefb00;
-    padding: 5px; /* Ridotto lo spazio interno */
-    margin-top: 10px; /* Ridotto il margine superiore */
-    max-width: 40%; /* Larghezza massima del riquadro */
-    
-        background-color: rgba(255, 255, 255, 0.9); /* Colore di sfondo */
-    
+.aggiunte {
+    display: flex;
+    flex-wrap: wrap; /* Per far andare a capo gli elementi su schermi stretti */
+    justify-content: space-between; /* Spaziatura tra i due div */
+    margin-top: 20px;
 }
+
 .date-form {
-    display: block;
+    flex: 0 0 48%; /* Larghezza dei due div, con margine tra loro */
+    margin-bottom: 10px; /* Spazio inferiore tra i due div */
     border: 2px solid #fefb00;
-    padding: 5px;
-    margin-top: 10px;
-    max-width: 40%;
+    padding: 10px;
     background-color: rgba(255, 255, 255, 0.9);
 }
 
-
-
-
-
-
+.riepilogo {
+    flex: 0 0 25%; /* Larghezza dei due div, con margine tra loro */
+    margin-bottom: 10px; /* Spazio inferiore tra i due div */
+    border: 2px solid #fefb00;
+    padding: 10px;
+    margin-right:20px;
+    background-color: rgba(255, 255, 255, 0.9);
+}
 
 /* Regolazioni responsive */
 @media screen and (max-width: 800px) {
-    table, th, td {
-        max-width: 100%; /* Larghezza massima per adattarsi al dispositivo */
+    .date-form, .riepilogo {
+        flex: 0 0 100%; /* Occupano tutta la larghezza quando lo schermo è stretto */
+        margin-right: 0; /* Rimuove il margine destro */
     }
-    
-    .date-form{
-    margin-right:auto;
-    margin-left:auto;
-    max-width:100%;
-    
-    
-    }
-    
 }
