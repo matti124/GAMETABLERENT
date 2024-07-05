@@ -66,16 +66,6 @@ public class OrdineControl extends HttpServlet {
 				
 		
 			
-		case "AllOrders":
-			if(user.getIsAdmin()>0)
-				this.AllOrders(request, response);
-				else             
-					response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Solo admin può accedere a queste azioni!");
-				break;
-				
-		
-
-		
 		}
 		
 	}
@@ -172,13 +162,6 @@ public class OrdineControl extends HttpServlet {
 		request.getRequestDispatcher("/Orders.jsp").forward(request,response); //pagina per vedere tutti gli ordini in uno specifico arco di tempo
 	}
 	
-	private void AllOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		OrdineDAO dao=new OrdineDAO();
-		ArrayList<OrdineDTO> ordini=dao.doRetrieveAll();
-		request.setAttribute("listaOrdini", ordini);
-		request.getRequestDispatcher("/Orders.jsp").forward(request,response); 
-	}
 	
 
 	

@@ -44,11 +44,14 @@ public class AdminControl extends HttpServlet {
 		switch (azione) {
 		
 		case "allOrders":{
+			this.ProfitXMonth(request, response);
 			this.AllOrders(request, response);
 			break;
 			
 		}
 		case "allOrdersByDate":{ 
+			this.ProfitXMonth(request, response);
+
 			this.AllOrdersByDate(request, response);
 			break;}
 			
@@ -91,12 +94,17 @@ public class AdminControl extends HttpServlet {
 	
 
 	private void AllOrdersByDate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Timestamp start=Timestamp.valueOf(request.getParameter("Start")); //sarà necessaria una regular expression di javascriprt per essere sicuro che sia corretta la data
-		Timestamp end=Timestamp.valueOf(request.getParameter("End"));
+		 String startDateStr = request.getParameter("Start");
+	        String endDateStr = request.getParameter("end");
+	        
+	        Timestamp start = Timestamp.valueOf(startDateStr );
+	        Timestamp end = Timestamp.valueOf(endDateStr );
+
+	       
 		OrdineDAO dao=new OrdineDAO();
 		ArrayList<OrdineDTO> ordini=dao.doRetrieveByDate(start, end);
 		request.setAttribute("ordini", ordini);
-		request.getRequestDispatcher("/Orders.jsp").forward(request,response); //pagina per vedere tutti gli ordini in uno specifico arco di tempo
+		request.getRequestDispatcher("/admin/AllOrders.jsp").forward(request,response); //pagina per vedere tutti gli ordini in uno specifico arco di tempo
 	}
 	
 	
@@ -121,6 +129,32 @@ public class AdminControl extends HttpServlet {
 		UtenteDTO user=userDAO.doRetrieveByKey(id_utente);
 		request.setAttribute("utenteDettagli", user);
 		request.getRequestDispatcher("/admin/AccountDetails.jsp").forward(request, response);
+	}
+
+	
+	private void ProfitXMonth(HttpServletRequest request, HttpServletResponse response) {
+	    double[] totals = new double[13]; // Array per 12 mesi + 1 per l'indice 0
+	    OrdineDAO dao = new OrdineDAO();
+	    
+	    for (int i = 1; i < 13; i++) {
+	        String startStr = String.format("2024-%02d-01 00:00:00", i);
+	        String endStr = String.format("2024-%02d-31 23:59:59", i);
+	        
+	        switch (i) {
+	            case 2:  endStr = "2024-02-29 23:59:59"; break; // Anno bisestile
+	            case 4:
+	            case 6:
+	            case 9:
+	            case 11: endStr = String.format("2024-%02d-30 23:59:59", i); break;
+	        }
+	        
+	        Timestamp start = Timestamp.valueOf(startStr);
+	        Timestamp end = Timestamp.valueOf(endStr);
+	        ArrayList<OrdineDTO> ordini = dao.doRetrieveByDate(start, end);
+	        totals[i] = ordini.stream().mapToDouble(ordine -> ordine.getTotalPrice()).sum();
+	    }
+	    
+	    request.setAttribute("profitti", totals);
 	}
 
 
