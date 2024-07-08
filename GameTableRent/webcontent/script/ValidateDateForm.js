@@ -1,4 +1,5 @@
         function validateForm() {
+			console.log("funziono");
             const startDate = document.querySelector('input[name="Start"]').value;
             const endDate = document.querySelector('input[name="end"]').value;
 

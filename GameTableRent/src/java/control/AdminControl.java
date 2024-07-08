@@ -97,8 +97,9 @@ public class AdminControl extends HttpServlet {
 		 String startDateStr = request.getParameter("Start");
 	        String endDateStr = request.getParameter("end");
 	        
-	        Timestamp start = Timestamp.valueOf(startDateStr );
-	        Timestamp end = Timestamp.valueOf(endDateStr );
+	        Timestamp start = Timestamp.valueOf(startDateStr + " 00:00:00");
+	        Timestamp end = Timestamp.valueOf(endDateStr + " 23:59:59");
+	      
 
 	       
 		OrdineDAO dao=new OrdineDAO();
@@ -131,7 +132,14 @@ public class AdminControl extends HttpServlet {
 		request.getRequestDispatcher("/admin/AccountDetails.jsp").forward(request, response);
 	}
 
-	
+	/* FUNZIONE CHIAMATA OGNI VOLTA CHE UN ADMIN VUOLE VISUALIZZARE PANNELLO DEGLI ORDINI IN MODO DA SAPERE I PROFITTI MENSILI SEMPRE AGGIORNATI 
+	 * CIO' CHE SI FA E ANDARE A PRELEVARE TRAMITE UN CICLO FOR UNA STRINGA CHE INDICA LA DATA DI PARTENZA DOVE 2024 E 01 SONO FISSI E CAMBIA IL MESE, MENTRE
+	 * PER LA DATA DI FINE ABBIAMO UNO SWITCH DOVE SE IL MESE E' DUE ALLORA SARA' 28 OPPURE 30 PER 4,6,9,11
+	 * DOPODICHE ANDIAMO A PRELEVARE GLI ORDINI PER OGNI MESE NEL CICLO E INSERIAMO NEL VETTORE TOTALS NELLA POSIZIONE DI QUEL MESE LA SOMMA TOTALE GUADAGNATA
+	 * 
+	 * 
+	 * 
+	 */
 	private void ProfitXMonth(HttpServletRequest request, HttpServletResponse response) {
 	    double[] totals = new double[13]; // Array per 12 mesi + 1 per l'indice 0
 	    OrdineDAO dao = new OrdineDAO();

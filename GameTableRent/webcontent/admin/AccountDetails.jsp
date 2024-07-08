@@ -46,7 +46,8 @@
     </div>
 </div>
 
-<!-- Includi il secondo JSP -->
+
+<!-- RIESCO AD INCLUDERE DIRETTAMENTE LA PAGINA DEGLI ORDINI POICHE' INIZIALMENTE HO SETTATO L'ATTRIBUTO "listaOrdini" USATO IN ORDERS.JSP PER LEGGERE GLI ORDINI CON GLI ORDINI DELL'UTENTE DA CHECKARE -->
 <jsp:include page="../Orders.jsp" />
 </body>
 </html>
