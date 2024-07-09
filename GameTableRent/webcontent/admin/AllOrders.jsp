@@ -86,20 +86,19 @@ double[]totals= (double[])request.getAttribute("profitti");
                 
            <div class="riepilogo">
                    <h2 style="font-size:medium">Vendite negli ultimi 12 mesi:</h2>
-        
-        <label>Gennaio: <span><%= totals[1] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-01-01 00:00:00&end=2024-01-31 23:59:59"><button type="button">Dettagli</button></a></label>
-        <label>Febbraio: <span><%= totals[2] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-02-01 00:00:00&end=2024-02-28 23:59:59"><button type="button">Dettagli</button></a></label>
-        <label>Marzo: <span><%= totals[3] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-03-01 00:00:00&end=2024-03-31 23:59:59"><button type="button">Dettagli</button></a></label>
-        <label>Aprile: <span><%= totals[4] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-04-01 00:00:00&end=2024-04-30 23:59:59"><button type="button">Dettagli</button></a></label>
-        <label>Maggio: <span><%= totals[5] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-05-01 00:00:00&end=2024-05-31 23:59:59"><button type="button">Dettagli</button></a></label>
-        <label>Giugno: <span><%= totals[6] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-06-01 00:00:00&end=2024-06-30 23:59:59"><button type="button">Dettagli</button></a></label>
-        <label>Luglio: <span><%= totals[7] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-07-01 00:00:00&end=2024-07-31 23:59:59"><button type="button">Dettagli</button></a></label>
-        <label>Agosto: <span><%= totals[8] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-08-01 00:00:00&end=2024-08-31 23:59:59"><button type="button">Dettagli</button></a></label>
-        <label>Settembre: <span><%= totals[9] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-09-01 00:00:00&end=2024-09-30 23:59:59"><button type="button">Dettagli</button></a></label>
-        <label>Ottobre: <span><%= totals[10] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-10-01 00:00:00&end=2024-10-31 23:59:59"><button type="button">Dettagli</button></a></label>
-        <label>Novembre: <span><%= totals[11] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-11-01 00:00:00&end=2024-11-30 23:59:59"><button type="button">Dettagli</button></a></label>
-        <label>Dicembre: <span><%= totals[12] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-12-01 00:00:00&end=2024-12-31 23:59:59"><button type="button">Dettagli</button></a></label>
-           
+       <label>Gennaio: <span><%= totals[1] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-01-01&end=2024-01-31"><button type="button">Dettagli</button></a></label>
+<label>Febbraio: <span><%= totals[2] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-02-01&end=2024-02-28"><button type="button">Dettagli</button></a></label>
+<label>Marzo: <span><%= totals[3] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-03-01&end=2024-03-31"><button type="button">Dettagli</button></a></label>
+<label>Aprile: <span><%= totals[4] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-04-01&end=2024-04-30"><button type="button">Dettagli</button></a></label>
+<label>Maggio: <span><%= totals[5] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-05-01&end=2024-05-31"><button type="button">Dettagli</button></a></label>
+<label>Giugno: <span><%= totals[6] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-06-01&end=2024-06-30"><button type="button">Dettagli</button></a></label>
+<label>Luglio: <span><%= totals[7] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-07-01&end=2024-07-31"><button type="button">Dettagli</button></a></label>
+<label>Agosto: <span><%= totals[8] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-08-01&end=2024-08-31"><button type="button">Dettagli</button></a></label>
+<label>Settembre: <span><%= totals[9] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-09-01&end=2024-09-30"><button type="button">Dettagli</button></a></label>
+<label>Ottobre: <span><%= totals[10] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-10-01&end=2024-10-31"><button type="button">Dettagli</button></a></label>
+<label>Novembre: <span><%= totals[11] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-11-01&end=2024-11-30"><button type="button">Dettagli</button></a></label>
+<label>Dicembre: <span><%= totals[12] %>$</span> <a href="AdminControl?action=allOrdersByDate&Start=2024-12-01&end=2024-12-31"><button type="button">Dettagli</button></a></label>
+
            
            </div>
     

@@ -96,10 +96,9 @@ public class AdminControl extends HttpServlet {
 	private void AllOrdersByDate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 String startDateStr = request.getParameter("Start");
 	        String endDateStr = request.getParameter("end");
-	        
 	        Timestamp start = Timestamp.valueOf(startDateStr + " 00:00:00");
 	        Timestamp end = Timestamp.valueOf(endDateStr + " 23:59:59");
-	      
+	      System.out.println(start + "\n"+ end);
 
 	       
 		OrdineDAO dao=new OrdineDAO();
