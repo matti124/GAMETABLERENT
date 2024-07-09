@@ -25,7 +25,9 @@ th {
 td {
     background-color: rgba(255, 255, 255, 0.9); /* Colore di sfondo */
 }
-
+.prezzo{
+	width:15%;
+}
 .aggiunte {
     display: flex;
     flex-wrap: wrap; /* Per far andare a capo gli elementi su schermi stretti */

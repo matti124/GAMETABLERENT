@@ -67,28 +67,43 @@
     </style>
 </head>
 <body>
+
     <header>
         <div class="logo">
             <img src="Pictures/GAME TABLE.png" alt="Logo">
         </div>
         <nav>
-            <% 
+            <% Boolean valid=null;
                UtenteDTO utente = (UtenteDTO) request.getSession().getAttribute("user");
-               if (utente == null) { %>
+            	if(utente==null)
+            		valid=null;
+            	else
+               if(utente.getIsAdmin()==0){
+            		valid=false;}
+            	else if(utente.getIsAdmin()==1)
+            		valid=true;
+            	
+               if (valid == null) { %>
                    <a href="Home.jsp">Home</a>
-            <% } else if (utente.getIsAdmin() == 0) { %>
-                   <a href="UserHome.jsp">Home</a>
-            <% } else if (utente.getIsAdmin() == 1) { %>
-                   <a href="admin/AdminHome.jsp">Home</a>
-            <% } %>
+                   <a href="Login.jsp">Login</a>
+                   <a href="ProductControl?action=mostraProdotti">Catalogo</a>
+                   <a href="Cart.jsp">Carrello</a>
+                   <%} else if(valid) {%>
+                   <a href="admin/AdminHome.jsp"> Home</a>
+                   <a href="Account.jsp"> Account</a>
+            <a href="<%=request.getContextPath()%>/AdminControl?action=allOrders">Orders</a>
+                    <a href="ProductControl?action=mostraProdotti">Catalogo</a>
             
-            <a href="Cart.jsp">Carrello</a>
-            <% if (utente == null) { %>
-                <a href="Login.jsp">Login</a>
-            <% } else { %>
-                <a href="Account.jsp">Account</a>
-            <% } %>
-            <a href="ProductControl?action=mostraProdotti">Catalogo</a>
+                   
+                   
+                   <%} else if(!valid){ %>
+                   <a href="UserHome.jsp">Home</a>
+                   <a href="Account.jsp">Account</a>
+                   <a href="ProductControl?action=mostraProdotti">Catalogo</a>
+                   <a href="Cart.jsp">Carrello</a>
+
+                   
+                   <%} %>         
         </nav>
     </header>
 </body>

@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="CSS/Catalogo.css">
 </head>
 <body>
-<% ArrayList<ProdottoDTO> catalogo = (ArrayList<ProdottoDTO>) request.getAttribute("ListaProdotti"); %>
+<% ArrayList<ProdottoDTO> catalogo = (ArrayList<ProdottoDTO>) request.getAttribute("ListaProdotti"); 
+	UtenteDTO user=(UtenteDTO)request.getSession().getAttribute("user");
+%>
 
 <h1>Catalogo:</h1>
 
@@ -41,6 +43,10 @@
                     <div class="mostra">
                         <button onclick="location.href='ProductControl?action=dettaglio&codice=<%=x.getID_Prod()%>'">Dettaglio</button>
                     </div>
+                  <%if(user.getIsAdmin()>0){ %>
+                    <button onclick="location.href='admin/AddProductForm.jsp'">Aggiungi Prodotto</button> 
+                                  <%} %>
+                  
                 </div>
                 
             </div>

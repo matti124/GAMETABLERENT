@@ -50,7 +50,7 @@ double[]totals= (double[])request.getAttribute("profitti");
                         %>
                             <tr>
                                 <td><%= x.getData() %></td>
-                                <td><%= x.getTotalPrice() %></td>
+                                <td><%= x.getTotalPrice() %> $</td>
                                 <td><%= x.getProdotti().size() %></td>
                                 <td><%= UserAssociated.getEmail() %></td>
                                 <td>

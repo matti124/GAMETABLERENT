@@ -43,7 +43,9 @@
                 <div class="buttons">
                     <button type="button" id="editButton" onclick="enableEditing()">Edit</button>
                     <button type="submit" id="submitButton" style="display:none;">Submit</button>
+                   <%if(user.getIsAdmin()==0){ %>
                     <a href="UserControl?action=Ordini"><button type="button">Orders</button></a>
+                    <%} %>
                     <a href="UserControl?action=Logout"><button type="button">Logout</button></a>
                 </div>
             </form>

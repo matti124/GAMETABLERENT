@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ProdottoDAO implements ProdottoDAOInterfaccia {
-	private static final String RetrieveByKeySQL="SELECT * FROM PRODOTTO WHERE ID_Prod= ?;";
-	private static final String doSaveSQL="INSERT INTO PRODOTTO(ID_Prod, Nome, Descrizione, Prezzo, PrezzoXDays, Quantity, In_Cat, Picture) VALUES(?, ?, ?, ?, ?, ?, ?, ?;";
+	private static final String RetrieveByKeySQL="SELECT * FROM PRODOTTO WHERE ID_Prod= ?";
+	private static final String doSaveSQL="INSERT INTO PRODOTTO(ID_Prod, Nome, Descrizione, Prezzo, PrezzoXDays, Quantity, In_Cat, Picture) VALUES(?, ?, ?, ?, ?, ?, ?, ?";
 	private static final String doDeleteSQL="DELETE FROM PRODOTTI WHERE ID_Prod= ?";
-	private static final String doRetrieveAllSQL="SELECT * FROM PRODOTTO;";
-   private static final String doUpdateSQL = "UPDATE PRODOTTO SET Nome = ?, Descrizione = ?, Prezzo = ?, PrezzoXDays = ?, Quantity = ?, In_Cat = ? , Picture = ? WHERE ID_Prod = ?;";
+	private static final String doRetrieveAllSQL="SELECT * FROM PRODOTTO";
+   private static final String doUpdateSQL = "UPDATE PRODOTTO SET Nome = ?, Descrizione = ?, Prezzo = ?, PrezzoXDays = ?, Quantity = ?, In_Cat = ? , Picture = ? WHERE ID_Prod = ?";
 	
    
    
@@ -50,7 +50,9 @@ public class ProdottoDAO implements ProdottoDAOInterfaccia {
             ps.setDouble(5, prod.getPrezzoXDay());
             ps.setInt(6, prod.getQuantity());
             ps.setInt(7, prod.getIN_CAT());
+            if(prod.getImmagine()!=null)
             ps.setBytes(8, prod.getImmagine());
+            else ps.setBytes(8, null);
             int rs = ps.executeUpdate();
             return rs > 0;
         }

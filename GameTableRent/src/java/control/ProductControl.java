@@ -27,6 +27,7 @@ import java.util.ArrayList;
  
  
  */
+@MultipartConfig
 
 @WebServlet("/ProductControl")
 public class ProductControl extends HttpServlet {
@@ -59,7 +60,7 @@ public class ProductControl extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        UtenteDTO utente = (UtenteDTO) request.getSession().getAttribute("utente");
+        UtenteDTO utente = (UtenteDTO) request.getSession().getAttribute("user");
 
         if (action == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non specificata");
@@ -76,6 +77,7 @@ public class ProductControl extends HttpServlet {
                 
             case "aggiungi":
             	addProduct(request, response, utente);
+            	break;
             default:
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
         }

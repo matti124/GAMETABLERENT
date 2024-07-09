@@ -101,6 +101,32 @@ input.editable {
 }
 
 
+/*PER FORM DI AGGIUNTA PRODOTTI*/
+.form-group-inline {
+	margin-top:20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-group-inline label {
+    margin-right: 10px;
+    margin-bottom: 0;
+}
+
+.form-group-inline input {
+    flex: 1;
+    margin-top:10px;
+}
+
+input[type="number"] {
+    width: 10%;
+    height:auto;
+    flex: none;
+}
+
+
+
 /* Responsive adjustments */
 @media screen and (max-width: 768px) {
     .container {
