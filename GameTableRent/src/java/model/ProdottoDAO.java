@@ -94,6 +94,7 @@ public class ProdottoDAO implements ProdottoDAOInterfaccia {
 	public boolean doUpdate(ProdottoDTO prodotto) {	
 		try(Connection con=DriverManagerConnectionPool.getConnection();
 				   PreparedStatement ps=con.prepareStatement(doUpdateSQL)){
+			System.out.println("******AGGIORNO PRODOTTO NEL MAGAZZINO****** \nquantità= "+ prodotto.getQuantity());
 			ps.setString(1, prodotto.getNome());
 			ps.setString(2, prodotto.getDescrizione());
 			ps.setDouble(3, prodotto.getPrezzo());

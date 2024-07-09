@@ -61,7 +61,7 @@
             };
 
             // Invia la richiesta
-            let params = "codice_prod=" + productId + "&quantity=" + quantity
+            let params = "codice_prod=" + productId + "&quantity=" + quantity + "&sign=" + sign; 
             console.log("Invio dei parametri: " + params);
             richiesta.send(params);
         }

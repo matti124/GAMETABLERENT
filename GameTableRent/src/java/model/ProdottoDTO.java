@@ -70,7 +70,9 @@ public class ProdottoDTO {
 	
 	
 	public void decreaseQuantity() {
+		System.out.println("Diminuisco la quantità in magazzino da "+ this.quantity);
 		this.quantity--;
+		System.out.println("a "+ this.quantity);
 		if(this.quantity==0)
 			this.setIN_CAT(0); //se sono finite le scorte di quel prodotto lo setto fuori dal catalogo
 	}

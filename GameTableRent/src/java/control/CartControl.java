@@ -7,9 +7,6 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
-
-
-
 /*
  AZIONI GESTITE DALLA SERVLET CART CONTROL:
  
@@ -24,298 +21,310 @@ import java.io.IOException;
  */
 @WebServlet("/CartControl")
 public class CartControl extends HttpServlet {
-    
-    private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 1L;
 	private CarrelloDAO carrelloDAO;
 
-    public void init() {
-        carrelloDAO = new CarrelloDAO();
-    }
+	public void init() {
+		carrelloDAO = new CarrelloDAO();
+	}
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String action = request.getParameter("action");
 
-        if (action == null) {
-            response.sendRedirect(request.getContextPath());
-            return;
-        }
-
-        switch (action) {
-        
-            case "view":
-                viewCart(request, response);
-                break;
-                
-                
-            case "clear":
-                clearCart(request, response);
-                break;
-                
-                
-            case "delete":
-                deleteCart(request, response);
-                break;
-                
-            
-            	
-            	
-            
-            	
-            	
-            default:
-                response.sendRedirect(request.getContextPath());
-                break;
-        }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       String action=request.getParameter("action");
-      
-       switch(action) {
-       
-       case "addToCart":
-    	   this.addToCart(request, response);
-    	   break;
-       case "UpdateCart":
-    	   	this.updateCart(request, response);
-    	   	break;
-    	   	
-       case "UpdateDaysCart":
-    	   this.UpdateDaysCart(request, response);
-    	   break;
-       
-       }
-       
-    
-    }
-
-    private void viewCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { //azione che avviene quando si preme sul tasto per andare al carrello
-       
-    	UtenteDTO user=(UtenteDTO) request.getSession().getAttribute("utente");
-        CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
-
-        if (cart != null) {
-            request.setAttribute("cart", cart);
-            request.getRequestDispatcher("/cart.jsp").forward(request, response);
-        } else {
-            // Handle case where cart is not found
-            response.getWriter().println("Cart not found.");
-        }
-    }
-
-    private void clearCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	UtenteDTO user=(UtenteDTO) request.getSession().getAttribute("utente");
-
-        CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
-
-        if (cart != null) {
-            boolean cleared = carrelloDAO.doFreeSpace(cart.getID_Carrello());
-
-            if (cleared) {
-                response.sendRedirect(request.getContextPath() + "/carrello?action=view");
-            } else {
-                response.getWriter().println("Failed to clear cart.");
-            }
-        } else {
-            // Handle case where cart is not found
-            response.getWriter().println("Cart not found.");
-        }
-    }
-
-    
-    
-    
-    
-    private void deleteCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	int id_exUtente=(int) request.getAttribute("id_exUt");
-        CarrelloDTO cart = carrelloDAO.doRetrieveById(id_exUtente);
-
-        if (cart != null) {
-            boolean deleted = carrelloDAO.doDeleteByKey(cart.getID_Carrello());
-
-            if (deleted) {
-                response.sendRedirect(request.getContextPath() + "/Home.jsp");
-            } else {
-                response.getWriter().println("Failed to delete cart.");
-            }
-        } else {
-            // Handle case where cart is not found
-            response.getWriter().println("Cart not found.");
-        }
-    }
-    
-    
-    
-	private void addToCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		
-    	
-    	int id_prod=Integer.parseInt(request.getParameter("codice_prod"));
-    	int quantity=Integer.parseInt(request.getParameter("quantity"));
-    	int giorni=Integer.parseInt(request.getParameter("days"));
-    	  
-    	
-           System.out.println("Quantità passata: "+ quantity);
-           
-    	
-
-    	UtenteDTO user=(UtenteDTO) request.getSession().getAttribute("user");
-    	
-    	ProdottoCarrelloDAO prodDAO= new ProdottoCarrelloDAO();
-    	ProdottoCarrelloDTO prod;
-        CarrelloDTO cart=(CarrelloDTO) request.getSession().getAttribute("cart");
-        System.out.println(cart.getID_Carrello());
-
-     
-     // Verifica se l'utente è non registrato
-        if (user == null) {
-        	System.out.println("non sono utente");
-                      // Controlla se il prodotto è già nel carrello
-            boolean found = false;
-            for (ProdottoCarrelloDTO x : cart.getCart()) {
-                if (x.getId_prodotto() == id_prod && x.getGiorni() == giorni) {
-                	System.out.println("Contengo già il prodotto con stessi giorni");                    // Se il prodotto è già presente, aggiorna la quantità o i giorni di noleggio
-                    x.setQuantity(x.getQuantita() + quantity);
-                    found = true;
-                    break;
-                }
-            }
-
-            // Se il prodotto non è stato trovato nel carrello, aggiungilo
-            if (!found) {
-            	ProdottoDAO dao=new ProdottoDAO();
-                ProdottoDTO dto = dao.doRetrieveByKey(id_prod);
-                
-                // Crea un nuovo oggetto ProdottoCarrelloDTO e aggiungilo al carrello
-            	System.out.println("Non Contengo già il prodotto con stessi giorni");                    // Se il prodotto è già presente, aggiorna la quantità o i giorni di noleggio
-
-                ProdottoCarrelloDTO prodCarrello = new ProdottoCarrelloDTO(cart.getID_Carrello(), dto.getID_Prod(), dto.getPrezzo(), dto.getPrezzoXDay(), 0, giorni, dto.getImmagine(), dto.getNome());
-                cart.addProduct(prodCarrello);
-                return;
-            }
-            return;
-        }
-
-        
-        
-        
-        else { //SONO UN UTENTE
-        	
-        	
-        	//AGGIORNO QUANTITA' DEL PRODOTTO NEL DATABASE SOLO SE E' UN UTENTE REGISTRATO A SALVARE GLI OGGETTI
-        	ProdottoDAO prodottoDAO= new ProdottoDAO();
-              ProdottoDTO prodotto=prodottoDAO.doRetrieveByKey(id_prod);
-               for(int i=0;i<quantity;i++)
-               prodotto.decreaseQuantity();
-               prodottoDAO.doUpdate(prodotto);
-               
-               
-        if(cart.contains(id_prod)) { //se il carrello contiene già un elemento di quel tipo 
-      
-    		prod=prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
-    		
-    		
-    		//SE STO INSERENDO NEL CARRELLO PRODOTTO CON STESSA QUANTITA' DI QUELLO TROVATO ALLORA AGGIORNO QUANTITA'
-    		if(prod.getGiorni()==giorni) {
-    			System.out.println("Sto inserendo prodotto già presente in carrello"+ giorni);
-    			for(int i=0;i<quantity; i++) {
-    	    		cart.addProduct(prod);}
-    		prodDAO.doUpdate(prod);}
-    		
-    		//SE E' LO STESSO PRODOTTO MA DIFFERNTE NUMERO DI GIORNI VUOL DIRE CHE LO STO AFFITTANDO E LO SALVO COME NUOVO PRODOTTO NEL CARRELLO
-    		else {
-    			System.out.println("Sto inserendo un prodotto già presente in carrello ma con giorni differenti");
-    			ProdottoCarrelloDTO prodottoAffittato=new ProdottoCarrelloDTO(cart.getID_Carrello(), id_prod, prod.getPrezzo(), prod.getPrezzoXdays(), quantity, giorni, prod.getImage(), prod.getName());
-    			prodDAO.doSave(prodottoAffittato);
-    			cart.addProduct(prodottoAffittato);
-        }}
-        
-      
- //se l'elemento non è già nel carrello devo ritrovare nel db il prezzo e prezzoxdays di esso e poi aggiungerlo al carrello e crearne una riga in ProdottoCarrello
-        else {
-        	System.out.println("NON contengo l'elemento");
-
-        	prod=new ProdottoCarrelloDTO(cart.getID_Carrello(),prodotto.getID_Prod(),  prodotto.getPrezzo(), prodotto.getPrezzoXDay(),0, giorni, prodotto.getImmagine(), prodotto.getNome());
-    		for(int i=0;i<quantity; i++) {
-    		System.out.println("Aumento quantittà prodotto in carrello: "+ i);
-        	cart.addProduct(prod);}
-        	prodDAO.doSave(prod);}
-        
-        try {
-			response.sendRedirect(request.getContextPath() + "/ProductControl?action=mostraProdotti");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (action == null) {
+			response.sendRedirect(request.getContextPath());
+			return;
 		}
-        }
 
-    	}
-    
-    
+		switch (action) {
 
-    
-    
-	private void updateCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
-	    int quantity = Integer.parseInt(request.getParameter("quantity"));
-	    
-	    
-	    UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
-	    if (user == null) {
-	        response.getWriter().write("User not logged in");
-	        return;
-	    }
-	    CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
-	    if (cart == null) {
-	        response.getWriter().write("Cart not found");
-	        return;}
-	    
-	    ProdottoCarrelloDAO prodDAO = new ProdottoCarrelloDAO();
-	    ProdottoCarrelloDTO prod = prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
-	    if (prod == null) {
-	        response.getWriter().write("Product not found in cart");
-	        return;
-	    }
-	    
-	   
-	    
+		case "view":
+			viewCart(request, response);
+			break;
 
-	    if (quantity == 0) {
-	        cart.delete(prod);;
-	        carrelloDAO.doUpdateCart(cart);
-	        prodDAO.doDelete(prod);
-	        request.getSession().setAttribute("cart", cart);
+		case "clear":
+			clearCart(request, response);
+			break;
 
-	        System.out.println("Product removed from cart");
-	    } else {
-	        prod.setQuantity(quantity);
-	        request.getSession().setAttribute("cart", cart);
-	        prodDAO.doUpdate(prod);  // Ensure this line persists the changes
-	    }
-	    response.getWriter().write("Success");
+		case "delete":
+			deleteCart(request, response);
+			break;
+
+		default:
+			response.sendRedirect(request.getContextPath());
+			break;
+		}
 	}
-	
-	
-	
-	private void UpdateDaysCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String action = request.getParameter("action");
+
+		switch (action) {
+
+		case "addToCart":
+			this.addToCart(request, response);
+			break;
+		case "UpdateCart":
+			this.updateCart(request, response);
+			break;
+
+		case "UpdateDaysCart":
+			this.UpdateDaysCart(request, response);
+			break;
+
+		}
+
+	}
+
+	private void viewCart(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException { // azione che avviene quando si preme sul tasto per andare al
+													// carrello
+
+		UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("utente");
+		CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
+
+		if (cart != null) {
+			request.setAttribute("cart", cart);
+			request.getRequestDispatcher("/cart.jsp").forward(request, response);
+		} else {
+			// Handle case where cart is not found
+			response.getWriter().println("Cart not found.");
+		}
+	}
+
+	private void clearCart(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("utente");
+
+		CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
+
+		if (cart != null) {
+			boolean cleared = carrelloDAO.doFreeSpace(cart.getID_Carrello());
+
+			if (cleared) {
+				response.sendRedirect(request.getContextPath() + "/carrello?action=view");
+			} else {
+				response.getWriter().println("Failed to clear cart.");
+			}
+		} else {
+			// Handle case where cart is not found
+			response.getWriter().println("Cart not found.");
+		}
+	}
+
+	private void deleteCart(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		int id_exUtente = (int) request.getAttribute("id_exUt");
+		CarrelloDTO cart = carrelloDAO.doRetrieveById(id_exUtente);
+
+		if (cart != null) {
+			boolean deleted = carrelloDAO.doDeleteByKey(cart.getID_Carrello());
+
+			if (deleted) {
+				response.sendRedirect(request.getContextPath() + "/Home.jsp");
+			} else {
+				response.getWriter().println("Failed to delete cart.");
+			}
+		} else {
+			// Handle case where cart is not found
+			response.getWriter().println("Cart not found.");
+		}
+	}
+
+	private void addToCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
 		int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
-	    int days = Integer.parseInt(request.getParameter("days"));
-	    
-	    CarrelloDTO cart=(CarrelloDTO) request.getSession().getAttribute("cart");
-	    ProdottoCarrelloDAO prodDAO=new ProdottoCarrelloDAO();
-	    ProdottoCarrelloDTO prod = prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
-	    System.out.println("Vecchi giorni: "+ prod.getGiorni());
-	    prod.setDays(days);
-	    System.out.println("Nuovi giorni: "+ prod.getGiorni());
-        request.getSession().setAttribute("cart", cart);
-	    prodDAO.doUpdateWithoutDaysInWhere(prod);
+		int quantity = Integer.parseInt(request.getParameter("quantity"));
+		int giorni = Integer.parseInt(request.getParameter("days"));
 
+		System.out.println("Quantità passata: " + quantity);
 
-	    
-	
+		UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
+
+		ProdottoCarrelloDAO prodDAO = new ProdottoCarrelloDAO();
+		ProdottoCarrelloDTO prod;
+		CarrelloDTO cart = (CarrelloDTO) request.getSession().getAttribute("cart");
+		System.out.println(cart.getID_Carrello());
+
+		// Verifica se l'utente è non registrato
+		if (user == null) {
+			System.out.println("non sono utente");
+			// Controlla se il prodotto è già nel carrello
+			boolean found = false;
+			for (ProdottoCarrelloDTO x : cart.getCart()) {
+				if (x.getId_prodotto() == id_prod && x.getGiorni() == giorni) {
+					System.out.println("Contengo già il prodotto con stessi giorni"); // Se il prodotto è già presente,
+																						// aggiorna la quantità o i
+																						// giorni di noleggio
+					x.setQuantity(x.getQuantita() + quantity);
+					found = true;
+					break;
+				}
+			}
+
+			// Se il prodotto non è stato trovato nel carrello, aggiungilo
+			if (!found) {
+				ProdottoDAO dao = new ProdottoDAO();
+				ProdottoDTO dto = dao.doRetrieveByKey(id_prod);
+
+				// Crea un nuovo oggetto ProdottoCarrelloDTO e aggiungilo al carrello
+				System.out.println("Non Contengo già il prodotto con stessi giorni"); // Se il prodotto è già presente,
+																						// aggiorna la quantità o i
+																						// giorni di noleggio
+
+				ProdottoCarrelloDTO prodCarrello = new ProdottoCarrelloDTO(cart.getID_Carrello(), dto.getID_Prod(),
+						dto.getPrezzo(), dto.getPrezzoXDay(), 0, giorni, dto.getImmagine(), dto.getNome());
+				cart.addProduct(prodCarrello);
+				return;
+			}
+			return;
+		}
+
+		else { // SONO UN UTENTE
+
+			// AGGIORNO QUANTITA' DEL PRODOTTO NEL DATABASE SOLO SE E' UN UTENTE REGISTRATO
+			// A SALVARE GLI OGGETTI
+			ProdottoDAO prodottoDAO = new ProdottoDAO();
+			ProdottoDTO prodotto = prodottoDAO.doRetrieveByKey(id_prod);
+			for (int i = 0; i < quantity; i++)
+				prodotto.decreaseQuantity();
+			prodottoDAO.doUpdate(prodotto);
+
+			if (cart.contains(id_prod)) { // se il carrello contiene già un elemento di quel tipo
+
+				prod = prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
+
+				// SE STO INSERENDO NEL CARRELLO PRODOTTO CON STESSA QUANTITA' DI QUELLO TROVATO
+				// ALLORA AGGIORNO QUANTITA'
+				if (prod.getGiorni() == giorni) {
+					System.out.println("Sto inserendo prodotto già presente in carrello" + giorni);
+					for (int i = 0; i < quantity; i++) {
+						cart.addProduct(prod);
+					}
+					prodDAO.doUpdate(prod);
+				}
+
+				// SE E' LO STESSO PRODOTTO MA DIFFERNTE NUMERO DI GIORNI VUOL DIRE CHE LO STO
+				// AFFITTANDO E LO SALVO COME NUOVO PRODOTTO NEL CARRELLO
+				else {
+					System.out.println("Sto inserendo un prodotto già presente in carrello ma con giorni differenti");
+					ProdottoCarrelloDTO prodottoAffittato = new ProdottoCarrelloDTO(cart.getID_Carrello(), id_prod,
+							prod.getPrezzo(), prod.getPrezzoXdays(), quantity, giorni, prod.getImage(), prod.getName());
+					prodDAO.doSave(prodottoAffittato);
+					cart.addProduct(prodottoAffittato);
+				}
+			}
+
+			// se l'elemento non è già nel carrello devo ritrovare nel db il prezzo e
+			// prezzoxdays di esso e poi aggiungerlo al carrello e crearne una riga in
+			// ProdottoCarrello
+			else {
+				System.out.println("NON contengo l'elemento");
+
+				prod = new ProdottoCarrelloDTO(cart.getID_Carrello(), prodotto.getID_Prod(), prodotto.getPrezzo(),
+						prodotto.getPrezzoXDay(), 0, giorni, prodotto.getImmagine(), prodotto.getNome());
+				for (int i = 0; i < quantity; i++) {
+					System.out.println("Aumento quantittà prodotto in carrello: " + i);
+					cart.addProduct(prod);
+				}
+				prodDAO.doSave(prod);
+			}
+
+			try {
+				response.sendRedirect(request.getContextPath() + "/ProductControl?action=mostraProdotti");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 	}
+
+	/*
+	 * QUANDO AGGIORNIAMO IL CARRELLO CON UNA NUOVA QUANTITA' DI UN PRODOTTO
+	 * DOBBIAMO ASSICURARCI DI AGGIORNARE ANCHE LA QUANTITA' DEL PRODOTTO IN
+	 * GENERALE OVVERO SE AUMENTO I PEZZI DI UN PRODOTTO NEL CARRELLO ALLORA LA
+	 * QUANTITA' NEL MAGAZZINO DIMINUISCE DI QUEI PEZZI
+	 * 
+	 * 
+	 * 
+	 */
+
+	private void updateCart(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
+		int quantity = Integer.parseInt(request.getParameter("quantity"));
+		String sign = request.getParameter("sign");
+		ProdottoDAO dao = new ProdottoDAO();
+		ProdottoDTO GeneralProd = dao.doRetrieveByKey(id_prod);
+
+		UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
+		if (user == null) {
+			response.getWriter().write("User not logged in");
+			return;
+		}
+		CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
+		if (cart == null) {
+			response.getWriter().write("Cart not found");
+			return;
+		}
+
+		ProdottoCarrelloDAO prodDAO = new ProdottoCarrelloDAO();
+		ProdottoCarrelloDTO prod = prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
+		if (prod == null) {
+			response.getWriter().write("Product not found in cart");
+			return;
+		}
+
+//Se raggiungiamo quantità pari a 0 eliminiamo il prodotto dal carrello, prima di tutto lo eliminiamo dal carrello  della sessione, poi aggiorniamo quello del db, per poi aumentare il prodotto nel magazzino che abbiamo appena tolto
+		if (quantity == 0) {
+			cart.delete(prod);
+			;
+			carrelloDAO.doUpdateCart(cart);
+			GeneralProd.increaseQuantity();
+			dao.doUpdate(GeneralProd);
+			prodDAO.doDelete(prod);
+			request.getSession().setAttribute("cart", cart);
+
+			System.out.println("Product removed from cart");
+		} else {
+			prod.setQuantity(quantity);
+			System.out.println("segno letto : " + sign);
+
+			if (sign.equalsIgnoreCase("-")) {
+
+				GeneralProd.increaseQuantity();
+			}
+
+			else
+				GeneralProd.decreaseQuantity();
+
+			dao.doUpdate(GeneralProd);
+			request.getSession().setAttribute("cart", cart);
+			prodDAO.doUpdate(prod);
+		}
+		response.getWriter().write("Success");
 	}
 
+	private void UpdateDaysCart(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
+		int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
+		int days = Integer.parseInt(request.getParameter("days"));
+
+		CarrelloDTO cart = (CarrelloDTO) request.getSession().getAttribute("cart");
+		ProdottoCarrelloDAO prodDAO = new ProdottoCarrelloDAO();
+		ProdottoCarrelloDTO prod = prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
+		System.out.println("Vecchi giorni: " + prod.getGiorni());
+		prod.setDays(days);
+		System.out.println("Nuovi giorni: " + prod.getGiorni());
+		request.getSession().setAttribute("cart", cart);
+		prodDAO.doUpdateWithoutDaysInWhere(prod);
+
+	}
+}
