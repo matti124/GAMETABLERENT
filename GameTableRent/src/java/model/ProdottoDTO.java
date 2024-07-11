@@ -19,8 +19,9 @@ public class ProdottoDTO {
 		this.descrizione = descrizione;
 		this.Prezzo = prezzo;
 		this.PrezzoXDay = prezzoXDay;
-		this.IN_CAT = incat;
 		this.quantity = quantity;
+		this.IN_CAT = incat;
+
 		this.immagine=img;
 	}
 

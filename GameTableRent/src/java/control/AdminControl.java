@@ -55,19 +55,7 @@ public class AdminControl extends HttpServlet {
 			this.AllOrdersByDate(request, response);
 			break;}
 			
-		case "addProduct":{ //mi indirizza alla pagina in cui compilerò il form per il nuovo elemento la quale passerà i dati a ProductControl?action=aggiungi
-			response.sendRedirect(request.getContextPath()+"/NewProduct.jsp");
-			break;}
-			
-			
-			
-		case "updateProd":{
-			response.sendRedirect(request.getContextPath()+"/UpdateProduct.jsp"); //mi indirizza alla pagina form dove potrò aggiornare il prodotto e i dati modificati verranno inoltrati a ProuctControl?action=updateProduct
-			break;}
-			
-		case "removeProd":{
-			request.getRequestDispatcher("/ProductoControl?action=elimina");
-			break;}
+	
 		
 		
 		case "AllAccounts":{

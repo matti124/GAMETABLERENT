@@ -30,7 +30,8 @@
                 </div>
                 <div class="prodotto-img">
                     <% if (x.getImmagine() != null) { %>
-                        <img class="immagineProd" alt="Immagine" src="<%= x.getImmagine() %>">
+                        <img class="immagineProd" alt="Immagine" src="<%= request.getContextPath() %>/ProductControl?action=image&id=<%=x.getID_Prod()%>">
+">
                     <% } else { %>
                         <img class="immagineProd" alt="Immagine" src="Pictures/defaultImage.png">
                     <% } %>
@@ -43,9 +44,14 @@
                     <div class="mostra">
                         <button onclick="location.href='ProductControl?action=dettaglio&codice=<%=x.getID_Prod()%>'">Dettaglio</button>
                     </div>
+                    <%if(user!=null){ %>
+                    
                   <%if(user.getIsAdmin()>0){ %>
                     <button onclick="location.href='admin/AddProductForm.jsp'">Aggiungi Prodotto</button> 
-                                  <%} %>
+                     <button onclick="location.href='ProductControl?action=elimina&id=<%=x.getID_Prod()%>'"> Elimina Prodotto </button>   
+                                  
+                                  
+                                  <%} }%>
                   
                 </div>
                 

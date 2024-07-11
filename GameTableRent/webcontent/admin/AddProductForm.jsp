@@ -28,6 +28,14 @@
 						required>
 				</div>
 
+
+
+	<div class="form-group-inline">
+					<label for="quantita">Quantità:</label> <input type="number"
+						id="quantita" name="quantita" required min="0">
+				</div>
+				
+				
 				<div class="form-group-inline">
 					<label for="inCatalogo">In Catalogo:</label> <select
 						id="inCatalogo" name="inCatalogo">
@@ -37,10 +45,7 @@
 
 				</div>
 
-				<div class="form-group-inline">
-					<label for="quantita">Quantità:</label> <input type="number"
-						id="quantita" name="quantita" required min="0">
-				</div>
+				
 
 				<label for="immagine">Immagine:</label> <input type="file"
 					id="immagine" name="immagine" accept="image/*">

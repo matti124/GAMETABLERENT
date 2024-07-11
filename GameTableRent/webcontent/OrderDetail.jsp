@@ -27,7 +27,7 @@
                         
                         <div class="prodotto-img">
                     <% if (x.getImage() != null) { %>
-                        <img class="immagineProd" alt="Immagine" src="<%=x.getImage()%>">
+                        <img class="immagineProd" alt="Immagine" src="<%= request.getContextPath() %>/ProductControl?action=image&id=<%= x.getId_prodotto() %>">
                     <% } else { %>
                         <img class="immagineProd" alt="Immagine" src="Pictures/defaultImage.png">
                     <% } %>
