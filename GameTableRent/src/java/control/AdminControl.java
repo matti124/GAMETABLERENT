@@ -1,5 +1,6 @@
 package control;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
@@ -12,7 +13,7 @@ import model.OrdineDAO;
 import model.OrdineDTO;
 import model.UtenteDAO;
 import model.UtenteDTO;
-
+import model.*;
 /*
  * AZIONI GESTITE DALLA SERVLET ADMIN CONTROL:
  * 1) VEDERE TUTTI GLI ORDINI EFFETTUATI IN UN CERTO LASSO DI TEMPO
@@ -55,7 +56,10 @@ public class AdminControl extends HttpServlet {
 			this.AllOrdersByDate(request, response);
 			break;}
 			
-	
+		case "allProducts":{
+			this.AllProducts(request,response);
+			break;
+		}
 		
 		
 		case "AllAccounts":{
@@ -65,6 +69,18 @@ public class AdminControl extends HttpServlet {
 		
 		case "AccountDetails":{
 			this.AccountDetails(request, response);
+			break;
+		}
+		
+		
+		case "updateProduct":{
+			this.updateProduct(request, response);
+			break;
+		}
+		
+		case "deleteProduct":{
+			this.deleteProduct(request, response);
+			break;
 		}
 			
 		}
@@ -72,6 +88,45 @@ public class AdminControl extends HttpServlet {
 	}
 
 	
+	private void deleteProduct(HttpServletRequest request, HttpServletResponse response) {
+		int id=Integer.parseInt(request.getParameter("id"));
+		ProdottoDAO dao=new ProdottoDAO();
+		try {
+			dao.doDeleteByKey(id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		
+		
+	}
+
+	private void updateProduct(HttpServletRequest request, HttpServletResponse response) {
+		int id=Integer.parseInt(request.getParameter("id"));
+		ProdottoDAO dao=new ProdottoDAO();
+		request.setAttribute("prodotto", dao.doRetrieveByKey(id));
+		try {
+			request.getRequestDispatcher("/admin/UpdateForm.jsp").forward(request, response);
+		} catch (ServletException | IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void AllProducts(HttpServletRequest request, HttpServletResponse response) {
+		ArrayList<ProdottoDTO> prodotti= new ArrayList<>();
+		ProdottoDAO dao=new ProdottoDAO();
+		prodotti=dao.doRetrieveAll();
+		request.setAttribute("prodotti", prodotti);
+		try {
+			request.getRequestDispatcher("/admin/AllProduct.jsp").forward(request, response);
+		} catch (ServletException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

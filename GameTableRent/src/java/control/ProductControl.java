@@ -162,7 +162,7 @@ public class ProductControl extends HttpServlet {
 
                 boolean updated = prodottoDAO.doUpdate(updateProdotto);
                 if (updated) {
-                    response.sendRedirect(request.getContextPath() + "/ProductControl?action=dettaglioProdotto&codice=" + updateProdotto.getID_Prod());
+                    response.sendRedirect(request.getContextPath() + "/ProductControl?action=dettaglio&codice=" + updateProdotto.getID_Prod());
                 } else {
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore durante l'aggiornamento del prodotto");
                 }

@@ -23,7 +23,7 @@ name = user.getNome();
             <a href="<%=request.getContextPath()%>/AdminControl?action=allOrders"><button>Orders</button></a>
         </div>
         <div class="row" id="row3User">
-            <a href="<%=request.getContextPath()%>/ProductControl?action=mostraProdotti"><button>Catalogo</button></a>
+            <a href="<%=request.getContextPath()%>/AdminControl?action=allProducts"><button>Catalogo</button></a>
         </div>
     </div>
 
