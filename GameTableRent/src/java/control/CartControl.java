@@ -283,33 +283,54 @@ public class CartControl extends HttpServlet {
 
 //Se raggiungiamo quantità pari a 0 eliminiamo il prodotto dal carrello, prima di tutto lo eliminiamo dal carrello  della sessione, poi aggiorniamo quello del db, per poi aumentare il prodotto nel magazzino che abbiamo appena tolto
 		if (quantity == 0) {
+			//eliminiamo dal carrello della sessione
 			cart.delete(prod);
-			;
+			//aggiorniamo il carrello della sessione nel DB
 			carrelloDAO.doUpdateCart(cart);
+			//incrementiamo di 1 la quantità di quel prodotto nel DB
 			GeneralProd.increaseQuantity();
+			//lo salviamo nel DB
 			dao.doUpdate(GeneralProd);
+			//cancelliamo dai prodotti nel carrello del DB quel prodotto
 			prodDAO.doDelete(prod);
+			//aggiorniamo il carrello nella sessione
 			request.getSession().setAttribute("cart", cart);
 
 			System.out.println("Product removed from cart");
 		} else {
-			prod.setQuantity(quantity);
 			System.out.println("segno letto : " + sign);
 
 			if (sign.equalsIgnoreCase("-")) {
-
+				//incremento i prodotti nel magazzino
 				GeneralProd.increaseQuantity();
+				
+				//diminuisco il prodotto nel carrello della sessione
+				cart.decreaseProduct(prod);
+				
+				//aggiorno il prodotto nel carrello nel DB
+				prodDAO.doUpdate(cart.retrieve(prod));
+				
+				//aggiorno il prodotto nel magazzino del DB
+				dao.doUpdate(GeneralProd);
+
+
 			}
 
-			else
+			else {
 				GeneralProd.decreaseQuantity();
+				cart.addProduct(prod);
+				prodDAO.doUpdate(cart.retrieve(prod));
+				dao.doUpdate(GeneralProd);
 
-			dao.doUpdate(GeneralProd);
+			}
+
+
 			request.getSession().setAttribute("cart", cart);
-			prodDAO.doUpdate(prod);
 		}
-		response.getWriter().write("Success");
-	}
+		
+		response.setContentType("application/json");
+	    response.setCharacterEncoding("UTF-8");
+	    response.getWriter().write("{\"totalPrice\": " + cart.GetTotalPrice() + "}");	}
 
 	private void UpdateDaysCart(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -320,11 +341,13 @@ public class CartControl extends HttpServlet {
 		CarrelloDTO cart = (CarrelloDTO) request.getSession().getAttribute("cart");
 		ProdottoCarrelloDAO prodDAO = new ProdottoCarrelloDAO();
 		ProdottoCarrelloDTO prod = prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
+		ProdottoCarrelloDTO prodUpdate=cart.retrieve(prod);
 		System.out.println("Vecchi giorni: " + prod.getGiorni());
-		prod.setDays(days);
+		prodUpdate.setDays(days);
 		System.out.println("Nuovi giorni: " + prod.getGiorni());
+		prodDAO.doUpdateWithoutDaysInWhere(prodUpdate);
+
 		request.getSession().setAttribute("cart", cart);
-		prodDAO.doUpdateWithoutDaysInWhere(prod);
 
 	}
 }

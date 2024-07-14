@@ -56,7 +56,10 @@ public class CarrelloDTO {
 	    	if(this.retrieveById(x.getId_prodotto(), x.getGiorni())==null) {
 				this.Cart.add(x);
 				x.addQuantity();}
-			else x.addQuantity();
+			else {
+				ProdottoCarrelloDTO prod=this.retrieve(x);
+				prod.addQuantity();
+			}
 	    } else {
 	        // Gestione appropriata nel caso prod sia null
 	        System.out.println("Tentativo di aggiungere un prodotto null al carrello.");
@@ -76,8 +79,8 @@ public class CarrelloDTO {
 			else prod.decreaseQuantity();
 	}
 	
-	public double getTotalPrice() {
-		double tot=0;
+	public float GetTotalPrice() {
+		float tot=0;
 		for(ProdottoCarrelloDTO x: this.Cart) {
 			if(x.getGiorni()>0) {
 				tot+=x.getPrezzoXdays()*x.getQuantita()*x.getGiorni();
@@ -96,6 +99,15 @@ public class CarrelloDTO {
 		return false;
 	}
 	
+	public ProdottoCarrelloDTO retrieve (ProdottoCarrelloDTO x) {
+		for(ProdottoCarrelloDTO prod: this.Cart) {
+			if(prod.equals(x))
+				return prod;
+		}
+		return null;
+		
+		
+	}
 	
 	public ArrayList<ProdottoOrdineDTO> CheckOut(int id_ord){
 		  		

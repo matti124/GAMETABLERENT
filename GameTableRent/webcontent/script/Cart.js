@@ -41,7 +41,6 @@
             }
 
             // Aggiorna il DOM con il nuovo valore di quantità
-            quantityElem.textContent = quantity;
 
 
             // Crea una richiesta asincrona al server
@@ -52,10 +51,17 @@
             richiesta.onreadystatechange = function() {
                 if (richiesta.readyState === 4 && richiesta.status === 200) {
                     console.log("Risposta dal server: " + richiesta.responseText);
+                     let response = JSON.parse(richiesta.responseText);
+
 					if(quantity===0){
 						document.getElementById("quantity_of_" + productId).remove;
 						window.location.reload();
 					}
+					            quantityElem.textContent = quantity;
+					            daysElement.textContent = days;
+                document.getElementById("TotalPrice").textContent = "Effettua Ordine, Tot: " + response.totalPrice + "$";
+            
+
 						
                 }
             };
@@ -99,7 +105,6 @@
     }
 
     console.log("Giorni risultanti: ", days);
-    daysElement.textContent = days;
 
     let richiesta = new XMLHttpRequest();
     richiesta.open("POST", "CartControl?action=UpdateDaysCart", true);
@@ -108,6 +113,9 @@
     richiesta.onreadystatechange = function() {
         if (richiesta.readyState === 4 && richiesta.status === 200) {
             console.log("Risposta dal server: " + richiesta.responseText);
+            
+                daysElement.textContent = days;
+
         }
     };
 

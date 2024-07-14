@@ -77,7 +77,7 @@
     </div>
     <div class="checkout-button">
         <% if (valido) { %>
-            <button id="TotalPrice" onclick="checkOut(<%=valido%>, <%=cart.getCart().size()%>)">Effettua Ordine, Tot: <%=cart.getTotalPrice()%>$</button>
+            <button id="TotalPrice" onclick="checkOut(<%=valido%>, <%=cart.getCart().size()%>)">Effettua Ordine, Tot: <%=cart.GetTotalPrice()%>$</button>
         <% } else { %>
             <p>Per procedere con l'acquisto, effettua il <a href="Login.jsp">login</a> o <a href="Registrazione.jsp">registrati</a>.</p>
         <% } %>

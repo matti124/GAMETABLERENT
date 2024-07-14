@@ -73,7 +73,9 @@ public class ProdottoCarrelloDTO {
 		this.quantita++;
 	}
 	public void decreaseQuantity() {
+		System.out.println("Diminuisco quantità prodotto carrello da "+ this.quantita+ "ad ");
 		this.quantita--;
+		System.out.println(this.quantita);
 	}
 	
 	public void setQuantity(int x) {

@@ -1,11 +1,21 @@
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="model.*, java.util.*"%>
+<%@ include file="Header.jsp" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Dettagli Prodotto</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/ProductDetail.css">
+        <script src="script/AggiuntaAlCarrello.js"></script>
+    
 </head>
 <body>
+<%UtenteDTO user=(UtenteDTO) request.getSession().getAttribute("user"); %>
+
+
     <div class="main-content">
         <div class="container">
                         <h2>Dettagli Prodotto</h2>
@@ -18,7 +28,7 @@
                         <label><strong>Descrizione:</strong> <%= prodotto.getDescrizione() %></label>
                         <label><strong>Prezzo:</strong> <%= prodotto.getPrezzo() %> Euro</label>
                         <label><strong>Prezzo per giorni:</strong> <%= prodotto.getPrezzoXDay() %> Euro</label>
-                        <label><strong>Quantit‡ disponibile:</strong> <%= prodotto.getQuantity() %></label>
+                        <label><strong>Quantit√† disponibile:</strong> <%= prodotto.getQuantity() %></label>
                         <% if (prodotto.getImmagine() != null) { %>
                             <img class="immagineProd" alt="Immagine" src="<%= request.getContextPath() %>/ProductControl?action=image&id=<%= prodotto.getID_Prod() %>">
                         <% } else { %>
@@ -31,6 +41,8 @@
                 <label><a href="<%= request.getContextPath() %>/ProductControl?action=mostraProdotti">Torna al catalogo</a></label>
             </div>
 
+
+<%if(user.getIsAdmin()==0||user==null){ %>
             <div class="form_content">
                 <h2>Aggiungi al Carrello</h2>
                 <input type="hidden" id="productId" value="<%= prodotto != null ? prodotto.getID_Prod() : "" %>">
@@ -42,7 +54,7 @@
                 </select>
                 
                 <div id="compraInput" style="display: block;">
-                    Quantit‡: <input type="number" id="quantita" min="1" max="<%= prodotto != null ? prodotto.getQuantity() : "" %>" required>
+                    Quantit√†: <input type="number" id="quantita" min="1" max="<%= prodotto != null ? prodotto.getQuantity() : "" %>" required>
                 </div>
                 
                 <div id="affittaInput" style="display: none;">
@@ -51,51 +63,18 @@
                 
                 <button onclick="aggiungiAlCarrello()">Aggiungi</button>
             </div>
+            <%} else if(user.getIsAdmin()>0) {%>
+            <div class="form-content">
+			<a href="AdminControl?action=updateProduct&id=<%=prodotto.getID_Prod()%>"><button>Modifica</button></a>
+		 <button onclick="location.href='ProductControl?action=elimina&id=<%=prodotto.getID_Prod()%>'"> Rimuovi dal catalogo </button>   
+			<a href="AdminControl?action=deleteProduct&id=<%=prodotto.getID_Prod()%>"><button onclick=alertSicurezza()>Elimina</button></a>
+			
+       
+            
+            </div>
+            <%} %>
         </div>
     </div>
 
-    <script>
-        function toggleInput() {
-            var scelta = document.getElementById("sceltaTipo").value;
-            if (scelta === "compra") {
-                document.getElementById("compraInput").style.display = "block";
-                document.getElementById("affittaInput").style.display = "none";
-            } else if (scelta === "affitta") {
-                document.getElementById("compraInput").style.display = "none";
-                document.getElementById("affittaInput").style.display = "block";
-            }
-        }
-
-        function aggiungiAlCarrello() {
-            var id_prod = document.getElementById('productId').value;
-            var tipo = document.getElementById('sceltaTipo').value;
-            var quantity = tipo === "compra" ? document.getElementById('quantita').value : 1;
-            var giorni = tipo === "affitta" ? document.getElementById('giorni').value : 0;
-           
-            var params = 'action=addToCart&codice_prod=' + id_prod
-                         + '&quantity=' + quantity
-                         + '&days=' + giorni;
-           
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'CartControl', true);
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    alert('Prodotto aggiunto al carrello con successo!');
-                    chiudiFormAggiunta(); 
-                } else {
-                    alert('Si Ë verificato un errore durante l\'aggiunta al carrello.');
-                }
-            };
-
-            xhr.onerror = function() {
-                alert('Si Ë verificato un errore di rete.');
-            };
-
-            xhr.send(params);
-        }
-    </script>
 </body>
 </html>
