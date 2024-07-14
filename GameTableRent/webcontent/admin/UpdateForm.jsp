@@ -5,7 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Form di aggiornamento</title>
-<link rel="stylesheet" type="text/css" href="../CSS/RegLog.css">
+<link rel="stylesheet" type="text/css" href="CSS/RegLog.css">
+
 
 </head>
 
@@ -53,6 +54,11 @@
 				</div>
 				
 				<label for="immagine">Immagine:</label> 
+				 <% if (((ProdottoDTO)request.getAttribute("prodotto")).getImmagine() != null) { %>
+                            <img class="immagineProd" alt="Immagine" src="<%= request.getContextPath() %>/ProductControl?action=image&id=<%= ((ProdottoDTO)request.getAttribute("prodotto")).getID_Prod() %>">
+                        <% } else { %>
+                            <img class="immagineProd" alt="Immagine" src="Pictures/defaultImage.png">
+                        <% } %>
 				<input type="file" id="immagine" name="immagine" accept="image/*">
 				
 				<button type="submit">Aggiorna Prodotto</button>

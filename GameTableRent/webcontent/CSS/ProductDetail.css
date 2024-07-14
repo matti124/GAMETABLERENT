@@ -10,13 +10,14 @@ body {
     background-color: #f8f9fa;
     margin: 0;
     padding: 0;
+        background-image: url("../Pictures/1000_F_263916530_LxHmbQhIf1QV3APt1tgqSNthRdl5PVJa.jpg");
+    
 }
 
 .main-content {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url("../Pictures/1000_F_263916530_LxHmbQhIf1QV3APt1tgqSNthRdl5PVJa.jpg");
     background-size: cover;
     background-position: center;
 }
@@ -84,7 +85,7 @@ button:hover {
 }
 
 .product-details img {
-    max-width: 100%;
+    max-width: 50%;
     height: auto;
     border-radius: 5px;
     margin-top: 10px;

@@ -21,13 +21,13 @@ body {
 }
 
 .container {
-	margin-top:60px;
-    width: 70%; /* Occupare il 90% della larghezza disponibile */
+    margin-top: 60px;
+    width: 70%;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Centra il contenuto */
+    text-align: center;
 }
 
 h2 {
@@ -49,7 +49,7 @@ form {
 }
 
 label {
-	margin-top:10px;
+    margin-top: 10px;
     margin-bottom: 10px;
     color: #4e8f00;
 }
@@ -59,7 +59,7 @@ input, button {
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 1em; /* Dimensione del testo nei campi di input */
+    font-size: 1em;
 }
 
 button {
@@ -80,30 +80,27 @@ button:hover {
     margin-top: 10px;
 }
 
-
-/*PER ACCOUNT.JSP*/
+/* PER ACCOUNT.JSP */
 input[readonly] {
-    background-color: #f0f0f0; /* Colore di sfondo più chiaro per readonly */
-    color: #999; /* Testo più chiaro per readonly */
-    border: 2px solid #ccc; /* Bordo leggero per readonly */
-    text-align:center;
+    background-color: #f0f0f0;
+    color: #999;
+    border: 2px solid #ccc;
+    text-align: center;
 }
 
 input.editable {
-    background-color: white; /* Colore di sfondo normale per modifica */
-    color: #333; /* Testo più scuro per modifica */
-    border: 4px double green; /* Bordo visibile per modifica */
+    background-color: white;
+    color: #333;
+    border: 4px double green;
 }
 
-.buttons{
-	display:inline;
-	
+.buttons {
+    display: inline;
 }
 
-
-/*PER FORM DI AGGIUNTA PRODOTTI*/
+/* PER FORM DI AGGIUNTA PRODOTTI */
 .form-group-inline {
-	margin-top:20px;
+    margin-top: 20px;
     display: flex;
     align-items: center;
     margin-bottom: 10px;
@@ -116,21 +113,27 @@ input.editable {
 
 .form-group-inline input {
     flex: 1;
-    margin-top:10px;
+    margin-top: 10px;
 }
 
 input[type="number"] {
     width: 10%;
-    height:auto;
+    height: auto;
     flex: none;
 }
 
-
+.immagineProd {
+    width: 35%;
+    display: block;
+    margin: 10px auto; /* Aggiornato per centrare l'immagine */
+    max-width: 100%;
+    height: auto;
+}
 
 /* Responsive adjustments */
 @media screen and (max-width: 768px) {
     .container {
-        width: 100%; /* Occupa il 100% della larghezza disponibile */
-        margin-top: 20px; /* Spazio per l'header */
+        width: 100%;
+        margin-top: 20px;
     }
 }

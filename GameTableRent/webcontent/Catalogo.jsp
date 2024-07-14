@@ -33,23 +33,25 @@
                 <div class="prodotto-img">
                     <% if (x.getImmagine() != null) { %>
                         <img class="immagineProd" alt="Immagine" src="<%= request.getContextPath() %>/ProductControl?action=image&id=<%=x.getID_Prod()%>">
-">
+
                     <% } else { %>
                         <img class="immagineProd" alt="Immagine" src="Pictures/defaultImage.png">
                     <% } %>
                 </div>
                 
                 <div class="buttonContainer">
+                <%if(user==null||user.getIsAdmin()==0){ %>
                     <div class="aggiungi">
 					<button onclick="mostraFormAggiungi('<%= x.getID_Prod() %>', <%= x.getQuantity() %>)">Aggiungi</button>
                     </div>
                     <div class="mostra">
                         <button onclick="location.href='ProductControl?action=dettaglio&codice=<%=x.getID_Prod()%>'">Dettaglio</button>
                     </div>
+                    <%} %>
                     <%if(user!=null){ %>
                     
                   <%if(user.getIsAdmin()>0){ %>
-                    <button onclick="location.href='admin/AddProductForm.jsp'">Aggiungi Prodotto</button> 
+			<a href="AdminControl?action=updateProduct&id=<%=x.getID_Prod()%>"><button>Modifica</button></a>
                      <button onclick="location.href='ProductControl?action=elimina&id=<%=x.getID_Prod()%>'"> Elimina Prodotto </button>   
                                   
                                   
@@ -58,8 +60,7 @@
                 </div>
                 
             </div>
-        <% }
-    } else { %>
+        <% } }  else { %>
         <p>Nessun prodotto disponibile.</p>
     <% } %>
 </div>
