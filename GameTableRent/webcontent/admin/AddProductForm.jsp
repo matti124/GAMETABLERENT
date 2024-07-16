@@ -12,8 +12,9 @@
 			<form action="<%=request.getContextPath()%>/ProductControl" enctype="multipart/form-data"
 				method="post">
 				<input type="hidden" name="action" value="aggiungi"> 
-				<label for="nome">Nome:</label> <input type="text" id="nome" name="nome"
-					required> 
+				<label for="nome">Nome:</label> 
+			<input type="text" id="nome" name="nome" pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s]+$" required title="Il nome non può contenere solo numeri">
+ 
 					<label for="descrizione">Descrizione:</label>
 				<textarea id="descrizione" name="descrizione" required
 					style="height: 200px"></textarea>
@@ -36,14 +37,18 @@
 				</div>
 				
 				
-				<div class="form-group-inline">
-					<label for="inCatalogo">In Catalogo:</label> <select
-						id="inCatalogo" name="inCatalogo">
-						<option value="1">Si</option>
-						<option value="0">No</option>
-					</select>
+		<div class="form-group-inline">
+    <label for="inCatalogo">In Catalogo:</label> 
+    <label>
+        <input type="radio" name="inCatalogo" value="1">
+        Si
+    </label>
+    <label>
+        <input type="radio" name="inCatalogo" value="0">
+        No
+    </label>
+</div>
 
-				</div>
 
 				
 

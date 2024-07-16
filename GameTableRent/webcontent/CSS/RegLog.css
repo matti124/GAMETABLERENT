@@ -49,7 +49,7 @@ form {
 }
 
 label {
-    margin-top: 10px;
+    margin-top: 5px;
     margin-bottom: 10px;
     color: #4e8f00;
 }
@@ -128,6 +128,19 @@ input[type="number"] {
     margin: 10px auto; /* Aggiornato per centrare l'immagine */
     max-width: 100%;
     height: auto;
+}
+
+
+textarea {
+    padding: 10px; /* Padding interno per spazio aggiuntivo */
+    border: 1px solid #ddd; /* Bordo sottile */
+    border-radius: 5px; /* Angoli arrotondati */
+    font-size: 1em; /* Dimensione del carattere */
+    resize: vertical; /* Consentire il ridimensionamento verticale */
+    min-height: 150px; /* Altezza minima */
+    max-height: 300px; /* Altezza massima */
+    font-family: Arial, sans-serif; /* Tipo di carattere */
+    line-height: 1.5; /* Altezza della linea per migliorare la leggibilità */
 }
 
 /* Responsive adjustments */

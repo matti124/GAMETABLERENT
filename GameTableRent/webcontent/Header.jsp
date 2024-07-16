@@ -91,8 +91,11 @@
                    <%} else if(valid) {%>
                    <a href="admin/AdminHome.jsp"> Home</a>
                    <a href="Account.jsp"> Account</a>
-            <a href="<%=request.getContextPath()%>/AdminControl?action=allOrders">Orders</a>
+            <a href="<%=request.getContextPath()%>/AdminControl?action=allOrders">Ordini</a>
+                               <a href="<%=request.getContextPath()%>/AdminControl?action=allProducts">Prodotti</a>
+            
                     <a href="ProductControl?action=mostraProdotti">Catalogo</a>
+                    
             
                    
                    

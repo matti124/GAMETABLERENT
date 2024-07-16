@@ -20,10 +20,10 @@ name = user.getNome();
             <a href="<%=request.getContextPath()%>/AdminControl?action=AllAccounts"><button>Accounts</button></a>
         </div>
         <div class="row" id="row2User">
-            <a href="<%=request.getContextPath()%>/AdminControl?action=allOrders"><button>Orders</button></a>
+            <a href="<%=request.getContextPath()%>/AdminControl?action=allOrders"><button>Ordini</button></a>
         </div>
         <div class="row" id="row3User">
-            <a href="<%=request.getContextPath()%>/AdminControl?action=allProducts"><button>Catalogo</button></a>
+            <a href="<%=request.getContextPath()%>/AdminControl?action=allProducts"><button>Prodotti</button></a>
         </div>
     </div>
 

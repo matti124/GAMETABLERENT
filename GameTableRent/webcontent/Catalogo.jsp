@@ -52,7 +52,7 @@
                     
                   <%if(user.getIsAdmin()>0){ %>
 			<a href="AdminControl?action=updateProduct&id=<%=x.getID_Prod()%>"><button>Modifica</button></a>
-                     <button onclick="location.href='ProductControl?action=elimina&id=<%=x.getID_Prod()%>'"> Elimina Prodotto </button>   
+                     <button onclick="location.href='ProductControl?action=elimina&id=<%=x.getID_Prod()%>'"> Rimuovi Prodotto </button>   
                                   
                                   
                                   <%} }%>
@@ -69,24 +69,25 @@
 <div id="formAggiunta" class="form" style="display: none;">
     <div class="form_content">
         <span class="close" onclick="chiudiFormAggiunta()">&times;</span>
-        <h2>Aggiungi al Carrello</h2>
+        <h2><span style="font-weight:bold;">Aggiungi al Carrello</span></h2>
         <input type="hidden" id="productId">
         
         <!-- Menu a tendina per selezionare Compra o Affitta -->
-        <label for="sceltaTipo">Scegli l'opzione:</label>
+        <label for="sceltaTipo"><span>Scegli l'opzione:</span></label>
         <select id="sceltaTipo" onchange="toggleInput()">
             <option value="compra">Compra</option>
             <option value="affitta">Affitta</option>
         </select>
         
+        
         <!-- Input per la quantità (mostrato quando Compra è selezionato) -->
         <div id="compraInput" style="display: block;">
-            Quantità: <input type="number" id="quantita" min="1" required>
+            <span>Quantità:</span> <input type="number" id="quantita" min="1" required>
         </div>
         
         <!-- Input per i giorni (mostrato quando Affitta è selezionato) -->
         <div id="affittaInput" style="display: none;">
-            Giorni: <input type="number" id="giorni" min="0" max="60" step="5" required>
+            <span>Giorni:</span> <input type="number" id="giorni" min="0" max="60" step="5" required>
         </div>
         
         <button onclick="aggiungiAlCarrello()">Aggiungi</button>

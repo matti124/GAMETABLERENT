@@ -13,10 +13,11 @@ UtenteDAO dao = new UtenteDAO();
     <link rel="stylesheet" href="CSS/Orders.css">
     <title>Ordini</title>
     <style>
-    label{
-    display:block;}
-    
-  span {
+    label {
+        display: block;
+    }
+
+    span {
         font-family: monospace;
         font-style: oblique;
         font-weight: bold;
@@ -26,6 +27,20 @@ UtenteDAO dao = new UtenteDAO();
         border-radius: 10px;
     }
     
+    /* Style for the button */
+    .add-product-button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .add-product-button:hover {
+        background-color: #45a049;
+    }
     </style>
 </head>
 <body>
@@ -40,23 +55,22 @@ UtenteDAO dao = new UtenteDAO();
                             <th>Prezzo</th>
                             <th>Prezzo Giornaliero</th>
                             <th>Quantità</th>
-                            <th> Catalogo </th>
+                            <th>Catalogo</th>
                             <th>Dettagli</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% for (ProdottoDTO x : prodotti) { 
-                        %>
+                        <% for (ProdottoDTO x : prodotti) { %>
                             <tr>
                                 <td><%= x.getNome() %></td>
-                                <td><%= x.getPrezzo()  %> $</td>
-                                <td><%= x.getPrezzoXDay() %></td>
-                                <td><%=x.getQuantity()  %></td>
-                                <td> <%=x.getIN_CAT() %> </td>
+                                <td><%= x.getPrezzo() %> $</td>
+                                <td><%= x.getPrezzoXDay()%> $</td>
+                                <td><%= x.getQuantity() %></td>
+                                <td><%= x.getIN_CAT() %></td>
                                 <td>
-                                   <form action="ProductControl" method="get">
+                                    <form action="ProductControl" method="get">
                                         <input type="hidden" name="action" value="dettaglio">
-                                        <input type="hidden" name="codice" value=<%=x.getID_Prod() %>>
+                                        <input type="hidden" name="codice" value="<%= x.getID_Prod() %>">
                                         <button type="submit">Vedi Prodotto</button>
                                     </form>
                                 </td>
@@ -65,8 +79,12 @@ UtenteDAO dao = new UtenteDAO();
                     </tbody>
                 </table>
             <% } else { %>
-                <h2 style="display:block; margin-top:20px;">Nessun ordine registrato</h2>
+                <h2 style="display:block; margin-top:20px;">Nessun prodotto registrato</h2>
             <% } %>
+            
+            <a href="admin/AddProductForm.jsp">
+                <button class="add-product-button">Aggiungi Prodotto</button>
+            </a>
         </div>
     </div>
 </body>

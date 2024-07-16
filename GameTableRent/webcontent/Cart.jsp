@@ -32,11 +32,11 @@
             <div class="prodotto">
                 <% String tipo = (x.getGiorni() == 0) ? "Acquisto" : "Nolleggio"; %>
                 <div class="prodotto-info">
-                    <h3>Nome: <%=x.getName()%></h3>
-                    <h5>Tipo: <%=tipo%></h5>
-                    <h5>Prezzo: <%=x.getPrezzo()%></h5>
-                    <h5>Prezzo al Giorno: <%=x.getPrezzoXdays()%></h5>
-                    <h5>Quantità: 
+                    <h3><span style="font-weight:normal">Nome:</span> <%=x.getName()%></h3><br>
+                    <h5><span style="font-weight:normal">Tipo:</span> <%=tipo%></h5><br>
+                    <h5><span style="font-weight:normal">Prezzo:</span> <%=x.getPrezzo()%></h5><br>
+                    <h5><span style="font-weight:normal">Prezzo al Giorno:</span> <%=x.getPrezzoXdays()%></h5><br>
+                    <h5><span style="font-weight:normal">Quantità: </span>
                     
                     <%if(valido){ %>
                         <button onclick="updateQuantityCart(<%=x.getId_prodotto()%>,'-', <%=maxQuantity%>)"> - </button>
@@ -48,9 +48,9 @@
                         <button onclick="updateQuantityCart(<%=x.getId_prodotto()%>,'+', <%=maxQuantity%>)"> + </button>
                         <%} %>
                         
-                    </h5>
+                    </h5><br>
                     <% if (tipo.equals("Nolleggio")) { %>
-                        <h5>Giorni: 
+                        <h5><span style="font-weight:normal">Giorni: </span>
                         <%if (valido){ %>
                             <button onclick="UpdateDaysCart(<%=x.getId_prodotto()%>,'-')"> - </button>
                             <%} %>
@@ -58,13 +58,13 @@
                             <%if(valido){ %>
                             <button onclick="UpdateDaysCart(<%=x.getId_prodotto()%>,'+')"> + </button>
                             <%} %>
-                        </h5>
+                        </h5><br>
                     <% } %>
                 </div>
                 <div class="prodotto-img">
                     <% if (x.getImage() != null) { %>
                         <img class="immagineProd" alt="Immagine" src="<%= request.getContextPath() %>/ProductControl?action=image&id=<%= prod.getID_Prod() %>">
-">
+
                     <% } else { %>
                         <img class="immagineProd" alt="Immagine" src="Pictures/defaultImage.png">
                     <% } %>

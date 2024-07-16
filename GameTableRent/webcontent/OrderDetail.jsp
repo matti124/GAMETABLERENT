@@ -16,13 +16,13 @@
 <div class="prodotto">
                 <% String tipo = (x.getGiorni() == 0) ? "Acquisto" : "Nolleggio"; %>
                 <div class="prodotto-info">
-                    <h3>Nome: <%=x.getName()%></h3>
-                    <h5>Tipo: <%=tipo%></h5>
-                    <h5>Prezzo: <%=x.getPrezzo()%></h5>
-                    <h5>Prezzo al Giorno: <%=x.getPrezzoXdays()%></h5>
-                    <h5>Quantità: <%=x.getQuantity() %></h5>
+                    <h3>Nome: <%=x.getName()%></h3> <br>
+                    <h5>Tipo: <%=tipo%></h5><br>
+                    <h5>Prezzo: <%=x.getPrezzo()%></h5> <br>
+                    <h5>Prezzo al Giorno: <%=x.getPrezzoXdays()%></h5> <br>
+                    <h5>Quantità: <%=x.getQuantity() %></h5> <br>
                      <% if (tipo.equals("Nolleggio")) { %>
-                        <h5>Giorni: <%=x.getGiorni() %></h5> <%} %>
+                        <h5>Giorni: <%=x.getGiorni() %></h5> <br> <%} %>
                                                 </div>
                         
                         <div class="prodotto-img">

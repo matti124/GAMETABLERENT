@@ -93,9 +93,12 @@ public class AdminControl extends HttpServlet {
 		ProdottoDAO dao=new ProdottoDAO();
 		try {
 			dao.doDeleteByKey(id);
-		} catch (SQLException e) {
+			request.getRequestDispatcher("/admin/AllProduct.jsp").forward(request, response);
+
+		} catch (SQLException | ServletException | IOException e) {
 			e.printStackTrace();
 		}
+
 
 		
 		

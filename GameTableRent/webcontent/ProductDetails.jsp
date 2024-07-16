@@ -66,7 +66,6 @@
             <%} else if(user.getIsAdmin()>0) {%>
             <div class="form-content">
 			<a href="AdminControl?action=updateProduct&id=<%=prodotto.getID_Prod()%>"><button>Modifica</button></a>
-		 <button onclick="location.href='ProductControl?action=elimina&id=<%=prodotto.getID_Prod()%>'"> Rimuovi dal catalogo </button>   
 			<a href="AdminControl?action=deleteProduct&id=<%=prodotto.getID_Prod()%>"><button onclick=alertSicurezza()>Elimina</button></a>
 			
        

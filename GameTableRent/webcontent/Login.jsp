@@ -19,6 +19,10 @@
         <% if (request.getAttribute("ValueLogin") != null) { %>
             <div class="error-message">Login fallito. Per favore riprova.</div>
         <%} %>
+        
+        <%if (request.getAttribute("ValueReg")!=null){ %>
+        <div class="error-message">Email già registrata nel sito</div>
+        <%} %>
     </div>
     </div>
 
