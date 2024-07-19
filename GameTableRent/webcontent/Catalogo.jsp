@@ -24,11 +24,12 @@
         for (ProdottoDTO x : catalogo) { %>
             <div class="prodotto">
                 <div class="prodotto-info">
-                    <h3>Nome: <%= x.getNome() %></h3>
-                    <h5>Descrizione: <%= x.getDescrizione() %></h5>
-                    <h5>Prezzo: <%= x.getPrezzo() %></h5>
-                    <h5>Prezzo al Giorno: <%= x.getPrezzoXDay() %></h5>
-                    <h5>Quantità nel magazzino: <%=x.getQuantity() %></h5>
+                    <h3><%= x.getNome() %></h3>
+                    <h5>Prezzo: <span><%= x.getPrezzo() %></span></h5>
+                    <h5>Prezzo al Giorno: <span><%= x.getPrezzoXDay() %></span></h5>
+                    <%if(user!=null){ %>
+                    <h5>Quantità nel magazzino: <span><%=x.getQuantity() %></span></h5>
+                    <%} %>
                 </div>
                 <div class="prodotto-img">
                     <% if (x.getImmagine() != null) { %>

@@ -58,7 +58,6 @@
 						window.location.reload();
 					}
 					            quantityElem.textContent = quantity;
-					            daysElement.textContent = days;
                 document.getElementById("TotalPrice").textContent = "Effettua Ordine, Tot: " + response.totalPrice + "$";
             
 
@@ -110,21 +109,25 @@
     richiesta.open("POST", "CartControl?action=UpdateDaysCart", true);
     richiesta.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-    richiesta.onreadystatechange = function() {
-        if (richiesta.readyState === 4 && richiesta.status === 200) {
-            console.log("Risposta dal server: " + richiesta.responseText);
-            
-                daysElement.textContent = days;
+  richiesta.onreadystatechange = function() {
+                if (richiesta.readyState === 4 && richiesta.status === 200) {
+                    console.log("Risposta dal server: " + richiesta.responseText);
+                     let response = JSON.parse(richiesta.responseText);
 
-        }
-    };
+					
+					            daysElement.textContent = days;
+                document.getElementById("TotalPrice").textContent = "Effettua Ordine, Tot: " + response.totalPrice + "$";
+            
+
+						
+                }}
 
     let params = "codice_prod=" + productId + "&days=" + days;
     console.log("Invio dei parametri: " + params);
     richiesta.send(params);
-}
 
-       
+
+   }    
        
        /* le funzione di aggiornamento trattano principalmente l'aggiornamento in front end dei numeri, 
        difatti in backend viene chiamata la funzione di cartcontrol che andrà ad aggiornare la quantità e i giorni 

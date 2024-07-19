@@ -348,6 +348,9 @@ public class CartControl extends HttpServlet {
 		prodDAO.doUpdateWithoutDaysInWhere(prodUpdate);
 
 		request.getSession().setAttribute("cart", cart);
+		response.setContentType("application/json");
+	    response.setCharacterEncoding("UTF-8");
+	    response.getWriter().write("{\"totalPrice\": " + cart.GetTotalPrice() + "}");
 
 	}
 }

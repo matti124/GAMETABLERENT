@@ -38,9 +38,8 @@
                     <h5><span style="font-weight:normal">Prezzo al Giorno:</span> <%=x.getPrezzoXdays()%></h5><br>
                     <h5><span style="font-weight:normal">Quantità: </span>
                     
-                    <%if(valido){ %>
                         <button onclick="updateQuantityCart(<%=x.getId_prodotto()%>,'-', <%=maxQuantity%>)"> - </button>
-                        <%} %>
+                  
                         
                         <span id="quantity_of_<%=x.getId_prodotto()%>"><%=x.getQuantita()%></span>
                         
