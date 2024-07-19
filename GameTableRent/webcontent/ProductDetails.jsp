@@ -10,7 +10,14 @@
     <title>Dettagli Prodotto</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/ProductDetail.css">
         <script src="script/AggiuntaAlCarrello.js"></script>
+    <script>
+
+    function confirmDeletion() {
+        var result = confirm("Sei sicuro di voler eliminare questo prodotto? Questa azione non può essere annullata.");
+        return result;
+    }
     
+    </script>
 </head>
 <body>
 <%UtenteDTO user=(UtenteDTO) request.getSession().getAttribute("user"); %>
@@ -38,11 +45,11 @@
                 <% } else { %>
                     <label>Prodotto non trovato.</label>
                 <% } %>
-                <label><a href="<%= request.getContextPath() %>/ProductControl?action=mostraProdotti">Torna al catalogo</a></label>
+                <label><a href="<%= request.getContextPath() %>/ProductControl?action=mostraProdotti"><button>Torna al catalogo</button></a></label>
             </div>
 
 
-<%if(user.getIsAdmin()==0||user==null){ %>
+<%if(user==null||user.getIsAdmin()==0){ %>
             <div class="form_content">
                 <h2>Aggiungi al Carrello</h2>
                 <input type="hidden" id="productId" value="<%= prodotto != null ? prodotto.getID_Prod() : "" %>">
@@ -66,7 +73,7 @@
             <%} else if(user.getIsAdmin()>0) {%>
             <div class="form-content">
 			<a href="AdminControl?action=updateProduct&id=<%=prodotto.getID_Prod()%>"><button>Modifica</button></a>
-			<a href="AdminControl?action=deleteProduct&id=<%=prodotto.getID_Prod()%>"><button onclick=alertSicurezza()>Elimina</button></a>
+			<a href="AdminControl?action=deleteProduct&id=<%=prodotto.getID_Prod()%>"><button onclick="return confirmDeletion()">Elimina</button></a>
 			
        
             

@@ -22,7 +22,7 @@
             document.getElementById("compraInput").style.display = "block";
             document.getElementById("affittaInput").style.display = "none";
         } else if (scelta === "affitta") {
-            document.getElementById("compraInput").style.display = "none";
+            document.getElementById("compraInput").style.display = "block";
             document.getElementById("affittaInput").style.display = "block";
         }
     }
@@ -31,7 +31,7 @@
     function aggiungiAlCarrello() {
         var id_prod = document.getElementById('productId').value;
         var tipo = document.getElementById('sceltaTipo').value;
-        var quantity = tipo === "compra" ? document.getElementById('quantita').value : 1;
+        var quantity = document.getElementById('quantita').value 
         var giorni = tipo === "affitta" ? document.getElementById('giorni').value : 0;
        
         var params = 'action=addToCart&codice_prod=' + id_prod

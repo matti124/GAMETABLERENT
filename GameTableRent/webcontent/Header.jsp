@@ -15,13 +15,24 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
+        .logo {
+            display: inline-block;
+            padding: 10px;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.8); /* Sfondo bianco trasparente */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Aggiunge ombra */
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
         .logo img {
             max-height: 60px;
+            border-radius: 10px;
             transition: transform 0.3s;
         }
 
-        .logo img:hover {
+        .logo:hover {
             transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Ombratura più intensa al passaggio del mouse */
         }
 
         nav {
@@ -49,7 +60,7 @@
         }
 
         /* Stile responsive */
-        @media screen and (max-width: 400px) {
+        @media screen and (max-width: 580px) {
             header {
                 padding: 10px 20px;
             }
@@ -73,40 +84,31 @@
             <img src="Pictures/GAME TABLE.png" alt="Logo">
         </div>
         <nav>
-            <% Boolean valid=null;
-               UtenteDTO utente = (UtenteDTO) request.getSession().getAttribute("user");
-            	if(utente==null)
-            		valid=null;
-            	else
-               if(utente.getIsAdmin()==0){
-            		valid=false;}
-            	else if(utente.getIsAdmin()==1)
-            		valid=true;
-            	
-               if (valid == null) { %>
-                   <a href="Home.jsp">Home</a>
-                   <a href="Login.jsp">Login</a>
-                   <a href="ProductControl?action=mostraProdotti">Catalogo</a>
-                   <a href="Cart.jsp">Carrello</a>
-                   <%} else if(valid) {%>
-                   <a href="admin/AdminHome.jsp"> Home</a>
-                   <a href="Account.jsp"> Account</a>
-            <a href="<%=request.getContextPath()%>/AdminControl?action=allOrders">Ordini</a>
-                               <a href="<%=request.getContextPath()%>/AdminControl?action=allProducts">Prodotti</a>
-            
-                    <a href="ProductControl?action=mostraProdotti">Catalogo</a>
-                    
-            
-                   
-                   
-                   <%} else if(!valid){ %>
-                   <a href="UserHome.jsp">Home</a>
-                   <a href="Account.jsp">Account</a>
-                   <a href="ProductControl?action=mostraProdotti">Catalogo</a>
-                   <a href="Cart.jsp">Carrello</a>
+            <% 
+                UtenteDTO utente = (UtenteDTO) request.getSession().getAttribute("user");
+                Boolean valid = null;
+                if (utente != null) {
+                    valid = utente.getIsAdmin() == 1 ? true : false;
+                }
 
-                   
-                   <%} %>         
+                if (valid == null) { %>
+                    <a href="Home.jsp">Home</a>
+                    <a href="Registrazione.jsp">Registrati</a>
+                    <a href="Login.jsp">Login</a>
+                    <a href="ProductControl?action=mostraProdotti">Catalogo</a>
+                    <a href="Cart.jsp">Carrello</a>
+                <% } else if (valid) { %>
+                    <a href="admin/AdminHome.jsp">Home</a>
+                    <a href="Account.jsp">Account</a>
+                    <a href="<%= request.getContextPath() %>/AdminControl?action=allOrders">Ordini</a>
+                    <a href="<%= request.getContextPath() %>/AdminControl?action=allProducts">Prodotti</a>
+                    <a href="ProductControl?action=mostraProdotti">Catalogo</a>
+                <% } else { %>
+                    <a href="UserHome.jsp">Home</a>
+                    <a href="Account.jsp">Account</a>
+                    <a href="ProductControl?action=mostraProdotti">Catalogo</a>
+                    <a href="Cart.jsp">Carrello</a>
+                <% } %>         
         </nav>
     </header>
 </body>

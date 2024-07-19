@@ -8,12 +8,13 @@
 	<link rel="stylesheet" href="CSS/RegLog.css">
 </head>
 <body>
+<%@include file= "Header.jsp" %>
 <div class="main-content">
-    <div class="container">
+    <div class="container" style="margin-top:10%">
         <h2>Login</h2>
         <form action="LoginServlet" method="post">
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="psw" placeholder="Password" required>
+            <input type="email" name="email" placeholder="Email" required> <br>
+            <input type="password" name="psw" placeholder="Password" required> <br>
             <button type="submit">Login</button>
         </form>
         <% if (request.getAttribute("ValueLogin") != null) { %>

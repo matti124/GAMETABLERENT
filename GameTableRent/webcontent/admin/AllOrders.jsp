@@ -28,6 +28,7 @@ double[]totals= (double[])request.getAttribute("profitti");
     }
     
     </style>
+    <script src="./script/ValidateDateForm.js"></script>
 </head>
 <body>
     <div class="main-content">
@@ -72,7 +73,7 @@ double[]totals= (double[])request.getAttribute("profitti");
     <div class="aggiunte">
     <div class="date-form" style="margin-bottom:auto">
                 <h2> Ricerca Ordini per data:</h2>
-                <form method="get" action="AdminControl">
+                <form method="get" action="AdminControl" onsubmit="return validateForm()">
                 <input type="hidden" name="action" value="allOrdersByDate">
                 <label> Data inizio: </label>
                 <input type="date" name="Start">

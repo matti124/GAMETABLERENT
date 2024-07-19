@@ -14,7 +14,7 @@
 				<input type="hidden" name="action" value="aggiungi"> 
 				<label for="nome">Nome:</label> 
 			<input type="text" id="nome" name="nome" pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s]+$" required title="Il nome non può contenere solo numeri">
- 
+ <br> <br>
 					<label for="descrizione">Descrizione:</label>
 				<textarea id="descrizione" name="descrizione" required
 					style="height: 200px"></textarea>
