@@ -19,7 +19,7 @@
             display: inline-block;
             padding: 10px;
             border-radius: 15px;
-            background-color: rgba(255, 255, 255, 0.8); /* Sfondo bianco trasparente */
+            background-color: rgba(78, 143, 0, 0.4); /* Sfondo bianco trasparente */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Aggiunge ombra */
             transition: transform 0.3s, box-shadow 0.3s;
         }
