@@ -104,12 +104,12 @@ public class CarrelloDAO implements CarrelloDAOInterfaccia {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    int id_U = resultSet.getInt("ID_U");
+                    int id_cart = resultSet.getInt("ID_CARRELLO");
                     ProdottoCarrelloDAO prod=new ProdottoCarrelloDAO();
                     ArrayList<ProdottoCarrelloDTO> prodotti_Cart=new ArrayList<>();
-                    prodotti_Cart=prod.doRetrieveAll(id_utente);
+                    prodotti_Cart=prod.doRetrieveAll(id_cart);
 
-                    return new CarrelloDTO(id_utente, prodotti_Cart, id_U);
+                    return new CarrelloDTO(id_cart, prodotti_Cart, id_utente);
                 }
             }
         } catch (SQLException e) {

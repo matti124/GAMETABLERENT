@@ -56,6 +56,7 @@ public class LoginServlet extends HttpServlet {
             CarrelloDAO cartDao = new CarrelloDAO();
             CarrelloDTO cart = cartDao.doRetrieveById(utente.getID());
             request.getSession().setAttribute("cart", cart);
+            System.out.println(cart.getCart());
             request.getSession().setAttribute("user", utente);
             System.out.println("Is Admin?  -> "+ utente.getIsAdmin());
             if(utente.getIsAdmin()>0) {
