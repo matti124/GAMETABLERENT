@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <h1>Errore 404</h1>
-        <p>La pagina che stai cercando non è stata trovata.</p>
+        <p>Cosa stai cercando...? <br>Questa pagina non esiste.</p>
         <p>
             <a href="<%= request.getContextPath() %>">Torna alla home page</a>
         </p>

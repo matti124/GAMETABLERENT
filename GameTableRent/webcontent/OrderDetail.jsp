@@ -2,8 +2,9 @@
     pageEncoding="UTF-8" import="model.*, java.util.*"%>
     <%OrdineDTO ordine=(OrdineDTO)request.getAttribute("ordine"); 
     UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
-    if(user==null)
+    if(user==null){
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
+    return;}
 
     
     %>

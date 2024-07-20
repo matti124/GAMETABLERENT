@@ -53,10 +53,10 @@ public class CartControl extends HttpServlet {
 			deleteCart(request, response);
 			break;
 
-		default:
-			response.sendRedirect(request.getContextPath());
-			break;
-		}
+		  default:{
+              response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+              return;}
+		  }
 	}
 
 	@Override

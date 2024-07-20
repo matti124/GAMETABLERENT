@@ -65,7 +65,9 @@ public class OrdineControl extends HttpServlet {
 				break;
 				
 		
-			
+		  default:{
+              response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+              return;}
 		}
 		
 	}

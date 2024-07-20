@@ -82,7 +82,9 @@ public class AdminControl extends HttpServlet {
 			this.deleteProduct(request, response);
 			break;
 		}
-			
+		  default:{
+              response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+              return;}	
 		}
 		
 	}
@@ -91,13 +93,13 @@ public class AdminControl extends HttpServlet {
 	private void deleteProduct(HttpServletRequest request, HttpServletResponse response) {
 		int id=Integer.parseInt(request.getParameter("id"));
 		ProdottoDAO dao=new ProdottoDAO();
-		try {
-			dao.doDeleteByKey(id);
-			request.getRequestDispatcher("/admin/AllProduct.jsp").forward(request, response);
-
-		} catch (SQLException | ServletException | IOException e) {
-			e.printStackTrace();
-		}
+			try {
+				dao.doDeleteByKey(id);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			this.AllProducts(request, response);
+		
 
 
 		

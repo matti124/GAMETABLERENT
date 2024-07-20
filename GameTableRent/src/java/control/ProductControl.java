@@ -39,11 +39,12 @@ public class ProductControl extends HttpServlet {
             case "image":
                 mostraImmagine(request, response);
                 break;
-            case "elimina":
-                eliminaProdotto(request, response, utente);
+            case "rimuovi":
+                rimuoviProdotto(request, response, utente);
                 break;
-            default:
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
+            default:{
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;}
         }
     }
 
@@ -66,6 +67,7 @@ public class ProductControl extends HttpServlet {
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
+                return;
         }
     }
 
@@ -175,7 +177,7 @@ public class ProductControl extends HttpServlet {
         }
     }
 
-    private void eliminaProdotto(HttpServletRequest request, HttpServletResponse response, UtenteDTO utente) throws ServletException, IOException {
+    private void rimuoviProdotto(HttpServletRequest request, HttpServletResponse response, UtenteDTO utente) throws ServletException, IOException {
         if (utente.getIsAdmin() != 1) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Non sei autorizzato a eseguire questa azione");
             return;

@@ -103,7 +103,7 @@ public class UserControl extends HttpServlet {
 		
 		default:
 	        // Azione non riconosciuta, gestione dell'errore
-	        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
+	        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 	        return;
 		
 		

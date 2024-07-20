@@ -53,7 +53,7 @@
                     
                   <%if(user.getIsAdmin()>0){ %>
 			<a href="AdminControl?action=updateProduct&id=<%=x.getID_Prod()%>"><button>Modifica</button></a>
-                     <button onclick="location.href='ProductControl?action=elimina&id=<%=x.getID_Prod()%>'"> Rimuovi Prodotto </button>   
+                     <button onclick="location.href='ProductControl?action=rimuovi&id=<%=x.getID_Prod()%>'"> Rimuovi Prodotto </button>   
                                   
                                   
                                   <%} }%>

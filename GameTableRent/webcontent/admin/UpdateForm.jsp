@@ -30,12 +30,12 @@
 
 				<div class="form-group-inline">
 					<label for="prezzo">Prezzo:</label> 
-					<input type="number" step="0.50" min=1.00 id="prezzo" name="prezzo"  required
+					<input type="number" step="0.01" min=1.00 id="prezzo" name="prezzo"  required
 					       value="<%= ((ProdottoDTO)request.getAttribute("prodotto")).getPrezzo() %>">
 				</div>
 				<div class="form-group-inline">
 					<label for="prezzoXDays">Prezzo per Giorno:</label> 
-					<input type="number" min=1.00 step="0.50" id="prezzoXDays" name="prezzoXDays" required 
+					<input type="number" min=1.00 step="0.01" id="prezzoXDays" name="prezzoXDays" required 
 					       value="<%= ((ProdottoDTO)request.getAttribute("prodotto")).getPrezzoXDay() %>">
 				</div>
 
