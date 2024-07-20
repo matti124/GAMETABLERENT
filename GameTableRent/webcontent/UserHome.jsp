@@ -2,10 +2,11 @@
     pageEncoding="ISO-8859-1" import="model.*,java.util.*"%>
     
     <%
-    String name;
+    String name=null;
     UtenteDTO user=(UtenteDTO) request.getSession().getAttribute("user");
-    if(user==null)
-		name="User";
+    if(user==null){
+        response.sendError(HttpServletResponse.SC_FORBIDDEN); return;}
+
 		else name= user.getNome();
 	
 %>

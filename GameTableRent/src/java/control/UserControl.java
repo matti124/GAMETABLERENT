@@ -31,6 +31,10 @@ public class UserControl extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String azione=request.getParameter("action");
 		UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
+		if(user==null) {
+		    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+		return;}
+
        UtenteDAO userDAO=new UtenteDAO();
 		switch (azione) {
 		

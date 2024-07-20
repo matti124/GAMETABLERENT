@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="model.*, java.util.*"%>
-    <%OrdineDTO ordine=(OrdineDTO)request.getAttribute("ordine"); %>
+    <%OrdineDTO ordine=(OrdineDTO)request.getAttribute("ordine"); 
+    UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
+    if(user==null)
+        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+
+    
+    %>
 <!DOCTYPE html>
 <html>
 <head>

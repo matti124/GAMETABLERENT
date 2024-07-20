@@ -18,7 +18,7 @@ import model.UtenteDTO;
 /**
  * Servlet Filter implementation class FilterForToken
  */
-@WebFilter(filterName = "AdminFilter", urlPatterns = {"/AdminControl", "/ProductControl?action=update", "/ProductoControl?action=elimina", "/ProductControl?action=aggiungi"})
+@WebFilter(filterName = "AdminFilter", urlPatterns = {"/AdminControl", "/ProductControl?action=update", "/ProductoControl?action=elimina", "/ProductControl?action=aggiungi", "/admin/*"})
 public class AdminFilter implements Filter {
 
     /**
@@ -50,7 +50,8 @@ public class AdminFilter implements Filter {
         if (isAdmin) {
             filterChain.doFilter(request, response); // Prosegui con la richiesta
         } else {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Accesso non consentito");
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
         }
     }
 

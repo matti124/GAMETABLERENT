@@ -3,6 +3,10 @@
 <%@ include file="Header.jsp" %>
 <%
     UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
+if(user==null)
+    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+
+
 %>
 <!DOCTYPE html>
 <html lang="it">

@@ -2,6 +2,10 @@
     pageEncoding="UTF-8" import="model.*, java.util.*"%>
 <% UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
    ArrayList<OrdineDTO> ordini = (ArrayList<OrdineDTO>) request.getAttribute("listaOrdini");
+   if(user==null){
+       response.sendError(HttpServletResponse.SC_FORBIDDEN);
+       return;}
+
 %>
 <% if (user.getIsAdmin() == 0) { %>
     <%@ include file="Header.jsp" %>
