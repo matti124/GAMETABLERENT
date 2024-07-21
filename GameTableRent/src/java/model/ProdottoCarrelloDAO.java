@@ -35,12 +35,13 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
 
     @Override
     public boolean doDelete(ProdottoCarrelloDTO prod) {
-        String query = "DELETE FROM PRODOTTI_CARRELLO WHERE ID_CARRELLO = ? AND ID_PRODOTTO = ?";
+        String query = "DELETE FROM PRODOTTI_CARRELLO WHERE ID_CARRELLO = ? AND ID_PRODOTTO = ? AND GIORNI = ?";
         
         try (	Connection connection=DriverManagerConnectionPool.getConnection();
         		PreparedStatement statement = connection.prepareStatement(query)) {
         	statement.setInt(1, prod.getId_carrello());
             statement.setInt(2, prod.getId_prodotto());
+            statement.setInt(3, prod.getGiorni());
 
             int rowsAffected = statement.executeUpdate();
             return rowsAffected == 1;
@@ -76,18 +77,20 @@ public class ProdottoCarrelloDAO implements ProdGenericDAOInterfaccia<ProdottoCa
       
     }
     
-    public boolean doUpdateWithoutDaysInWhere(ProdottoCarrelloDTO prod) {
-        String query = "UPDATE PRODOTTI_CARRELLO SET QUANTITY = ?, PREZZO = ?, PREZZOXDAYS = ?, GIORNI = ? WHERE ID_CARRELLO = ? AND ID_PRODOTTO = ?";
+    public boolean doUpdateDays(ProdottoCarrelloDTO prod, int newDays) {
+        String query = "UPDATE PRODOTTI_CARRELLO SET QUANTITY = ?, GIORNI= ?, PREZZO = ?, PREZZOXDAYS = ? WHERE ID_CARRELLO = ? AND ID_PRODOTTO = ? AND GIORNI = ?";
         System.out.println("Updating product in database: " + prod.getId_prodotto() + ", new quantity: " + prod.getQuantita() + ", new days: " + prod.getGiorni());
 
         try (Connection connection = DriverManagerConnectionPool.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, prod.getQuantita());
-            statement.setDouble(2, prod.getPrezzo());
-            statement.setDouble(3, prod.getPrezzoXdays());
-            statement.setInt(4, prod.getGiorni());
+            statement.setInt(2, newDays);
+            statement.setDouble(3, prod.getPrezzo());
+            statement.setDouble(4, prod.getPrezzoXdays());
             statement.setInt(5, prod.getId_carrello());
             statement.setInt(6, prod.getId_prodotto());
+            statement.setInt(7, prod.getGiorni());
+
 
             int rowsAffected = statement.executeUpdate();
             System.out.println("*********Prodotto Carrello aggiornato***********");

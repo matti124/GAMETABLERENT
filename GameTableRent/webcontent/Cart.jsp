@@ -38,14 +38,17 @@
                     <h5><span style="font-weight:normal">Prezzo al Giorno:</span> <%=x.getPrezzoXdays()%></h5><br>
                     <h5><span style="font-weight:normal">Quantità: </span>
                     
-                        <button onclick="updateQuantityCart(<%=x.getId_prodotto()%>,'-', <%=maxQuantity%>)"> - </button>
+                    <%if(valido){ %>
+                        <button onclick="updateQuantityCart(<%=x.getId_prodotto()%>,'-', <%=maxQuantity%>, <%=x.getGiorni()%>)"> - </button>
                   
-                        
-                        <span id="quantity_of_<%=x.getId_prodotto()%>"><%=x.getQuantita()%></span>
+                        <%} %>
+                        <span id="quantity_of_<%=x.getId_prodotto()%>_<%=x.getGiorni()%>"><%=x.getQuantita()%></span>
                         
                         <% if(valido){%>
-                        <button onclick="updateQuantityCart(<%=x.getId_prodotto()%>,'+', <%=maxQuantity%>)"> + </button>
+                        <button onclick="updateQuantityCart(<%=x.getId_prodotto()%>,'+', <%=maxQuantity%>,<%=x.getGiorni()%> )"> + </button>
                         <%} %>
+                                    <button onclick="rimuoviDalCarrello(<%=x.getId_prodotto()%>, <%=x.getGiorni()%>)" style="font-weight:bold; color:red ">x</button>
+                        
                         
                     </h5><br>
                     <% if (tipo.equals("Nolleggio")) { %>
@@ -76,9 +79,9 @@
     </div>
     <div class="checkout-button">
         <% if (valido) { %>
-            <button id="TotalPrice" onclick="checkOut(<%=valido%>, <%=cart.getCart().size()%>)">Effettua Ordine, Tot: <%=cart.GetTotalPrice()%>$</button>
+            <button class="TotalPrice1" id="TotalPrice" onclick="checkOut(<%=valido%>, <%=cart.getCart().size()%>)">Effettua Ordine, Tot: <%=cart.GetTotalPrice()%>$</button>
         <% } else { %>
-            <p>Per procedere con l'acquisto, effettua il <a href="Login.jsp">login</a> o <a href="Registrazione.jsp">registrati</a>.</p>
+            <p class="TotalPrice1">Prezzo Totale -> <%=cart.GetTotalPrice() %><br>Per procedere con l'acquisto, effettua il <a href="Login.jsp">login</a> o <a href="Registrazione.jsp">registrati</a>.</p>
         <% } %>
     </div>
 </body>

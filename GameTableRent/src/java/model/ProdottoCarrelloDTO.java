@@ -85,8 +85,12 @@ public class ProdottoCarrelloDTO {
 
 	@Override
 	public boolean equals(Object obj) {
-		ProdottoCarrelloDTO x=(ProdottoCarrelloDTO) obj;
-		return (this.id_prodotto==x.id_prodotto && this.id_carrello==x.id_carrello&& this.giorni==x.giorni);
+	    if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+	    ProdottoCarrelloDTO that = (ProdottoCarrelloDTO) obj;
+	    return id_prodotto == that.id_prodotto &&
+	           id_carrello == that.id_carrello &&
+	           giorni == that.giorni;
 	}
 
 

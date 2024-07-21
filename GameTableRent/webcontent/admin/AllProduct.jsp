@@ -11,7 +11,7 @@ UtenteDAO dao = new UtenteDAO();
     <meta charset="UTF-8">
     <link rel="stylesheet" href="CSS/RegLog.css">
     <link rel="stylesheet" href="CSS/Orders.css">
-    <title>Ordini</title>
+    <title>Prodotti</title>
     <style>
     label {
         display: block;

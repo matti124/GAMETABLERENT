@@ -43,7 +43,7 @@ public class CarrelloDTO {
 	
 	
 	public ProdottoCarrelloDTO retrieveById(int id_p, int giorni) {	//in caso un elemento già fosse nel carrello lo ritorniamo
-		for(ProdottoCarrelloDTO x : Cart) {
+		for(ProdottoCarrelloDTO x : this.Cart) {
 			if(x.getId_prodotto()==id_p&& x.getGiorni()==giorni)
 				return x;
 		}
@@ -53,19 +53,26 @@ public class CarrelloDTO {
 	
 	public void addProduct(ProdottoCarrelloDTO x) { //se un elemento non è nel carrello lo aggiungo oppure ne aumento la quantità
 	    if (x != null) {
-	    	if(this.retrieveById(x.getId_prodotto(), x.getGiorni())==null) {
+	    	ProdottoCarrelloDTO prod=this.retrieveById(x.getId_prodotto(), x.getGiorni());
+	    	if(prod==null) {
+	    		System.out.println("PRODOTTO NON ERA IN CARRELLO, LO AGGIUNGO");
+	    		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"+x +"\n\n\n");
+	    		x.addQuantity();
 				this.Cart.add(x);
-				x.addQuantity();}
+				
+				}
 			else {
-				ProdottoCarrelloDTO prod=this.retrieve(x);
+	    		System.out.println("PRODOTTO  ERA IN CARRELLO, LO AUMENTO");
+				this.Cart.remove(prod);
 				prod.addQuantity();
+				this.Cart.add(prod);
 			}
 	    } else {
 	        // Gestione appropriata nel caso prod sia null
 	        System.out.println("Tentativo di aggiungere un prodotto null al carrello.");
 	    }
 		
-	    System.out.println(x);
+	    System.out.println("HO AGGIUNTO "+ x+ "AL CARRELLO DELLA SESSIONE");
 		
 	}
 	

@@ -76,6 +76,9 @@ public class CartControl extends HttpServlet {
 		case "UpdateDaysCart":
 			this.UpdateDaysCart(request, response);
 			break;
+			
+		case "removeFromCart":
+			this.removeProductFromCart(request, response);;
 
 		}
 
@@ -179,6 +182,7 @@ public class CartControl extends HttpServlet {
 
 				ProdottoCarrelloDTO prodCarrello = new ProdottoCarrelloDTO(cart.getID_Carrello(), dto.getID_Prod(),
 						dto.getPrezzo(), dto.getPrezzoXDay(), 0, giorni, dto.getImmagine(), dto.getNome());
+				for(int i=0;i<quantity;i++)
 				cart.addProduct(prodCarrello);
 				return;
 			}
@@ -214,7 +218,7 @@ public class CartControl extends HttpServlet {
 				else {
 					System.out.println("Sto inserendo un prodotto già presente in carrello ma con giorni differenti");
 					ProdottoCarrelloDTO prodottoAffittato = new ProdottoCarrelloDTO(cart.getID_Carrello(), id_prod,
-							prod.getPrezzo(), prod.getPrezzoXdays(), quantity, giorni, prod.getImage(), prod.getName());
+							prod.getPrezzo(), prod.getPrezzoXdays(), quantity-1, giorni, prod.getImage(), prod.getName()); //soluzione banale per problema con consistenza di dati in frontend
 					prodDAO.doSave(prodottoAffittato);
 					cart.addProduct(prodottoAffittato);
 				}
@@ -235,6 +239,8 @@ public class CartControl extends HttpServlet {
 				prodDAO.doSave(prod);
 			}
 
+			
+			request.getSession().setAttribute("cart", cart);
 			try {
 				response.sendRedirect(request.getContextPath() + "/ProductControl?action=mostraProdotti");
 			} catch (IOException e) {
@@ -256,101 +262,194 @@ public class CartControl extends HttpServlet {
 	 */
 
 	private void updateCart(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
-		int quantity = Integer.parseInt(request.getParameter("quantity"));
-		String sign = request.getParameter("sign");
-		ProdottoDAO dao = new ProdottoDAO();
-		ProdottoDTO GeneralProd = dao.doRetrieveByKey(id_prod);
+	        throws ServletException, IOException {
+	    int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
+	    int quantity = Integer.parseInt(request.getParameter("quantity"));
+	    int days = Integer.parseInt(request.getParameter("days"));
+	    String sign = request.getParameter("sign");
+	    ProdottoDAO dao = new ProdottoDAO();
+	    ProdottoDTO GeneralProd = dao.doRetrieveByKey(id_prod);
 
-		UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
-		if (user == null) {
-			response.getWriter().write("User not logged in");
-			return;
-		}
-		CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
-		if (cart == null) {
-			response.getWriter().write("Cart not found");
-			return;
-		}
+	    UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
+	    if (user == null) {
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+	        response.getWriter().write("{\"error\": \"User not logged in\"}");
+	        return;
+	    }
+	    CarrelloDTO cart = carrelloDAO.doRetrieveById(user.getID());
+	    if (cart == null) {
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+	        response.getWriter().write("{\"error\": \"Cart not found\"}");
+	        return;
+	    }
 
-		ProdottoCarrelloDAO prodDAO = new ProdottoCarrelloDAO();
-		ProdottoCarrelloDTO prod = prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
-		if (prod == null) {
-			response.getWriter().write("Product not found in cart");
-			return;
-		}
+	    ProdottoCarrelloDAO prodDAO = new ProdottoCarrelloDAO();
+	    System.out.println("Sto cercando: prodotto con id prodotto: " + id_prod +  "e giorni: "+ days );
+	    ProdottoCarrelloDTO prod = prodDAO.doRetrieveByKeyAndDays(cart.getID_Carrello(), id_prod, days);
+	    if (prod == null) {
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+	        response.getWriter().write("{\"error\": \"Product not found in cart\"}");
+	        return;
+	    }
 
-//Se raggiungiamo quantità pari a 0 eliminiamo il prodotto dal carrello, prima di tutto lo eliminiamo dal carrello  della sessione, poi aggiorniamo quello del db, per poi aumentare il prodotto nel magazzino che abbiamo appena tolto
-		if (quantity == 0) {
-			//eliminiamo dal carrello della sessione
-			cart.delete(prod);
-			//aggiorniamo il carrello della sessione nel DB
-			carrelloDAO.doUpdateCart(cart);
-			//incrementiamo di 1 la quantità di quel prodotto nel DB
-			GeneralProd.increaseQuantity();
-			//lo salviamo nel DB
-			dao.doUpdate(GeneralProd);
-			//cancelliamo dai prodotti nel carrello del DB quel prodotto
-			prodDAO.doDelete(prod);
-			//aggiorniamo il carrello nella sessione
-			request.getSession().setAttribute("cart", cart);
+	    try {
+	        // Se raggiungiamo quantità pari a 0 eliminiamo il prodotto dal carrello,
+	        // prima di tutto lo eliminiamo dal carrello della sessione,
+	        // poi aggiorniamo quello del db, per poi aumentare il prodotto nel magazzino che abbiamo appena tolto
+	        if (quantity == 0) {
+	            // Eliminiamo dal carrello della sessione
+	            cart.delete(prod);
+	            // Aggiorniamo il carrello della sessione nel DB
+	            carrelloDAO.doUpdateCart(cart);
+	            // Incrementiamo di 1 la quantità di quel prodotto nel DB
+	            GeneralProd.increaseQuantity();
+	            // Lo salviamo nel DB
+	            dao.doUpdate(GeneralProd);
+	            // Cancelliamo dai prodotti nel carrello del DB quel prodotto
+	            prodDAO.doDelete(prod);
+	            // Aggiorniamo il carrello nella sessione
+	            request.getSession().setAttribute("cart", cart);
+	        } else {
+	            if (sign.equalsIgnoreCase("-")) {
+	                // Incremento i prodotti nel magazzino
+	                GeneralProd.increaseQuantity();
+	                // Diminuisco il prodotto nel carrello della sessione
+	                cart.decreaseProduct(prod);
+	            } else {
+	                // Decremento i prodotti nel magazzino
+	                GeneralProd.decreaseQuantity();
+	                // Aggiungo il prodotto al carrello della sessione
+	                cart.addProduct(prod);
+	            }
+	            // Aggiorno il prodotto nel carrello nel DB
+	            prodDAO.doUpdate(cart.retrieve(prod));
+	            // Aggiorno il prodotto nel magazzino del DB
+	            dao.doUpdate(GeneralProd);
+	            // Aggiorno il carrello nella sessione
+	            request.getSession().setAttribute("cart", cart);
+	        }
 
-			System.out.println("Product removed from cart");
-		} else {
-			System.out.println("segno letto : " + sign);
-
-			if (sign.equalsIgnoreCase("-")) {
-				//incremento i prodotti nel magazzino
-				GeneralProd.increaseQuantity();
-				
-				//diminuisco il prodotto nel carrello della sessione
-				cart.decreaseProduct(prod);
-				
-				//aggiorno il prodotto nel carrello nel DB
-				prodDAO.doUpdate(cart.retrieve(prod));
-				
-				//aggiorno il prodotto nel magazzino del DB
-				dao.doUpdate(GeneralProd);
-
-
-			}
-
-			else {
-				GeneralProd.decreaseQuantity();
-				cart.addProduct(prod);
-				prodDAO.doUpdate(cart.retrieve(prod));
-				dao.doUpdate(GeneralProd);
-
-			}
-
-
-			request.getSession().setAttribute("cart", cart);
-		}
-		
-		response.setContentType("application/json");
-	    response.setCharacterEncoding("UTF-8");
-	    response.getWriter().write("{\"totalPrice\": " + cart.GetTotalPrice() + "}");	}
-
+	        // Risposta JSON con il prezzo totale aggiornato
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+	        response.getWriter().write("{\"totalPrice\": " + cart.GetTotalPrice() + "}");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+	        response.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
+	    }
+	}
+	
+	
+	
 	private void UpdateDaysCart(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	        throws ServletException, IOException {
+	    int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
+	    int newDays = Integer.parseInt(request.getParameter("days"));
+	    int oldDays = Integer.parseInt(request.getParameter("oldDays"));
 
-		int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
-		int days = Integer.parseInt(request.getParameter("days"));
+	    CarrelloDTO cart = (CarrelloDTO) request.getSession().getAttribute("cart");
+	    ProdottoCarrelloDAO prodDAO = new ProdottoCarrelloDAO();
+	    ProdottoCarrelloDTO prod = prodDAO.doRetrieveByKeyAndDays(cart.getID_Carrello(), id_prod, oldDays);
+	    System.out.println("PRODOTTO PRIMA DI AGGIORNAMENTO GIORNI:"+ prod);
 
-		CarrelloDTO cart = (CarrelloDTO) request.getSession().getAttribute("cart");
-		ProdottoCarrelloDAO prodDAO = new ProdottoCarrelloDAO();
-		ProdottoCarrelloDTO prod = prodDAO.doRetrieveByKey(cart.getID_Carrello(), id_prod);
-		ProdottoCarrelloDTO prodUpdate=cart.retrieve(prod);
-		System.out.println("Vecchi giorni: " + prod.getGiorni());
-		prodUpdate.setDays(days);
-		System.out.println("Nuovi giorni: " + prod.getGiorni());
-		prodDAO.doUpdateWithoutDaysInWhere(prodUpdate);
+	    if (prod == null) {
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+	        response.getWriter().write("{\"error\": \"Product not found in cart\"}");
+	        return;
+	    }
+
+	    // Check if a product with the new days already exists in the cart
+	    ProdottoCarrelloDTO existingProdWithNewDays = prodDAO.doRetrieveByKeyAndDays(cart.getID_Carrello(), id_prod, newDays);
+	    if (existingProdWithNewDays != null) {
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+	        response.getWriter().write("{\"error\": \"Product with the new days already exists in cart\"}");
+	        return;
+	    }
+	    
+	    // Update cart in session
+	    ProdottoCarrelloDTO prodSes=cart.retrieve(prod);
+	    cart.getCart().remove(prod);
+	    prodSes.setDays(newDays);
+	    cart.getCart().add(prodSes);
+	    
+	    prodDAO.doUpdateDays(prod, newDays);
+
+	    System.out.println("PRODOTTO DOPO DI AGGIORNAMENTO GIORNI:"+ cart.retrieve(prodSes));
+
+
+	
+
+	    request.getSession().setAttribute("cart", cart);
+	    response.setContentType("application/json");
+	    response.setCharacterEncoding("UTF-8");
+	    response.getWriter().write("{\"totalPrice\": " + cart.GetTotalPrice() + "}");
+	}
+
+
+	
+	
+	
+	
+	//DA IMPLEMENTARE PER NON UTENTI SOLO NELLA SESSIONE, PER ALTRI IN DB ANCHE
+
+    private void removeProductFromCart(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int id_prod = Integer.parseInt(request.getParameter("codice_prod"));
+        int giorni_prod=Integer.parseInt(request.getParameter("giorni"));
+        UtenteDTO user = (UtenteDTO) request.getSession().getAttribute("user");
+        CarrelloDTO cart = (CarrelloDTO) request.getSession().getAttribute("cart");
+
+        if (cart != null) {
+            if (user != null) {
+                // Utente registrato
+                ProdottoCarrelloDAO prodDAO = new ProdottoCarrelloDAO();
+                ProdottoCarrelloDTO prod = prodDAO.doRetrieveByKeyAndDays(cart.getID_Carrello(), id_prod, giorni_prod);
+                ProdottoDAO daoMag=new ProdottoDAO();
+                ProdottoDTO prodMag=daoMag.doRetrieveByKey(id_prod);
+
+                if (prod != null) {
+                    cart.delete(prod);
+                    carrelloDAO.doUpdateCart(cart);
+                    prodDAO.doDelete(prod);
+                    prodMag.increaseQuantity();
+                    daoMag.doUpdate(prodMag);
+                } else {
+                    response.getWriter().write("Product not found in cart.");
+                }
+            } else {
+                // Utente non registrato
+            	System.out.println("Utente non registrato rimuove prodotto da carrello");
+                ProdottoCarrelloDTO prodToRemove = null;
+                for (ProdottoCarrelloDTO p : cart.getCart()) {
+                    if (p.getId_prodotto() == id_prod&& p.getGiorni()==giorni_prod) {
+                    	System.out.println("Trovato prodotto da rimuovere");
+                        prodToRemove = p;
+                        break;
+                    }
+                }
+
+                if (prodToRemove != null) {
+                    cart.delete(prodToRemove);
+                    request.getSession().setAttribute("cart", cart);
+                } else {
+                    response.getWriter().write("Product not found in cart.");
+                }
+            }
+        } else {
+            response.getWriter().write("Cart not found.");
+   }
 
 		request.getSession().setAttribute("cart", cart);
 		response.setContentType("application/json");
 	    response.setCharacterEncoding("UTF-8");
 	    response.getWriter().write("{\"totalPrice\": " + cart.GetTotalPrice() + "}");
 
-	}
-}
+    }
+    }
