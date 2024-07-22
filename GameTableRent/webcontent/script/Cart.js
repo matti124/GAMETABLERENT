@@ -128,3 +128,27 @@ function rimuoviDalCarrello(productId, giorni) {
 	let params = "codice_prod=" + productId + "&giorni=" + giorni;
 	xhr.send(params);
 }
+
+
+
+function checkOut(isValid, cartSize) {
+    if (!isValid) {
+        alert("You need to log in to proceed with the purchase.");
+        window.location.href = "Login.jsp";
+    } else if (cartSize === 0) {
+        alert("Your cart is empty.");
+    } else {
+        // Proceed with checkout
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", "OrdineControl?action=newOrdine", true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                alert("L'ordine è andato a buon fine");
+            } else if (xhr.readyState === 4) {
+                alert("Errore durante il checkout. Riprova più tardi.");
+            }
+        };
+        xhr.send();
+    }
+}
+
